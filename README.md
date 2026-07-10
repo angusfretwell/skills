@@ -12,7 +12,11 @@ npx skills add angusfretwell/skills
 
 ### [`/commit`](skills/commit/SKILL.md)
 
-Creates git commits in [Conventional Commits](https://www.conventionalcommits.org) format.
+Creates commits in [Conventional Commits](https://www.conventionalcommits.org) format.
+
+### [`/open-pr`](skills/open-pr/SKILL.md)
+
+Opens a pull request for the current work, or refreshes an existing PR's title and description.
 
 ### [`/address-review`](skills/address-review/SKILL.md)
 
