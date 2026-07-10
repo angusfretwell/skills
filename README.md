@@ -1,5 +1,7 @@
 # Skills
 
+[![skills.sh](https://skills.sh/b/angusfretwell/skills)](https://skills.sh/angusfretwell/skills)
+
 A collection of [Agent Skills](https://skills.sh) for Claude Code and other coding agents.
 
 ## Install
