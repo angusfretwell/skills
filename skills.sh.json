@@ -9,7 +9,7 @@
     {
       "title": "In progress",
       "description": "Skills that I'm still working on.",
-      "skills": ["afk-loop"]
+      "skills": ["afk-loop", "dependency-graph"]
     }
   ]
 }

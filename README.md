@@ -25,3 +25,15 @@ Opens a pull request for the current work, or refreshes an existing PR's title a
 Interactively triages review findings (from a PR comment, file, or session context).
 
 Applies fixes in parallel, files deferrals, and posts summary.
+
+## In progress
+
+### [`/afk-loop`](skills/afk-loop/SKILL.md)
+
+Autonomous issue-clearing loop: dispatches implementers, reviewers, and fixers over an issue tracker's ready issues.
+
+Run as `/loop /afk-loop`.
+
+### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
+
+Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
