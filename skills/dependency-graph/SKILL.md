@@ -1,6 +1,6 @@
 ---
 name: dependency-graph
-description: Build a dependency graph over a batch of work items — issues, tasks, tickets — and surface the frontier: what can start now. Use when planning parallel or ordered execution, checking whether two items would collide, or when another skill needs to sequence a batch.
+description: Build a dependency graph over a batch of work items — issues, tasks, tickets — and surface the frontier of items that can start now. Use when planning parallel or ordered execution, checking whether two items would collide, or when another skill needs to sequence a batch.
 ---
 
 Given a batch of **work items**, map which block which. Look past the dependencies items declare outright — the ones that bite are implicit.
