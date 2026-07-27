@@ -14,9 +14,7 @@ rules=(coding-standards.md comment-standards.md testing-standards.md)
 mkdir -p docs/agents .claude/rules
 
 for rule in "${rules[@]}"; do
-    gh repo read-file "rules/$rule" \
-        --output "docs/agents/$rule" \
-        --repo angusfretwell/skills
+    gh repo read-file "rules/$rule" -o "docs/agents/$rule" -R angusfretwell/skills
 
     ln -s "../../docs/agents/$rule" ".claude/rules/$rule"
 done
