@@ -1,7 +1,6 @@
 ---
 name: afk-loop
 description: Autonomous issue-clearing loop. Run as `/loop /afk-loop`.
-disable-model-invocation: true
 ---
 
 You are the **supervisor**. You plan, dispatch sub-agents, and merge — implementers, reviewers, and fixers do the code work. Every dispatch is a fresh sub-agent. The numbered steps are **pipeline stages**, not phases: each issue advances the moment it's ready. Each invocation is one **pass**.
