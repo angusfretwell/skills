@@ -7,7 +7,7 @@ You are the **supervisor**. You plan, dispatch sub-agents, and merge — impleme
 
 Findings and logs live on the PR, never in your context; every sub-agent returns only a verdict.
 
-The issue tracker should have been provided to you; if it wasn't, stop and ask.
+The issue tracker should have been provided to you; if it wasn't, stop and ask. Likewise the merge mode — you merge clean PRs yourself, or **park** them for a human to merge; if the invocation didn't say, ask before planning. One answer holds for every pass of the loop.
 
 ## Process
 
@@ -15,7 +15,7 @@ The issue tracker should have been provided to you; if it wasn't, stop and ask.
 
 List the tracker's open issues labeled `ready-for-agent`. A PRD issue with linked implementation issues is never workable — work the implementation issues instead.
 
-Build a dependency graph over the issues and find the frontier per `/dependency-graph`, treating each issue as a work item. An issue that already has an open PR resumes at step 3 (review) — the PR's comments carry any prior-round state.
+Build a dependency graph over the issues and find the frontier per `/dependency-graph`, treating each issue as a work item. An issue that already has an open PR resumes at step 3 (review) — the PR's comments carry any prior-round state — unless the PR is labeled `parked`, which resumes at step 4.
 
 Done when: every open `ready-for-agent` issue is classified as frontier, blocked (by which issues), or PRD.
 
@@ -23,7 +23,7 @@ Done when: every open `ready-for-agent` issue is classified as frontier, blocked
 
 Launch one implementer per frontier issue, in the background — at most 5 issues **in flight** at once; the rest wait for a free slot. Prompt each with `<implementer-prompt>`.
 
-When an issue merges or stops, its slot frees: replan first, then dispatch the next frontier issue into it.
+When an issue merges, parks, or stops, its slot frees: replan first, then dispatch the next frontier issue into it.
 
 Done when: every frontier issue has exactly one implementer or is waiting for a slot.
 
@@ -43,6 +43,8 @@ For each issue whose review came back clean, wait for the PR's checks to finish.
 - **Red** → launch a fixer with the payload `Address: failing checks`, then re-check. Still red after two red→fix cycles → stop the issue.
 - **Merge conflict** (the merge fails after a sibling PR lands) → launch a fixer with the payload `Address: merge conflict`, wait for green again, then retry the merge.
 
+When merges are parked, a green PR is labeled `parked` and a human's review requested instead of merging; its slot frees, but the issue stays unmerged, so its dependents stay blocked until the human merges. On a later pass, a `parked` PR the human has merged counts as merged (close the issue if the `Closes` reference didn't); one still green just waits — label and review request stand, ask nothing again; one gone red or conflicted re-enters the cycles above and is re-parked once green.
+
 ## Stopping an issue
 
 A stopped issue gets a comment explaining exactly what blocked it and loses its `ready-for-agent` label so no pass picks it up again.
@@ -52,10 +54,10 @@ A stopped issue gets a comment explaining exactly what blocked it and loses its 
 
 ## End of pass
 
-The pass is done when nothing is in flight: every dispatched issue is merged or stopped. End it with a status line — issues merged, stopped (and why), still blocked — then:
+The pass is done when nothing is in flight: every dispatched issue is merged, parked, or stopped. End it with a status line — issues merged, parked (awaiting a human's merge), stopped (and why), still blocked — then:
 
-- Any open `ready-for-agent` issue remains → schedule the next wakeup at the minimum delay with the same `/afk-loop` prompt.
-- Frontier empty and every remaining issue is blocked or stopped → stop the loop, with the final status as your summary.
+- Any open `ready-for-agent` issue remains, or a `parked` PR awaits its human → schedule the next wakeup with the same `/afk-loop` prompt: at the minimum delay while issues remain, or the maximum delay when only parked PRs do.
+- Frontier empty, no parked PRs, and every remaining issue is blocked or stopped → stop the loop, with the final status as your summary.
 
 ## Dispatch prompts
 
