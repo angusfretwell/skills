@@ -1,13 +1,24 @@
 ---
 name: afk-loop
 description: Autonomous issue-clearing loop. Run as `/loop /afk-loop`.
+argument-hint: "[merge-mode] [concurrency] [review-rounds]"
 ---
 
 You are the **supervisor**. You plan, dispatch sub-agents, and merge — implementers, reviewers, and fixers do the code work. Every dispatch is a fresh sub-agent. The numbered steps are **pipeline stages**, not phases: each issue advances the moment it's ready. Each invocation is one **pass**.
 
 Findings and logs live on the PR, never in your context; every sub-agent returns only a verdict.
 
-The issue tracker should have been provided to you; if it wasn't, stop and ask. Likewise the merge mode — you merge clean PRs yourself, or **park** them for a human to merge; if the invocation didn't say, ask before planning. One answer holds for every pass of the loop.
+The issue tracker should have been provided to you; if it wasn't, stop and ask.
+
+## Settings
+
+Three **settings** govern the loop — `/afk-loop [merge-mode] [concurrency] [review-rounds]`. Take each from the invocation, and ask for whatever it leaves unresolved in a single `AskUserQuestion` batch before planning.
+
+- **Merge mode** — you merge clean PRs yourself, or **park** them for a human to merge. No default.
+- **Concurrency** — how many issues run in flight at once. Default 5; offer 1, 3, and 5.
+- **Review rounds** — how many findings→fix→re-review rounds an issue gets before you stop it. Default 3; offer 1, 2, and 3.
+
+Every setting holds for the whole loop — restate all three in the wakeup prompt (see [End of pass](#end-of-pass)) so no later pass asks again.
 
 ## Process
 
@@ -21,7 +32,7 @@ Done when: every open `ready-for-agent` issue is classified as frontier, blocked
 
 ### 2. Dispatch implementers
 
-Launch one implementer per frontier issue, in the background — at most 5 issues **in flight** at once; the rest wait for a free slot. Prompt each with `<implementer-prompt>`.
+Launch one implementer per frontier issue, in the background — at most **concurrency** issues **in flight** at once; the rest wait for a free slot. Prompt each with `<implementer-prompt>`.
 
 When an issue merges, parks, or stops, its slot frees: replan first, then dispatch the next frontier issue into it.
 
@@ -33,7 +44,7 @@ When an implementer returns a PR, launch a reviewer with `<reviewer-prompt>`.
 
 - **`FINDINGS`** → launch a fixer with `<fixer-prompt>` and the payload `Address: review findings`, then re-review. Each findings→fix→re-review cycle is one **round**; the current round number is the PR's comment count.
 - **`CLEAN`** → the issue is ready to merge.
-- **Still failing after round 3** → stop the issue (below).
+- **Still failing after the last round** — the round count reaches **review rounds** → stop the issue (below).
 
 ### 4. Merge
 
@@ -56,7 +67,7 @@ A stopped issue gets a comment explaining exactly what blocked it and loses its 
 
 The pass is done when nothing is in flight: every dispatched issue is merged, parked, or stopped. End it with a status line — issues merged, parked (awaiting a human's merge), stopped (and why), still blocked — then:
 
-- Any open `ready-for-agent` issue remains, or a `parked` PR awaits its human → schedule the next wakeup with the same `/afk-loop` prompt: at the minimum delay while issues remain, or the maximum delay when only parked PRs do.
+- Any open `ready-for-agent` issue remains, or a `parked` PR awaits its human → schedule the next wakeup with the same `/afk-loop` prompt, restating all three settings so the next pass resolves them from the invocation and asks nothing: at the minimum delay while issues remain, or the maximum delay when only parked PRs do.
 - Frontier empty, no parked PRs, and every remaining issue is blocked or stopped → stop the loop, with the final status as your summary.
 
 ## Dispatch prompts
