@@ -56,7 +56,7 @@ Grouped by unit of work — a `###` subheading per group with a short paragraph 
 
 ## Evidence
 
-Only material the session already produced — screenshots, recordings, test output. Omit the section when there's none.
+Artifacts a reviewer can look at — screenshots and recordings the session captured. Omit the section when the session captured none.
 
 ## To-do
 
