@@ -12,9 +12,9 @@ The issue tracker should have been provided to you; if it wasn't, stop and ask.
 
 ## Settings
 
-Three **settings** govern the loop — `/afk-loop [merge-mode] [concurrency] [cap]`. Take each from the invocation; a default applies silently when the invocation omits its setting, so only the merge mode is ever asked about (`AskUserQuestion`, before planning).
+Three **settings** govern the loop — `/afk-loop [merge-mode] [concurrency] [cap]`. Take each from the invocation; a default applies silently when the invocation omits its setting.
 
-- **Merge mode** — you merge clean PRs yourself, or **park** them for a human to merge. No default — ask.
+- **Merge mode** — you merge clean PRs yourself, or **park** them for a human to merge. No default — ask (`AskUserQuestion`, before planning).
 - **Concurrency** — how many issues run in flight at once. Default 5.
 - **Cap** — how many fix attempts an issue gets before you stop it. Review rounds and check-fix attempts are counted separately, each capped at this number. Default 5.
 
@@ -52,7 +52,7 @@ Rounds accumulate on the PR, not within a pass: a PR resumed on a later pass car
 
 ### 4. Merge
 
-Every PR opens as a **draft** and is marked ready for review the moment it is mergeable — clean review, green checks. Draft says the loop is still working on it; ready says a merge can happen. So for each issue whose review came back clean, wait for the PR's checks to finish.
+You mark a PR ready for review the moment it is mergeable — clean review, green checks. Draft says the loop is still working on it; ready says a merge can happen. So for each issue whose review came back clean, wait for the PR's checks to finish.
 
 - **Green** → mark the PR ready for review, then act on the merge mode: merge it yourself and delete its branch, or **park** it — request a human's review and leave it for them. After merging, check the `Closes` reference closed the issue; close it on the tracker yourself if it didn't.
 - **Red** → launch a fixer with the payload `ADDRESS: failing checks`, then re-check. Still red once the attempt count reaches the **cap** → stop the issue.
@@ -62,20 +62,20 @@ A parked PR frees its slot, but its issue stays unmerged and keeps `ready-for-ag
 
 ## AFK summary
 
-Every PR carries one **summary** comment recording where it got to, written once per pass at the [end of the pass](#end-of-pass). You are its only writer: sub-agents return verdicts, you write them down.
+Every PR carries one **summary** comment recording where it got to, written once per pass at the [end of the pass](#end-of-pass). You are its only writer.
 
-It is keyed by its heading, `## AFK summary` — find it by that marker, never by author or position, since the reviewer's findings comments share your identity and usually sit later in the thread. Create it on a PR's first summary, edit that same comment forever after.
+It is keyed by its heading, `## AFK summary` — find it by that marker, never by author or position, since your sub-agents' comments share your identity and usually sit later in the thread. Create it on a PR's first summary, edit that same comment forever after.
 
 ```
 ## AFK summary
 **State:** NEEDS_REVIEW (round 3)
 **Outcome:** —
-- Round 1: findings → fixed
-- Round 2: findings → fixed
+- Round 1: findings → addressed
+- Round 2: findings → addressed
 - Checks red → fixed (attempt 1)
 ```
 
-`State` is the code the investigator returned, or the one the pass's own work left the PR in — the same vocabulary either way, listed in `<states>`. `Outcome` stays `—` until the PR reaches a terminal state, then names it: merged, awaiting a human's merge, review cap hit, check cap hit, or a one-way door — that last one named and nothing more, since the sub-agent's `## One-way door` comment sits on this same PR.
+`State` is the code the investigator returned, or the one the pass's own work left the PR in — the same vocabulary either way, listed in `<states>`. `Outcome` stays `—` until the PR reaches a terminal state, then names it: merged, awaiting a human's merge, review cap hit, check cap hit, or a one-way door — that last one named and nothing more, since the sub-agent's `## AFK one-way door` comment sits on this same PR.
 
 The summary **counts, it never explains** — a round happened, a check went red, an attempt was spent. If writing a line would mean opening a log, a diff, or another comment, leave it out — whatever it says is already on this PR, one comment away.
 
@@ -89,7 +89,7 @@ A stopped issue's `ready-for-agent` label flips to `ready-for-human`: the loop i
 — and where the explanation goes depends on how far the issue got:
 
 - **No PR** — the issue gets the comment, written by the sub-agent that hit the door. Only a one-way door reaches here; a cap hit needs a PR to have been capped on.
-- **PR open** — the PR carries it and the issue gets no comment: a one-way door as the sub-agent's own `## One-way door` comment, a cap hit as the summary's `Outcome`. Either way one place, written by whoever held the context. The PR stays a draft; convert it back to one if it had already been readied.
+- **PR open** — the PR carries it and the issue gets no comment: a one-way door as the sub-agent's own `## AFK one-way door` comment, a cap hit as the summary's `Outcome`. Either way one place, written by whoever held the context. The PR stays a draft; convert it back to one if it had already been readied.
 
 ## End of pass
 
@@ -106,8 +106,8 @@ Compose every dispatch from these templates: copy the matching template verbatim
 
 You establish where one issue's open PR left off and return its state.
 
-1. Read the PR for issue {{ISSUE_ID}}: its `## AFK summary` comment if it has one, its `## Review findings` comments, its checks, whether it is a draft, and its commits since the most recent findings comment.
-2. Weigh the summary as the last pass's account of itself, and the PR's own state as what actually happened — where they disagree, the PR wins, since a pass can end mid-stage after its last write.
+1. Read the PR for issue {{ISSUE_ID}}: its `## AFK summary` comment if it has one, its `## AFK review findings` and `## AFK review response` comments, its checks, whether it is a draft, and its commits since the most recent findings comment.
+2. Where the summary and the PR's actual state disagree, the PR wins — a pass can end mid-stage after its last write.
 3. Return exactly one state from the `<states>` block at the end of this prompt, with its round or attempt number where the state takes one. Return the bare state; never the findings themselves.
 
 </investigator-prompt>
@@ -133,25 +133,34 @@ You review one issue's implementation, post findings on its PR, and return a ver
 
 1. Enter the issue's worktree — the one on branch `afk/{{ISSUE_ID}}` — and confirm `git status` shows that branch. Every later step runs from here.
 2. Fetch issue {{ISSUE_ID}} from the tracker. It is the spec you review against — title, body, and comments all count.
-3. Fetch the PR's comments headed `## Review findings` — those, and only those, are prior rounds. If any exist, check each item in the most recent one against the current code — any not genuinely addressed stays a finding.
+3. Fetch the PR's comments headed `## AFK review findings` — those, and only those, are prior rounds — together with the `## AFK review response` comment answering the most recent. Check each of that round's items against the current code: one the fixer fixed but didn't genuinely address stays a finding; one it won't-fixed stands or falls on its reasoning — accept it and the item is settled, or reject it and re-raise the item marked **disputed**.
 4. Run `/code-review` on the branch — the changes since its merge-base with the default branch.
-5. If the change is user-facing, manually test it: run the app and exercise the flows the issue describes.
-6. If you have findings, post them as a single PR comment headed `## Review findings — round N`, where N is one past the highest round already on the PR — each finding with file, line, what's wrong, and what correct looks like — and return `FINDINGS`. If you have none, comment nothing and return `CLEAN`. Return the bare verdict; never the findings themselves.
+5. If the change is user-facing, QA it in a sub-agent: run the app and exercise the flows the issue describes, returning what broke. Its findings join yours, and its logs and screenshots stay out of your context.
+6. If you have findings, post them as a single PR comment headed `## AFK review findings (round N)`, where N is one past the highest round already on the PR — each finding with file, line, what's wrong, and what correct looks like — and return `FINDINGS`. If you have none, comment nothing and return `CLEAN`. Return the bare verdict; never the findings themselves.
 
 </reviewer-prompt>
 
 <fixer-prompt>
 
-You fix issue {{ISSUE_ID}}'s open PR — review findings, failing checks, or a merge conflict, whichever the `ADDRESS:` line at the end of this prompt names — and push to the same branch. Fetch the work from the PR yourself.
+You fix issue {{ISSUE_ID}}'s open PR — review findings, failing checks, or a merge conflict, whichever the `ADDRESS:` line at the end of this prompt names — and push what you change to the same branch. Fetch the work from the PR yourself.
 
 1. Enter the issue's worktree — the one on branch `afk/{{ISSUE_ID}}` — and confirm `git status` shows that branch. Every later step runs from here.
 2. Fetch issue {{ISSUE_ID}} from the tracker for context — title, body, and comments all count.
-3. Address the named case:
-   - **Review findings** — fetch the PR's most recent `## Review findings` comment and address every item: make the fix it describes; where none is described, fix what it names. Where a finding has a testable seam, fix it with `/tdd` — the finding is the red test.
-   - **Failing checks** — fetch the failing check's output from the PR (`gh pr checks`, then the failing run's log), reproduce locally where possible, fix, and confirm the command passes.
-   - **Merge conflict** — fetch and rebase onto the default branch, resolving with `/resolving-merge-conflicts`.
-4. Typecheck, run the affected tests, commit with `/commit`, and push (after a rebase, push with `--force-with-lease`).
-5. Return `PUSHED` — or, if an item turns on a **one-way door**, follow the procedure at the end of this prompt.
+3. Work the case the `ADDRESS:` line names, per its section below.
+4. Where you changed code, typecheck, run the affected tests, commit with `/commit`, and push (after a rebase, push with `--force-with-lease`).
+5. For review findings, post the round's ledger last — after the push, so it records what landed: a single PR comment headed `## AFK review response (round N)`, N matching the findings comment you answered, one line per item giving its disposition and what you did. The diff carries the code; this carries the calls.
+6. Return `ADDRESSED` — or, if anything turned on a **one-way door**, follow the procedure at the end of this prompt. The door comes last: steps 4 and 5 still run first, so the other items land and the ledger records the round before you stop.
+
+**Review findings** — fetch the PR's most recent `## AFK review findings` comment and **triage** every item onto a **disposition** before you change any code:
+
+- **fix** — the default. Make the fix the item describes; where none is described, fix what it names. Where the item has a testable seam, fix it with `/tdd` — the finding is the red test.
+- **investigate** — the item seems off. Read the code it names, then settle it into fix or won't fix.
+- **won't fix** — the item is wrong, or it is minor and discretionary and you judge against it.
+- **one-way door** — the call is bigger than a won't fix, or the item arrived marked **disputed**: the reviewer rejected a won't fix and the standoff is the human's to settle. This item's ledger line names the door, and the door comment itself follows the procedure at the end of this prompt.
+
+**Failing checks** — fetch the failing check's output from the PR (`gh pr checks`, then the failing run's log), reproduce locally where possible, fix, and confirm the command passes.
+
+**Merge conflict** — fetch and rebase onto the default branch, resolving with `/resolving-merge-conflicts`.
 
 </fixer-prompt>
 
@@ -159,7 +168,7 @@ You fix issue {{ISSUE_ID}}'s open PR — review findings, failing checks, or a m
 
 A **one-way door** is an open question you can't safely decide: the spec is ambiguous, contradicts the codebase, or the choice would be expensive to reverse (data migration, public API shape, irreversible deletion, money flow). One-way doors are for humans, so surface the decision instead of making it:
 
-1. Comment naming the question and the options you considered, headed `## One-way door` — on the PR if one is open, otherwise on the issue. You hold the context here, so this comment is the record; your supervisor only notes that you hit one.
+1. Comment naming the question and the options you considered, headed `## AFK one-way door` — on the PR if one is open, otherwise on the issue. You hold the context here, so this comment is the record; your supervisor only notes that you hit one.
 2. Return `STOPPED: <the question>` instead of your normal result.
 
 </one-way-doors>
@@ -168,8 +177,8 @@ A **one-way door** is an open question you can't safely decide: the spec is ambi
 
 A PR is in exactly one of these states. Return the code verbatim, with its number where the code takes one:
 
-- **`NEEDS_REVIEW (round N)`** — the code is waiting on its Nth review; N is 1 when no findings comments exist yet.
-- **`NEEDS_FIXES (round N)`** — round N posted findings that later commits haven't addressed.
+- **`NEEDS_REVIEW (round N)`** — the code is waiting on its Nth review: one past the most recent round an `## AFK review response` answers, or 1 when no findings comments exist yet.
+- **`NEEDS_FIXES (round N)`** — round N posted findings that no `## AFK review response (round N)` comment answers yet.
 - **`AWAITING_CHECKS`** — review is clean and checks are still running.
 - **`NEEDS_CHECK_FIXES (attempt N)`** — checks are red.
 - **`NEEDS_CONFLICT_RESOLUTION`** — the branch conflicts with the default branch.
