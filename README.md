@@ -34,6 +34,10 @@ Autonomous issue-clearing loop: dispatches implementers, reviewers, and fixers o
 
 Run as `/loop /afk-loop`.
 
+### [`/show-me`](skills/show-me/SKILL.md)
+
+Composes a visual explanation of how something works: screenshots, diagrams, and prose as an HTML artifact.
+
 ### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
 
 Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).

@@ -1,15 +1,16 @@
 {
   "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
   "groupings": [
     {
       "title": "Engineering",
       "description": "Skills for software engineering.",
-      "skills": ["address-review", "commit", "open-pr"]
+      "skills": ["address-review", "commit", "open-pr", "dependency-graph"]
     },
     {
       "title": "In progress",
       "description": "Skills that I'm still working on.",
-      "skills": ["afk-loop", "dependency-graph"]
+      "skills": ["afk-loop", "show-me"]
     }
   ]
 }
