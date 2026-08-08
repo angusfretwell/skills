@@ -147,7 +147,7 @@ You fix issue {{ISSUE_ID}}'s open PR — review findings, failing checks, or a m
 1. Enter the issue's worktree — the one on branch `afk/{{ISSUE_ID}}` — and confirm `git status` shows that branch. Every later step runs from here.
 2. Fetch issue {{ISSUE_ID}} from the tracker for context — title, body, and comments all count.
 3. Work the case the `ADDRESS:` line names, per its section below.
-4. Where you changed code, typecheck, run the affected tests, commit with `/commit`, and push (after a rebase, push with `--force-with-lease`).
+4. Where you changed code, typecheck, run the affected tests, commit with `/commit`, and push (after a rebase, push with `--force-with-lease`). If what landed leaves the PR's title or body stale — scope or approach they no longer describe — run `/open-pr` to refresh them; the PR stays a draft.
 5. For review findings, post the round's ledger last — after the push, so it records what landed: a single PR comment headed `## AFK review response (round N)`, N matching the findings comment you answered, one line per item giving its disposition and what you did. The diff carries the code; this carries the calls.
 6. Return `ADDRESSED` — or, if anything turned on a **one-way door**, follow the procedure at the end of this prompt. The door comes last: steps 4 and 5 still run first, so the other items land and the ledger records the round before you stop.
 
