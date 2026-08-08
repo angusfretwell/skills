@@ -42,13 +42,13 @@ Done when: every frontier issue has exactly one implementer or is waiting for a 
 
 ### 3. Review rounds
 
-When an implementer returns a PR, launch a reviewer with `<reviewer-prompt>`.
+When an implementer returns a PR, launch a reviewer with `<reviewer-prompt>`. Each review is one **round**, numbered in the heading of the comment it posts.
 
-- **`FINDINGS`** → launch a fixer with `<fixer-prompt>` and the payload `ADDRESS: review findings`, then re-review. Each findings→fix→re-review cycle is one **round**, numbered in the heading of the findings comment it produced.
+- **`FINDINGS`** → launch a fixer with `<fixer-prompt>` and the payload `ADDRESS: review findings`, then re-review.
 - **`CLEAN`** → the issue is ready to merge.
 - **The round number reaches the cap** → stop the issue (below).
 
-Rounds accumulate on the PR, not within a pass: a PR resumed on a later pass carries on from the round it reached, so the cap holds however many passes it takes to reach. The findings comments carry the review count; the summary carries the check-fix count — attempts a pass spent but died before writing down are forgiven.
+Rounds accumulate on the PR, not within a pass: a PR resumed on a later pass carries on from the round it reached, so the cap holds however many passes it takes to reach. The review comments carry the review count; the summary carries the check-fix count — attempts a pass spent but died before writing down are forgiven.
 
 ### 4. Merge
 
@@ -106,7 +106,7 @@ Compose every dispatch from these templates: copy the matching template verbatim
 
 You establish where one issue's open PR left off and return its state.
 
-1. Read the PR for issue {{ISSUE_ID}}: its `## AFK summary` comment if it has one, its `## AFK review findings` and `## AFK review response` comments, its checks, whether it is a draft, and its commits since the most recent findings comment.
+1. Read the PR for issue {{ISSUE_ID}}: its `## AFK summary` comment if it has one, its `## AFK review findings`, `## AFK review clean`, and `## AFK review response` comments, its checks, whether it is a draft, and its commits since the most recent review comment.
 2. Where the summary and the PR's actual state disagree, the PR wins — a pass can end mid-stage after its last write.
 3. Return exactly one state from the `<states>` block at the end of this prompt, with its round or attempt number where the state takes one. Return the bare state; never the findings themselves.
 
@@ -133,10 +133,10 @@ You review one issue's implementation, post findings on its PR, and return a ver
 
 1. Enter the issue's worktree — the one on branch `afk/{{ISSUE_ID}}` — and confirm `git status` shows that branch. Every later step runs from here.
 2. Fetch issue {{ISSUE_ID}} from the tracker. It is the spec you review against — title, body, and comments all count.
-3. Fetch the PR's comments headed `## AFK review findings` — those, and only those, are prior rounds — together with the `## AFK review response` comment answering the most recent. Check each of that round's items against the current code: one the fixer fixed but didn't genuinely address stays a finding; one it won't-fixed stands or falls on its reasoning — accept it and the item is settled, or reject it and re-raise the item marked **disputed**.
+3. Fetch the PR's comments headed `## AFK review findings` — those, and only those, carry prior rounds' items — together with the `## AFK review response` comment answering the most recent. Check each of that round's items against the current code: one the fixer fixed but didn't genuinely address stays a finding; one it won't-fixed stands or falls on its reasoning — accept it and the item is settled, or reject it and re-raise the item marked **disputed**.
 4. Run `/code-review` on the branch — the changes since its merge-base with the default branch.
 5. If the change is user-facing, QA it in a sub-agent: run the app and exercise the flows the issue describes, returning what broke. Its findings join yours, and its logs and screenshots stay out of your context.
-6. If you have findings, post them as a single PR comment headed `## AFK review findings (round N)`, where N is one past the highest round already on the PR — each finding with file, line, what's wrong, and what correct looks like — and return `FINDINGS`. If you have none, comment nothing and return `CLEAN`. Return the bare verdict; never the findings themselves.
+6. Every round ends in a single PR comment, numbered round N — one past the highest round already on the PR: findings under `## AFK review findings (round N)`, each with file, line, what's wrong, and what correct looks like; a clean round under `## AFK review clean (round N)`, saying only that it found nothing. Then return the bare verdict — `FINDINGS` or `CLEAN` — never the findings themselves.
 
 </reviewer-prompt>
 
@@ -177,9 +177,9 @@ A **one-way door** is an open question you can't safely decide: the spec is ambi
 
 A PR is in exactly one of these states. Return the code verbatim, with its number where the code takes one:
 
-- **`NEEDS_REVIEW (round N)`** — the code is waiting on its Nth review: one past the most recent round an `## AFK review response` answers, or 1 when no findings comments exist yet.
+- **`NEEDS_REVIEW (round N)`** — the code is waiting on its Nth review: one past the most recent round an `## AFK review response` answers, or 1 when no review comments exist yet.
 - **`NEEDS_FIXES (round N)`** — round N posted findings that no `## AFK review response (round N)` comment answers yet.
-- **`AWAITING_CHECKS`** — review is clean and checks are still running.
+- **`AWAITING_CHECKS`** — an `## AFK review clean` comment settles the review, and checks are still running.
 - **`NEEDS_CHECK_FIXES (attempt N)`** — checks are red.
 - **`NEEDS_CONFLICT_RESOLUTION`** — the branch conflicts with the default branch.
 - **`AWAITING_HUMAN_MERGE`** — ready for review, green, and left for a human to merge.
