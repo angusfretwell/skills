@@ -38,6 +38,10 @@ Run as `/loop /afk-loop`.
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose as an HTML artifact.
 
+### [`/interview-me`](skills/interview-me/SKILL.md)
+
+Works through the session's open questions in chunked rounds of AskUserQuestion, with recommendations and option previews.
+
 ### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
 
 Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
