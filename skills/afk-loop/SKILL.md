@@ -46,6 +46,7 @@ When an implementer returns a PR, launch a reviewer with `<reviewer-prompt>`. Ea
 
 - **`FINDINGS`** → launch a fixer with `<fixer-prompt>` and the payload `ADDRESS: review findings`, then re-review.
 - **`CLEAN`** → the issue is ready to merge.
+- **`INCOMPLETE`** → the reviewer couldn't complete an axis, so it posted no round. Launch a fresh reviewer for the same round; a second `INCOMPLETE` stops the issue. Never accept a verdict a reviewer couldn't reach, and never relay one yourself — you have not read the code.
 - **The round number reaches the cap** → stop the issue (below).
 
 Rounds accumulate on the PR, not within a pass: a PR resumed on a later pass carries on from the round it reached, so the cap holds however many passes it takes to reach. The review comments carry the review count; the summary carries the check-fix count — attempts a pass spent but died before writing down are forgiven.
@@ -75,21 +76,22 @@ It is keyed by its heading, `## AFK summary` — find it by that marker, never b
 - Checks red → fixed (attempt 1)
 ```
 
-`State` is the code the investigator returned, or the one the pass's own work left the PR in — the same vocabulary either way, listed in `<states>`. `Outcome` stays `—` until the PR reaches a terminal state, then names it: merged, awaiting a human's merge, review cap hit, check cap hit, or a one-way door — that last one named and nothing more, since the sub-agent's `## AFK one-way door` comment sits on this same PR.
+`State` is the code the investigator returned, or the one the pass's own work left the PR in — the same vocabulary either way, listed in `<states>`. `Outcome` stays `—` until the PR reaches a terminal state, then names it: merged, awaiting a human's merge, review cap hit, check cap hit, a review it couldn't complete, or a one-way door — that last one named and nothing more, since the sub-agent's `## AFK one-way door` comment sits on this same PR.
 
 The summary **counts, it never explains** — a round happened, a check went red, an attempt was spent. If writing a line would mean opening a log, a diff, or another comment, leave it out — whatever it says is already on this PR, one comment away.
 
 ## Stopping an issue
 
-A stopped issue's `ready-for-agent` label flips to `ready-for-human`: the loop is done with it. The flip is always yours to make, for either cause —
+A stopped issue's `ready-for-agent` label flips to `ready-for-human`: the loop is done with it. The flip is always yours to make, whatever the cause —
 
 - **One-way door** — an implementer or fixer returns `STOPPED: <the question>` (per `<one-way-doors>`).
 - **Cap hit** — review rounds or check-fix attempts reached the **cap**.
+- **Review unreachable** — two reviewers running the same round both returned `INCOMPLETE`.
 
 — and where the explanation goes depends on how far the issue got:
 
 - **No PR** — the issue gets the comment, written by the sub-agent that hit the door. Only a one-way door reaches here; a cap hit needs a PR to have been capped on.
-- **PR open** — the PR carries it and the issue gets no comment: a one-way door as the sub-agent's own `## AFK one-way door` comment, a cap hit as the summary's `Outcome`. Either way one place, written by whoever held the context. The PR stays a draft; convert it back to one if it had already been readied.
+- **PR open** — the PR carries it and the issue gets no comment: a one-way door as the sub-agent's own `## AFK one-way door` comment, a cap hit or an unreachable review as the summary's `Outcome`. Either way one place, written by whoever held the context. The PR stays a draft; convert it back to one if it had already been readied.
 
 ## End of pass
 
@@ -134,9 +136,11 @@ You review one issue's implementation, post findings on its PR, and return a ver
 1. Enter the issue's worktree — the one on branch `afk/{{ISSUE_ID}}` — and confirm `git status` shows that branch. Every later step runs from here.
 2. Fetch issue {{ISSUE_ID}} from the tracker. It is the spec you review against — title, body, and comments all count.
 3. Fetch the PR's comments headed `## AFK review findings` — those, and only those, carry prior rounds' items — together with the `## AFK review response` comment answering the most recent. Check each of that round's items against the current code: one the fixer fixed but didn't genuinely address stays a finding; one it won't-fixed stands or falls on its reasoning — accept it and the item is settled, or reject it and re-raise the item marked **disputed**.
-4. Run `/code-review` on the branch — the changes since its merge-base with the default branch.
+4. Run `/code-review` on the branch — the changes since its merge-base with the default branch. It fans out one sub-agent per axis; brief each to **return** its report, never to message it — you are a sub-agent yourself, so nothing it dispatches can address you by name, and a report it messages instead lands somewhere you will never read.
 5. If the change is user-facing, QA it in a sub-agent: run the app and exercise the flows the issue describes, returning what broke. Its findings join yours, and its logs and screenshots stay out of your context.
 6. Every round ends in a single PR comment, numbered round N — one past the highest round already on the PR: findings under `## AFK review findings (round N)`, each with file, line, what's wrong, and what correct looks like; a clean round under `## AFK review clean (round N)`, saying only that it found nothing. Then return the bare verdict — `FINDINGS` or `CLEAN` — never the findings themselves.
+
+A report you did not read is a report you do not have. An axis or a QA pass that returns nothing — it stalls, it dies, or it messaged its findings away — is **missing**, not clean: re-run it inline and read what it finds, or — if it comes back empty again — post no round and return the bare verdict `INCOMPLETE`. Never write an item, or a clean verdict on an axis, from what you expected that axis to say; a round reconstructed from anticipation reads exactly like a real one, and everything downstream trusts it.
 
 </reviewer-prompt>
 
@@ -184,6 +188,6 @@ A PR is in exactly one of these states. Return the code verbatim, with its numbe
 - **`NEEDS_CONFLICT_RESOLUTION`** — the branch conflicts with the default branch.
 - **`AWAITING_HUMAN_MERGE`** — ready for review, green, and left for a human to merge.
 - **`MERGED`** — already merged.
-- **`STOPPED`** — the summary's `Outcome` names a cap hit or a one-way door.
+- **`STOPPED`** — the summary's `Outcome` names a cap hit, an unreachable review, or a one-way door.
 
 </states>
