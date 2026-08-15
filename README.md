@@ -36,7 +36,7 @@ Run as `/loop /afk-loop`.
 
 ### [`/show-me`](skills/show-me/SKILL.md)
 
-Composes a visual explanation of how something works: screenshots, diagrams, and prose as an HTML artifact.
+Composes a visual explanation of how something works: text shapes, diagrams, and prose inline, or screenshots and diagrams as an artifact (`--artifact`).
 
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
