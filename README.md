@@ -2,9 +2,11 @@
 
 [![skills.sh](https://skills.sh/b/angusfretwell/skills)](https://skills.sh/angusfretwell/skills)
 
-A collection of [Agent Skills](https://skills.sh) for Claude Code and other coding agents.
+[Agent Skills](https://skills.sh) for Claude Code and other coding agents.
 
 ## Install
+
+Run:
 
 ```bash
 npx skills add angusfretwell/skills
@@ -14,44 +16,42 @@ npx skills add angusfretwell/skills
 
 ### [`/commit`](skills/commit/SKILL.md)
 
-Creates commits in [Conventional Commits](https://www.conventionalcommits.org) format.
+Creates git commits in [Conventional Commits](https://www.conventionalcommits.org) format.
 
 ### [`/open-pr`](skills/open-pr/SKILL.md)
 
-Opens a pull request for the current work, or refreshes an existing PR's title and description.
+Opens a pull request for the current work, or updates the title and description of an open one when later commits leave them stale.
 
 ### [`/address-review`](skills/address-review/SKILL.md)
 
-Interactively triages review findings (from a PR comment, file, or session context).
-
-Applies fixes in parallel, files deferrals, and posts summary.
+Triages review findings with you — from a PR comment, a file, or the session itself — then applies the fixes in parallel, files the deferrals, and posts a summary.
 
 ### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
 
-Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
+Builds a dependency graph over a batch of work items and shows the frontier: the items that can start now.
 
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
-Works through the session's open questions in chunked rounds of AskUserQuestion, with recommendations and option previews.
+Asks the session's open questions in rounds of AskUserQuestion, with a recommendation and a preview for each option.
 
 ## In progress
 
 ### [`/afk-loop`](skills/afk-loop/SKILL.md)
 
-Autonomous issue-clearing loop: dispatches implementers, reviewers, and fixers over an issue tracker's ready issues.
+An autonomous issue-clearing loop: dispatches implementers, reviewers, and fixers over an issue tracker's ready issues.
 
 Run as `/loop /afk-loop`.
 
 ### [`/show-me`](skills/show-me/SKILL.md)
 
-Composes a visual explanation of how something works: screenshots, diagrams, and prose as an HTML artifact.
+Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
 
 ### [`/supervise`](skills/supervise/SKILL.md)
 
-Supervisor protocol for running a task through sub-agents: the supervisor's context holds only the index, the disk holds the content.
+Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
 
-Other skills can invoke it with their own dispatch prompts.
+Other skills can call it with their own dispatch prompts.
 
 ### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
 
-Style rules for human-facing prose: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's ubiquitous language over both.
+Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.
