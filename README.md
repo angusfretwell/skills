@@ -51,3 +51,7 @@ Orders a batch of work items into a dependency graph and surfaces the frontier (
 Supervisor protocol for running a task through sub-agents: the supervisor's context holds only the index, the disk holds the content.
 
 Other skills can invoke it with their own dispatch prompts.
+
+### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
+
+Style rules for human-facing prose: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's ubiquitous language over both.
