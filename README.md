@@ -26,6 +26,14 @@ Interactively triages review findings (from a PR comment, file, or session conte
 
 Applies fixes in parallel, files deferrals, and posts summary.
 
+### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
+
+Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
+
+### [`/interview-me`](skills/interview-me/SKILL.md)
+
+Works through the session's open questions in chunked rounds of AskUserQuestion, with recommendations and option previews.
+
 ## In progress
 
 ### [`/afk-loop`](skills/afk-loop/SKILL.md)
@@ -37,14 +45,6 @@ Run as `/loop /afk-loop`.
 ### [`/show-me`](skills/show-me/SKILL.md)
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose as an HTML artifact.
-
-### [`/interview-me`](skills/interview-me/SKILL.md)
-
-Works through the session's open questions in chunked rounds of AskUserQuestion, with recommendations and option previews.
-
-### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
-
-Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
 
 ### [`/supervise`](skills/supervise/SKILL.md)
 
