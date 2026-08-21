@@ -45,3 +45,9 @@ Works through the session's open questions in chunked rounds of AskUserQuestion,
 ### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
 
 Orders a batch of work items into a dependency graph and surfaces the frontier (the unblocked items).
+
+### [`/supervise`](skills/supervise/SKILL.md)
+
+Supervisor protocol for running a task through sub-agents: the supervisor's context holds only the index, the disk holds the content.
+
+Other skills can invoke it with their own dispatch prompts.
