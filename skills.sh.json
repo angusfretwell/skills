@@ -5,12 +5,24 @@
     {
       "title": "Engineering",
       "description": "Skills for software engineering.",
-      "skills": ["address-review", "commit", "open-pr", "dependency-graph", "interview-me"]
+      "skills": [
+        "address-review",
+        "commit",
+        "open-pr",
+        "dependency-graph",
+        "interview-me"
+      ]
     },
     {
       "title": "In progress",
       "description": "Skills that I'm still working on.",
-      "skills": ["afk-loop", "show-me", "supervise", "writing-for-humans"]
+      "skills": [
+        "afk-loop",
+        "show-me",
+        "supervise",
+        "writing-for-humans",
+        "afk"
+      ]
     }
   ]
 }
