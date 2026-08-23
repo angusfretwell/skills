@@ -46,6 +46,10 @@ Run as `/loop /afk-loop`.
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
 
+### [`/stampede`](skills/stampede/SKILL.md)
+
+An autonomous issue-clearing orchestrator over herdr: one workspace and worktrunk worktree per issue, workers in tabs, the orchestrator keeps the herd moving and asks you only when stuck.
+
 ### [`/supervise`](skills/supervise/SKILL.md)
 
 Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
