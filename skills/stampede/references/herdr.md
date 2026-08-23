@@ -1,12 +1,12 @@
 # herdr mechanics
 
-The installed binary is the authority on syntax — `herdr <group>` with no subcommand prints a group's commands. This file holds the recipes the orchestrator repeats and the gotchas no `--help` confesses. Every herdr command returns JSON: read ids and states from `.result`, never predict them.
+The installed binary is the authority on syntax — `herdr <group>` with no subcommand prints a group's commands. This file holds the recipes the orchestrator repeats and the gotchas no `--help` confesses. Every herdr command returns JSON: ids and states come from `.result`.
 
 ## Targeting the session
 
-Inside herdr (`HERDR_ENV=1`) run `herdr …` bare. Outside, prefix every command with `--session stampede-<repo>`: `herdr --session stampede-<repo> workspace list`. The flag is not an environment variable — it goes on every call.
+Inside herdr (`HERDR_ENV=1`) the current session is yours: run `herdr …` bare. Outside, the session is `stampede-<repo>` (`<repo>` = `<owner>-<name>` from `origin`); prefix every command with `--session stampede-<repo>`: `herdr --session stampede-<repo> workspace list`. The flag is not an environment variable — it goes on every call.
 
-Starting a session headless: `herdr --session stampede-<repo> server` run in the background (Bash `run_in_background`) — it is the server process and holds the foreground. It is up when `herdr --session stampede-<repo> workspace list` returns JSON rather than `server_not_running`. `herdr session list` shows it `running`. Leave it running at the end of a run; the human attaches with `herdr session attach stampede-<repo>`. `server stop` and `session delete` are the human's to run.
+Starting a session headless (when `herdr session list` shows it absent or stopped): `herdr --session stampede-<repo> server` run in the background (Bash `run_in_background`) — it is the server process and holds the foreground. It is up when `herdr --session stampede-<repo> workspace list` returns JSON rather than `server_not_running`. `herdr session list` shows it `running`. Leave it running at the end of a run; the human attaches with `herdr session attach stampede-<repo>`. `server stop` and `session delete` are the human's to run.
 
 ## Dispatching a worker
 
@@ -20,7 +20,7 @@ Every worker is an interactive `claude` started in a fresh tab of the issue's wo
 
 The integrator is the one long-lived worker: start it once in the workspace's root pane (`.result.root_pane.pane_id` from `workspace create`), then each later cue is `agent prompt integ-<id> "…"` followed by a fresh background `agent wait`. Prompt it only when `herdr agent get integ-<id>` shows `idle` or `done`; `agent_blocked` on a prompt means it is asking something — read the pane.
 
-Agent names: `[a-z][a-z0-9_-]{0,31}`, unique among live agents in the session. The role-id-round scheme in `SKILL.md` keeps them unique; a slice id that pushes `impl-<id>-<slice>` past 32 characters is truncated from the slice end.
+Agent names: `[a-z][a-z0-9_-]{0,31}`, unique among live agents in the session. The role-id-round scheme in `SKILL.md` keeps them unique, and the outcome files they name distinct; a slice id that pushes `impl-<id>-<slice>` past 32 characters is truncated from the slice end.
 
 ## Reading a blocked pane
 
