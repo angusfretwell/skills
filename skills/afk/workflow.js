@@ -107,6 +107,7 @@ Before you return, stop every server, watcher, or other long-running process you
 const ONE_WAY_DOORS = `
 A one-way door is an open question you can't safely decide: the spec is ambiguous, contradicts the codebase, or the choice would be expensive to reverse (data migration, public API shape, irreversible deletion, money flow). Surface it instead of deciding: write the question and the options you considered to door.md in the state dir, post the same text as a "## AFK one-way door" comment on the PR if one is open (else on the issue), patch state.json {"stage":"stopped","outcome":"stopped","stoppedBecause":"one-way door"}, then return STOPPED with the question. The door comes last — finish and record whatever else you were doing first.`;
 
+const context = (id) => `
 Tracker: ${tracker}. Issue: ${id}. State dir: ${dir(id)}.
 Read state.json; cd into its worktree and confirm \`git status\` shows branch afk/${id}. Every later step runs from there. Fetch the issue from the tracker — title, body, and comments are the spec.`;
 
