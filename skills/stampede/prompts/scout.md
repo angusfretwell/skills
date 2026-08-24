@@ -6,7 +6,7 @@ Tracker: {{TRACKER}}. State root: {{STATE_ROOT}}. Herdr: `{{HERDR}}` — prefix 
    - Locate the repo's agent-label mapping — a doc under `docs/agents/`, `AGENTS.md`, `CLAUDE.md`, or the like that maps the skill's canonical labels (`ready-for-agent`, `ready-for-human`) and statuses onto this tracker's real names. Return what you find as `labelMap` (below). Return `labelMap: null` if there is none — the run will ask the human once.
 2. For every other issue, read `{{STATE_ROOT}}/<id>/state.json` if it exists and reconcile three sources — the file, `herdr agent list`, and the PR (`gh` or the tracker):
    - `pr`: `MERGED`, `CLOSED` (unmerged), `MISSING` (the file names one that no longer exists), `OPEN`, or `NONE` (the file names none).
-   - `agents`: for each agent the file calls `running` — `alive` if `herdr agent list` shows it; `finished` if it is gone and `outcomes/<agent>.json` exists; `missing` if gone without one.
+   - `agents`: for each agent the file calls `running` — `alive` if `herdr agent list` shows it; `finished` if it is gone and the `outcome` file its state entry records exists; `missing` if gone without one.
    A stage of `merged`, `parked`, or `stopped` is kind `terminal`. An issue whose stage is `merged` or whose `pr` is `MERGED` counts as merged in step 3.
 3. Build the dependency graph over the remaining issues per `/dependency-graph` — declared blockers, produced artefacts, overlapping files, decisions one establishes for another. An issue every blocker of which is merged is kind `frontier`; the rest are `blocked`.
 

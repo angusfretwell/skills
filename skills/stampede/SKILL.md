@@ -25,12 +25,12 @@ Herdr and worktrunk mechanics belong to their own skills — `/herdr` and `/work
 
 ```
 .stampede/
-  config.json              { tracker, mergeMode, concurrency, cap, session, labelMap }
+  config.json                    { tracker, mergeMode, concurrency, cap, session, labelMap }
   <issueId>/
-    state.json             the issue's state — schema below
-    plan.md notes/ slice-*.md review-*.md qa-*.md door.md   written by workers, read by workers
-    briefs/<agent>.md      the dispatch brief each agent was prompted with
-    outcomes/<agent>.json  the outcome file each agent wrote
+    state.json                   the issue's state — schema below
+    PLAN.md                      the slice plan every implementer reads
+    notes/<number>-<type>.md     written by workers, read by workers — 001-review.md, 002-fix-review.md, 003-door.md, …; number order is chronological
+    outcomes/<number>-<type>.json  one per dispatched agent — 001-implement.json, …; dispatch.sh allocates the number and records the path in state.json
 ```
 
 `state.json`:
@@ -41,7 +41,7 @@ Herdr and worktrunk mechanics belong to their own skills — `/herdr` and `/work
   "workspace": "w3", "branch": "afk/<id>", "worktree": "/abs/path", "pr": "<ref> | null",
   "reviewRound": 0, "qaRound": 0, "ciAttempts": 0, "incompleteVerdicts": 0, "lastReviewedSha": null,
   "slices": [{ "id": "auth-api", "title": "…", "dependsOn": [], "status": "pending | done | merged", "worktree": "/abs/path" }],
-  "agents": { "<agent-name>": { "role": "…", "tab": "w3:t2", "status": "running | done" } },
+  "agents": { "<agent-name>": { "role": "…", "tab": "w3:t2", "outcome": "/abs/path/outcomes/004-review.json", "status": "running | done" } },
   "blockedOn": "<what a blocked issue is asking> | null",
   "outcome": "merged | parked | stopped | null", "stoppedBecause": "… | null"
 }
@@ -51,7 +51,7 @@ The issue orchestrator owns `state.json` for its issue and keeps `stage` current
 
 ## Dispatching
 
-The scout is an `Agent` sub-agent (opus), briefed with `prompts/scout.md` filled — it is not a herdr agent. Every herdr agent is started through [`scripts/dispatch.sh`](scripts/dispatch.sh), which composes the brief (preamble + role file from `prompts/`, every `{{…}}` filled with absolute paths, and everything after a role file's first `---` line dropped as dispatcher notes), opens the tab, starts claude with the pane-ready retry built in, prompts it, and records it in `state.json` — one call, and you never read `prompts/*.md` yourself. It prints a `wait` command to background and, on the issue orchestrator, a `pane`. [`scripts/collect.sh`](scripts/collect.sh) reads a finished agent's outcome, marks it done, closes its tab, and prints the outcome. You run only one dispatch directly — the issue orchestrator; it runs the rest.
+The scout is an `Agent` sub-agent (opus), briefed with `prompts/scout.md` filled — it is not a herdr agent. Every herdr agent is started through [`scripts/dispatch.sh`](scripts/dispatch.sh), which composes the brief to a temp file (preamble + role file from `prompts/`, every `{{…}}` filled with absolute paths, and everything after a role file's first `---` line dropped as dispatcher notes; briefs are not kept), allocates the agent's numbered outcome file, opens the tab, starts claude with the pane-ready retry built in, prompts it, and records it in `state.json` — one call, and you never read `prompts/*.md` yourself. It prints a `wait` command to background and, on the issue orchestrator, a `pane`. [`scripts/collect.sh`](scripts/collect.sh) reads a finished agent's outcome, marks it done, closes its tab, and prints the outcome. You run only one dispatch directly — the issue orchestrator; it runs the rest.
 
 ## Session
 
@@ -85,9 +85,9 @@ A resumed issue re-enters at [Resume](#resume).
 
 ### 3. Advance an issue
 
-The `issue-<id>` orchestrator signals you only through `outcomes/issue-<id>.json`, which it writes only when it escalates or terminates. Its `herdr agent wait` can also return when it merely falls idle between its own workers — so on every return, read `outcomes/issue-<id>.json`; if it holds no fresh `BLOCKED` or terminal result, the orchestrator is mid-work — background a new wait and leave it be. When the outcome is fresh:
+The `issue-<id>` orchestrator signals you only through its outcome file (the path dispatch.sh printed and `state.json` records), which it writes only when it escalates or terminates. Its `herdr agent wait` can also return when it merely falls idle between its own workers — so on every return, read that outcome file; if it holds no fresh `BLOCKED` or terminal result, the orchestrator is mid-work — background a new wait and leave it be. When the outcome is fresh:
 
-- **`BLOCKED`** — a cap hit, dead worker, or one-way door the orchestrator could not resolve. Its `question` is verbatim from `door.md` or the pane. Act per [Blocked](#blocked); when the human decides, delete `outcomes/issue-<id>.json` (so its next write is unambiguous), `herdr agent prompt issue-<id>` the decision, background a fresh wait, and carry on.
+- **`BLOCKED`** — a cap hit, dead worker, or one-way door the orchestrator could not resolve. Its `question` is verbatim from the door note or the pane. Act per [Blocked](#blocked); when the human decides, delete the outcome file (so its next write is unambiguous), `herdr agent prompt issue-<id>` the decision, background a fresh wait, and carry on.
 - **`MERGED` / `PARKED` / `STOPPED`** — terminal. Terminate the issue (step 4).
 
 A `blocked` wait result (not an outcome) means the orchestrator's own pane is stuck at a dialog — `herdr agent read` it and treat as Blocked.
@@ -107,7 +107,7 @@ Each `issue-<id>` dispatch is followed by its `wait` in a **background** Bash ca
 
 ## Blocked
 
-Record first, ask last. A blocked issue, a cap hit, a dead orchestrator: it is already in `state.json` (`blockedOn`) and in the `BLOCKED` outcome — keep every other issue moving. Put a question to the human (`AskUserQuestion`) only when nothing can progress without an answer, or a decision gates the next dispatch. Carry the question in the human's words: the orchestrator's `question`, `door.md`, or the pane's text, not your paraphrase.
+Record first, ask last. A blocked issue, a cap hit, a dead orchestrator: it is already in `state.json` (`blockedOn`) and in the `BLOCKED` outcome — keep every other issue moving. Put a question to the human (`AskUserQuestion`) only when nothing can progress without an answer, or a decision gates the next dispatch. Carry the question in the human's words: the orchestrator's `question`, the latest `notes/*-door.md`, or the pane's text, not your paraphrase.
 
 ## Resume
 

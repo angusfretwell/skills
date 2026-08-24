@@ -10,11 +10,11 @@ Starting it headless (absent or stopped in `herdr session list`): `herdr --sessi
 
 ## Dispatching a worker
 
-Every worker is an interactive `claude` in a tab of the issue's workspace, named for its role, prompted with a brief on disk. [`scripts/dispatch.sh`](../scripts/dispatch.sh) does the whole dispatch in one call — brief composition to `.stampede/<id>/briefs/<name>.md`, tab create, `agent start` with a retry loop for `agent_pane_busy` (a fresh pane is often not ready), the prompt (`"Read and follow the brief at <abs brief path>."`), and the `state.json` record. [`scripts/collect.sh`](../scripts/collect.sh) reads the outcome file, marks the agent done, and closes its tab. Never hand-roll what they automate.
+Every worker is an interactive `claude` in a tab of the issue's workspace, named for its role, prompted with a brief on disk. [`scripts/dispatch.sh`](../scripts/dispatch.sh) does the whole dispatch in one call — brief composition to a temp file (briefs are not kept), outcome-number allocation, tab create, `agent start` with a retry loop for `agent_pane_busy` (a fresh pane is often not ready), the prompt (`"Read and follow the brief at <abs brief path>."`), and the `state.json` record. [`scripts/collect.sh`](../scripts/collect.sh) reads the outcome file, marks the agent done, and closes its tab. Never hand-roll what they automate.
 
 - The `wait` command dispatch.sh prints runs in a background Bash call. `done`/`idle` with an outcome file on disk is a finished dispatch; without one, prompt the agent once to write it, then treat a second empty return as the agent missing.
 - `agent_not_ready` on start means claude is stuck at a startup dialog — `agent read` it and treat as blocked.
-- Agent names: `[a-z][a-z0-9_-]{0,31}`, unique among live agents — the script lowercases and truncates; the role-id-round scheme keeps them and their outcome files distinct.
+- Agent names: `[a-z][a-z0-9_-]{0,31}`, unique among live agents — the script lowercases and truncates; the role-id-round scheme keeps them distinct, and each agent's numbered outcome file is recorded in its `state.json` entry.
 
 The **issue orchestrator** is the one long-lived agent per issue: started once in the workspace's root pane (`--pane` from `workspace create`'s `.result.root_pane.pane_id`), then each later cue — a human's decision, a resume — is `agent prompt issue-<id> "…"` followed by a fresh background wait. Prompt it only when `agent get` shows `idle` or `done`; `agent_blocked` on a prompt means it is asking something — read the pane.
 

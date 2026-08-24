@@ -1,4 +1,4 @@
-Findings: {{STATE_DIR}}/{{KIND}}-{{ROUND}}.md.
+Findings: the highest-numbered {{STATE_DIR}}/notes/*-{{KIND}}.md.
 
 Triage EVERY item onto a disposition before changing any code:
 
@@ -9,5 +9,5 @@ Triage EVERY item onto a disposition before changing any code:
 
 Where you changed code: typecheck, run the affected tests, `/commit`, push. If the PR's title or body went stale, `/open-pr` to refresh them — it stays a draft.
 
-Then write {{STATE_DIR}}/{{KIND}}-{{ROUND}}-response.md: one line per item, disposition and what you did. Write it after the push so it records what landed.
+Then write {{STATE_DIR}}/notes/<number>-fix-{{KIND}}.md: one line per item, disposition and what you did. Write it after the push so it records what landed.
 Outcome: `{ "result": "ADDRESSED", "scope": "<scope>" }` — `scope` is `none` if you changed no code (every item declined), `surgical` if the change was local to the findings, `broad` if it reached across shared interfaces or refactored cross-cutting code.

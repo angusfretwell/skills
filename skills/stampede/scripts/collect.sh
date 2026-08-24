@@ -20,7 +20,8 @@ done
 
 STATE_DIR="$STATE_ROOT/$ISSUE"
 STATE_JSON="$STATE_DIR/state.json"
-OUTCOME="$STATE_DIR/outcomes/$AGENT.json"
+OUTCOME=$(jq -r --arg a "$AGENT" '.agents[$a].outcome // empty' "$STATE_JSON")
+[ -n "$OUTCOME" ] || { echo "no outcome path recorded for $AGENT in $STATE_JSON" >&2; exit 1; }
 [ -f "$OUTCOME" ] || { echo "no outcome file: $OUTCOME" >&2; exit 1; }
 
 if [ -n "${HERDR_ENV:-}" ]; then

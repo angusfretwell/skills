@@ -2,13 +2,13 @@
 set -euo pipefail
 
 usage() {
-  echo "usage: dispatch.sh --state-root <abs> --issue <id> --agent <name> --role <role> --model <model> [--cwd <abs>] [--pane <pane_id>] [--no-preamble] [KEY=VALUE ...]" >&2
+  echo "usage: dispatch.sh --state-root <abs> --issue <id> --agent <name> --role <role> --model <model> [--type <type>] [--cwd <abs>] [--pane <pane_id>] [--no-preamble] [KEY=VALUE ...]" >&2
   exit 2
 }
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-STATE_ROOT="" ISSUE="" AGENT="" ROLE="" MODEL="" CWD="" PANE="" PREAMBLE=1
+STATE_ROOT="" ISSUE="" AGENT="" ROLE="" MODEL="" TYPE="" CWD="" PANE="" PREAMBLE=1
 FILLS=()
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -17,6 +17,7 @@ while [ $# -gt 0 ]; do
     --agent) AGENT=$2; shift 2 ;;
     --role) ROLE=$2; shift 2 ;;
     --model) MODEL=$2; shift 2 ;;
+    --type) TYPE=$2; shift 2 ;;
     --cwd) CWD=$2; shift 2 ;;
     --pane) PANE=$2; shift 2 ;;
     --no-preamble) PREAMBLE=0; shift ;;
@@ -27,6 +28,7 @@ done
 [ -n "$STATE_ROOT" ] && [ -n "$ISSUE" ] && [ -n "$AGENT" ] && [ -n "$ROLE" ] && [ -n "$MODEL" ] || usage
 
 AGENT=$(printf '%s' "$AGENT" | tr '[:upper:]' '[:lower:]' | cut -c1-32)
+TYPE=${TYPE:-$ROLE}
 STATE_DIR="$STATE_ROOT/$ISSUE"
 STATE_JSON="$STATE_DIR/state.json"
 CONFIG="$STATE_ROOT/config.json"
@@ -43,8 +45,12 @@ TRACKER=$(jq -r .tracker "$CONFIG")
 WORKSPACE=$(jq -r .workspace "$STATE_JSON")
 [ -n "$CWD" ] || CWD=$(jq -r .worktree "$STATE_JSON")
 
-BRIEF="$STATE_DIR/briefs/$AGENT.md"
-mkdir -p "$STATE_DIR/briefs" "$STATE_DIR/outcomes"
+mkdir -p "$STATE_DIR/notes" "$STATE_DIR/outcomes"
+LAST=$(ls "$STATE_DIR/outcomes" | sed -n 's/^\([0-9][0-9]*\)-.*/\1/p' | sort -n | tail -1)
+SEQ=$(printf '%03d' $((10#${LAST:-0} + 1)))
+OUTCOME_FILE="$STATE_DIR/outcomes/$SEQ-$TYPE.json"
+
+BRIEF=$(mktemp "${TMPDIR:-/tmp}/stampede-brief-$AGENT-XXXXXX")
 {
   if [ "$PREAMBLE" = 1 ]; then cat "$SKILL_DIR/prompts/_preamble.md"; echo; fi
   awk 'BEGIN{n=0} /^---$/{n=1} n==0{print}' "$ROLE_FILE"
@@ -59,6 +65,7 @@ fill STATE_ROOT "$STATE_ROOT"
 fill AGENT "$AGENT"
 fill SKILL_DIR "$SKILL_DIR"
 fill DOORS "$SKILL_DIR/references/one-way-doors.md"
+fill OUTCOME_FILE "$OUTCOME_FILE"
 
 BRANCH_SET=0
 for kv in ${FILLS[@]+"${FILLS[@]}"}; do
@@ -99,7 +106,7 @@ done
 "${HERDR[@]}" agent prompt "$AGENT" "Read and follow the brief at $BRIEF. It names the outcome file to write when you are done." >/dev/null
 
 TMP=$(mktemp)
-jq --arg a "$AGENT" --arg r "$ROLE" --arg t "$TAB" '.agents[$a] = {role: $r, tab: $t, status: "running"}' "$STATE_JSON" > "$TMP" && mv "$TMP" "$STATE_JSON"
+jq --arg a "$AGENT" --arg r "$ROLE" --arg t "$TAB" --arg o "$OUTCOME_FILE" '.agents[$a] = {role: $r, tab: $t, outcome: $o, status: "running"}' "$STATE_JSON" > "$TMP" && mv "$TMP" "$STATE_JSON"
 
-jq -n --arg agent "$AGENT" --arg tab "$TAB" --arg pane "$PANE" --arg brief "$BRIEF" --arg wait "${HERDR[*]} agent wait $AGENT" \
-  '{agent: $agent, tab: $tab, pane: $pane, brief: $brief, wait: $wait}'
+jq -n --arg agent "$AGENT" --arg tab "$TAB" --arg pane "$PANE" --arg outcome "$OUTCOME_FILE" --arg wait "${HERDR[*]} agent wait $AGENT" \
+  '{agent: $agent, tab: $tab, pane: $pane, outcome: $outcome, wait: $wait}'
