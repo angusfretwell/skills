@@ -1,9 +1,7 @@
-Read {{STATE_DIR}}/state.json. Tracker label mapping: {{LABEL_MAP}}.
+Read the state dir's `state.json`. Your brief names the tracker label mapping.
 
-1. If it names a PR, upsert ONE comment on it headed `## AFK summary` — find it by that heading; create it if absent, else edit it in place:
-   **State:** <stage> (round/attempt N where it applies)
-   **Outcome:** <outcome, or —>
-   then one line per review round, QA round, and CI attempt, each saying only that it happened and how it ended (findings → addressed, clean, red → fixed). Counts only — the findings are on disk. If any review round left discretionary items declined by the fixer, add a final `**Notes for a human:**` line pointing at the notes/*-review.md files that hold them.
-2. If outcome is `stopped`, relabel the issue from the mapping's `ready-for-agent` to its `ready-for-human`.
-3. If outcome is `merged` and the issue is still open, close it.
+1. If it names a PR, upsert ONE comment on it headed `## AFK summary` — find it by that heading, edit in place: the stage and outcome, then one line per review round, QA round, and CI attempt saying only that it happened and how it ended. Counts only — the findings are on disk. If any round left discretionary items declined, add a `**Notes for a human:**` line pointing at the notes that hold them.
+2. If the outcome is `stopped`, relabel the issue from `ready-for-agent` to `ready-for-human`.
+3. If the outcome is `merged` and the issue is still open, close it.
+
 Outcome: `{ "result": "DONE" }`.

@@ -1,12 +1,6 @@
-You implement slice {{SLICE_ID}} — {{SLICE_TITLE}} — of issue {{ISSUE_ID}}, in this worktree on slice branch {{BRANCH}}.
+You implement the slice your brief names, in this worktree on its slice branch.
 
-Read {{STATE_DIR}}/PLAN.md: the overview, the shared interfaces, your slice's section, and the notes it points you at. {{DEPENDS_LINE}} {{SIBLINGS_LINE}}
-
-1. Implement the slice; use `/mattpocock-skills:tdd` where there is a testable seam. After each green, self-contained step run `/commit`.
-2. Typecheck and run the tests you wrote or touched — that is the whole local check.
-3. Write {{STATE_DIR}}/notes/<number>-slice-{{SLICE_ID}}.md: what you built, the files, the interfaces dependents should use, and anything that differs from PLAN.md. Leave the branch committed and clean; the integrator lands it.
+1. Read the state dir's `PLAN.md`: the overview, the shared interfaces, your slice's section, and the notes it points at — including the slice notes of anything yours depends on. If sibling slices run alongside yours, stay inside your slice's files.
+2. Implement; use `/mattpocock-skills:tdd` where there is a testable seam, `/commit` after each green, self-contained step. Typecheck and run the tests you wrote or touched — that is the whole local check.
+3. Write a `slice-<id>` note: what you built, the files, the interfaces dependents should use, anything that differs from PLAN.md. Leave the branch committed and clean; the orchestrator lands it.
 4. Outcome: `{ "result": "DONE" }`.
-
----
-
-`{{BRANCH}}` here and in the preamble is the slice branch `afk/<id>--<slice>`, not the issue branch. `{{DEPENDS_LINE}}` is `Read notes/*-slice-<id>.md for each slice yours depends on (<ids>) — they record what landed.` or `Yours depends on nothing.` `{{SIBLINGS_LINE}}` is `Slices <ids> run alongside yours in their own worktrees — stay inside your slice's files.` or empty.

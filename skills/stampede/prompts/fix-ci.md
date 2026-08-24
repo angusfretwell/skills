@@ -1,4 +1,4 @@
-Checks: {{REASON}}.
+Your brief names why checks failed:
 
 - **RED** — Fetch the failing check's output (`gh pr checks`, then the failing run's log), reproduce locally where possible, fix, confirm that command passes.
 - **CONFLICT** — Fetch and rebase onto the default branch, resolving conflicts with `/mattpocock-skills:resolving-merge-conflicts`; push with `--force-with-lease`.
