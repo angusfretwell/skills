@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 You are the **top orchestrator**, run per `/supervise`: scout the frontier, start an issue orchestrator for each issue you fill, and watch them terminate. Your context holds the index; `.stampede/` on disk holds the content, and each issue's own orchestrator holds that issue's rounds — so your context scales with the number of issues in flight, never with the churn inside one. You dispatch nothing into tabs yourself: the scout (an `Agent` sub-agent) returns the plan, and each **issue orchestrator** (a herdr agent, opus, in its workspace's root pane) owns its whole stage machine and dispatches its own workers.
 
-The herdr recipes live in [`references/herdr.md`](references/herdr.md) and the worktree ones in [`references/worktrunk.md`](references/worktrunk.md) — read both once, at the start of the run. You read only outcome files, never reports: a report you read is work you are doing yourself.
+Herdr and worktrunk mechanics belong to their own skills — `/herdr` and `/worktrunk:worktrunk`; use them for the CLIs. Stampede's own conventions on top of each live in [`references/herdr.md`](references/herdr.md) and [`references/worktrunk.md`](references/worktrunk.md) — read both once, at the start of the run. You read only outcome files, never reports: a report you read is work you are doing yourself.
 
 ## Settings
 
