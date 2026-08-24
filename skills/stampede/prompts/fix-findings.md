@@ -1,6 +1,6 @@
 Findings: the highest-numbered note of the kind your brief names (`review` or `qa`).
 
-Triage EVERY item onto a disposition before changing any code:
+Triage **every** item onto a disposition before changing any code:
 
 - **fix** — the default for a hard violation; where there's a testable seam, fix with `/mattpocock-skills:tdd` (the finding is the red test).
 - **investigate** — read the code it names, then settle it into fix or won't fix.
@@ -10,4 +10,5 @@ Triage EVERY item onto a disposition before changing any code:
 Where you changed code: typecheck, run the affected tests, `/commit`, push. If the PR's title or body went stale, `/open-pr` to refresh them — it stays a draft.
 
 Then write a `fix-<kind>` note: one line per item, disposition and what you did, written after the push so it records what landed.
+
 Outcome: `{ "result": "ADDRESSED" }`.
