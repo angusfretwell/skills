@@ -2,7 +2,6 @@
 name: conveyor
 description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, and ship."
 argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>]"
-disable-model-invocation: true
 ---
 
 # Conveyor
