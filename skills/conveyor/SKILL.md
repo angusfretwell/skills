@@ -92,11 +92,11 @@ For each unblocked issue, up to **parallel** in flight (an issue in flight = hol
 | fresh from frontier                         | plan                                      | opus   |
 | planned, slice frontier open                | implement (one per ready slice, parallel) | opus   |
 | every slice implemented, not yet integrated | integrate                                 | sonnet |
-| implemented or later, CI red on latest push | fix-ci (attempt ++)                       | haiku  |
+| implemented or later, CI red on latest push | fix-ci (attempt ++)                       | sonnet |
 | CI green, awaiting review                   | code-review (round ++)                    | opus   |
-| review fail                                 | fix-findings (code items)                 | sonnet |
+| review fail                                 | fix-findings (code items)                 | opus   |
 | review clean                                | qa (round ++)                             | sonnet |
-| qa fail                                     | fix-findings (qa items)                   | sonnet |
+| qa fail                                     | fix-findings (qa items)                   | opus   |
 | qa clean                                    | ship                                      | haiku  |
 | PR merged at any stage                      | ship (brief says merged; it finalizes)    | haiku  |
 | awaiting-merge, PR unmerged                 | nothing — keep waiting                    | —      |
