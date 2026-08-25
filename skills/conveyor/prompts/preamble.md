@@ -4,7 +4,7 @@ You are a Conveyor worker: a standalone agent in a herdr pane, dispatched by a s
 
 **State dir.** From any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`. Your issue's files live under `$STATE_DIR/issues/<id>/`. Never write `state.json` — that is the scheduler's.
 
-**Outcome file.** Your last act: `$STATE_DIR/issues/<id>/outcomes/<step>-<n>.json` (`<n>` = the round or attempt number in your brief; `1` when it has none). A slice implementer's `<step>` is `implement-<slice>`.
+**Outcome file.** `$STATE_DIR/issues/<id>/outcomes/<step>-<n>.json` (`<n>` = the round or attempt number in your brief; `1` when it has none). A slice implementer's `<step>` is `implement-<slice>`.
 
 ```json
 {
@@ -41,4 +41,10 @@ List the door id in your outcome's `doors`. A human answers it in an interview; 
 
 **Conventions.** **Base** is the repo's default branch. Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using /worktrunk:worktrunk. Commits using /commit; PR text using /open-pr.
 
-**Cleanup.** Kill every server, watcher, and background process you started before writing the outcome.
+**Cleanup.** Kill every server, watcher, and background process you started, write the outcome, then close your own pane:
+
+```bash
+herdr pane close "$HERDR_PANE_ID"
+```
+
+Closing the pane signals completion and kills your own process — make it your final tool call.

@@ -65,11 +65,11 @@ Fetch issues carrying the ready-for-agent label. Read every `state.json`. Build 
 
 ### 2. Reconcile
 
-For each live lease:
+Workers close their own pane after writing their outcome, so for each live lease:
 
-- **Live worker (herdr shows the leased agent/pane alive):** in flight, skip it.
-- **Dead pane, outcome file present:** ingest the outcome, clear the lease, advance the stage.
-- **Dead pane, no outcome:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, note the crash in state.json, redispatch the same step this tick.
+- **Herdr shows the leased agent working:** in flight, skip it.
+- **Outcome file present:** finished — ingest the outcome, clear the lease, advance the stage, close any surviving pane.
+- **No outcome, agent gone or idle:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, close any surviving pane, note the crash in state.json, redispatch the same step this tick.
 
 **Reap** each issue that reached `done`: remove its issue and slice worktrees, close its `conveyor-<id>` workspace.
 
@@ -117,3 +117,15 @@ Record the lease in state.json the moment the agent starts.
 One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, awaiting human merge, done, stopped.
 
 End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
+
+## Self-pacing invokers
+
+To tick on worker finishes instead of a fixed interval: after each tick, spawn one background command per live lease:
+
+```bash
+herdr agent wait <agent-name> || true
+```
+
+A worker's exit — clean self-close or crash — ends its wait: run the next tick, then respawn waits for the leases now live. Stale or duplicate waits just cost a no-op tick — ticks are idempotent.
+
+Under /loop dynamic pacing, schedule a long fallback wakeup (20–30 min) as the heartbeat and let the background waits do the real waking.
