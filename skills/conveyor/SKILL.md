@@ -12,15 +12,13 @@ You are the scheduler, never the worker. Every job — planning, coding, reviewi
 
 ## Settings
 
+The issue **tracker** (how to reach issues — e.g. "Linear team ENG", "GitHub issues on origin"; passed verbatim into every brief) and the triage **label** vocabulary (the ready-for-agent and ready-for-human labels) should have been provided to you. If not, refuse to run and name what's missing.
+
 From the invocation arguments:
 
-- **tracker** — how to reach issues (e.g. "Linear team ENG", "GitHub issues on origin"). Passed verbatim into every brief.
-- **labels** — the ready-for-agent label and the ready-for-human label.
 - **merge** — `auto` (ship merges PRs) or `manual` (ship marks PRs ready and a human merges). Default `manual`.
 - **parallel** — max issues in flight. Default 3.
 - **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 3.
-
-Tracker and labels have no default: if the invocation omits either, refuse to run and name what's missing.
 
 ## Preflight
 
