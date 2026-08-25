@@ -1,6 +1,7 @@
 ---
 name: conveyor
-description: "Autonomous software development: one tick fetches ready issues and dispatches herdr worker agents through plan → implement → review → QA → ship."
+description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, and ship."
+argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>]"
 disable-model-invocation: true
 ---
 
