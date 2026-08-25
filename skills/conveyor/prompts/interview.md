@@ -11,4 +11,4 @@ For each answered door:
 1. Fill the door file's **Answer** section with the decision and its reasoning.
 2. Apply it where the pipeline will see it: update the issue description or `plan.md` when the decision changes the work, the PR description (per the `/open-pr` skill) when it changes what shipped.
 
-Between rounds, wait — the human may step away; stay idle rather than exiting with pending doors. When the queue is empty, write your outcome (verdict `resolved`, summary listing door → decision) and exit.
+Between rounds, wait — the human may step away; stay idle rather than exiting with pending doors. The answered door files are your record — the contract's outcome file does not apply to you (you have no issue). When the queue is empty, exit.

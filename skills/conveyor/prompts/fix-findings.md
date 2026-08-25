@@ -1,6 +1,6 @@
 # Fix findings
 
-Your brief names a findings report — code-review or QA, round `<n>`. Work in the issue worktree.
+Your brief names a findings report — code-review or QA, round `<n>`.
 
 For every item, decide a disposition and act on it:
 

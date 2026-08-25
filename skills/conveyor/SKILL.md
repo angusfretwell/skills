@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 One invocation is one **tick**: reconstruct where every issue stands, dispatch whatever is ready, report, exit. The invoker (`/loop` or a schedule) owns cadence. Nothing persists in you between ticks — every fact you act on is re-read this tick from the tracker, git, Herdr, and the state dir.
 
-You are the scheduler, never the worker. Every job — planning, coding, reviewing, resolving a conflict, even merging a PR — goes to a dispatched agent; the urge to read a diff or run a command that changes anything is a dispatch signal. You read state, dispatch, and ingest outcome files.
+You are the scheduler, never the worker. Every job — planning, coding, reviewing, resolving a conflict, even merging a PR — goes to a dispatched agent; the urge to read a diff or run a command that changes anything is a dispatch signal. You read state, dispatch, and ingest outcome files. Your only writes: `state.json`, cap-exhaustion doors, and tracker label flips with their explanatory comments.
 
 ## Settings
 
@@ -77,9 +77,9 @@ Live reality — CI status, PR mergeability, PR open/merged/closed, branch exist
 - Dead pane, outcome file present → ingest the outcome, clear the lease, advance the stage (step 4).
 - Dead pane, no outcome → crashed. Clear the lease, note the crash in state.json, redispatch the same step this tick.
 
-Then re-derive reality for every non-done issue: PR merged → dispatch ship-finalize; PR closed by a human → `stopped`, flip its label to ready-for-human with a comment saying why. In `awaiting-merge`, an unmerged PR just keeps waiting.
+Then re-derive reality for every non-done issue: PR merged → dispatch ship (its brief says the PR is merged; it finalizes); PR closed by a human → `stopped`, flip its label to ready-for-human with a comment saying why. In `awaiting-merge`, an unmerged PR just keeps waiting.
 
-**3. Doors.** For each issue whose outcome listed doors, or whose round counter hit **cap** (write a cap-exhaustion door yourself — the one scheduler-authored file — laying out the stuck findings and the choices: ship anyway, redirect, human takeover): set `blocked`, queue the doors. Ensure a single **interview** agent lives in the **root workspace** (spawn if absent, forward new doors with an agent prompt if alive), and send a push notification naming the issues and questions. An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
+**3. Doors.** For each issue whose outcome listed doors, or whose round counter hit **cap** (write a cap-exhaustion door yourself, laying out the stuck findings and the choices: ship anyway, redirect, human takeover): set `blocked`, queue the doors. Ensure a single **interview** agent (opus) lives in the **root workspace** (spawn if absent, forward new doors with an agent prompt if alive), and send a push notification naming the issues and questions. An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
 **4. Advance and dispatch.** For each unblocked issue, up to **parallel** in flight (an issue in flight = holds a live lease; new plans start only with spare capacity):
 
@@ -88,7 +88,7 @@ Then re-derive reality for every non-done issue: PR merged → dispatch ship-fin
 | fresh from frontier                            | plan                                      | opus   |
 | planned, slice frontier open                   | implement (one per ready slice, parallel) | opus   |
 | every slice implemented, not yet integrated    | integrate                                 | sonnet |
-| implemented/integrated, or fix pushed → CI red | fix-ci (attempt ++)                       | haiku  |
+| implemented or later, CI red on latest push    | fix-ci (attempt ++)                       | haiku  |
 | CI green, awaiting review                      | code-review (round ++)                    | opus   |
 | review fail                                    | fix-findings (code items)                 | sonnet |
 | review clean                                   | qa (round ++)                             | sonnet |
@@ -98,7 +98,7 @@ Then re-derive reality for every non-done issue: PR merged → dispatch ship-fin
 
 Fixes always return through code-review — new code gets fresh eyes. Conflict-fix's outcome says whether review/QA rerun (non-trivial resolution) or the pipeline proceeds. Rebase onto base only when actually unmergeable or a merge is imminent; routine currency costs re-reviews.
 
-**Dispatch mechanics.** Each issue gets a Herdr **workspace** named `conveyor-<id>`; workers run as agents in tabs within it, slice workers each in their own tab beside their slice worktree. The interview agent alone lives in the root workspace. Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-review`). Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + the stage's prompt file + a header giving issue id, tracker, branch, worktree path, round number, and paths to the state dir files it needs — pointers, never pasted content. Record the lease in state.json the moment the agent starts. Worktrees are created and merged with `wt`, branches `conveyor/<id>` off base and `conveyor/<id>--<slice>` off the issue branch.
+**Dispatch mechanics.** Each issue gets a Herdr **workspace** named `conveyor-<id>`; workers run as agents in tabs within it, every tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer — so a worker's cwd is its workplace. Plan alone starts at the repo root: it creates the worktrees. The interview agent alone lives in the root workspace. Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-review`). Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + the stage's prompt file + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content. Record the lease in state.json the moment the agent starts. Worktrees are created and merged with `wt`, branches `conveyor/<id>` off base and `conveyor/<id>--<slice>` off the issue branch.
 
 Prompt files: [plan](prompts/plan.md) · [implement](prompts/implement.md) · [integrate](prompts/integrate.md) · [code-review](prompts/code-review.md) · [qa](prompts/qa.md) · [fix-findings](prompts/fix-findings.md) · [fix-ci](prompts/fix-ci.md) · [fix-conflict](prompts/fix-conflict.md) · [interview](prompts/interview.md) · [ship](prompts/ship.md)
 

@@ -4,7 +4,7 @@ You are a Conveyor worker: a standalone agent in a Herdr pane, dispatched by a s
 
 **State dir.** From any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`. Your issue's files live under `$STATE_DIR/issues/<id>/`. Never write `state.json` — that is the scheduler's.
 
-**Outcome file.** Your last act: `$STATE_DIR/issues/<id>/outcomes/<step>-<n>.json`
+**Outcome file.** Your last act: `$STATE_DIR/issues/<id>/outcomes/<step>-<n>.json` (`<n>` = the round or attempt number in your brief; `1` when it has none)
 
 ```json
 {"verdict": "<per your prompt>", "summary": ["<=3 lines"], "reports": ["<paths>"], "doors": ["<door ids>"]}

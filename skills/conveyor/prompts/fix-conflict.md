@@ -1,6 +1,6 @@
 # Fix conflict
 
-The issue branch no longer merges cleanly into base. Work in the issue worktree.
+The issue branch no longer merges cleanly into base.
 
 Start the merge or rebase onto base (follow the repo's convention, else merge), then resolve per the `/mattpocock-skills:resolving-merge-conflicts` skill. A conflict that forces a design choice (the two sides embody incompatible decisions) is a door.
 
