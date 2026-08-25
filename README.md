@@ -36,7 +36,7 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 ### [`/browser-qa`](skills/browser-qa/SKILL.md)
 
-QAs a change against its spec: launches the app, drives every affected flow in a real browser, probes the edge cases the change touches, and opens the report with a pass or fail verdict.
+QAs a change against its spec: launches the app, drives every affected flow in a real browser, and probes the edge cases the change touches.
 
 ### [`/conveyor`](skills/conveyor/SKILL.md)
 
