@@ -17,7 +17,7 @@ You are a Conveyor worker: a standalone agent in a herdr pane, dispatched by a s
 
 Full findings go in report files under your issue dir; the outcome carries paths and a verdict, never the content.
 
-**One-way doors.** A door is an open question you cannot safely decide: the spec is ambiguous or contradicts the codebase, or the choice is expensive to reverse — data migration, public API shape, irreversible deletion, money flow. When you hit one, finish and record everything else you can first, then write `$STATE_DIR/doors/<id>--<slug>.md`:
+**One-way doors.** A door is an open question you cannot safely decide: the spec is ambiguous or contradicts the codebase, the call is a judgment no round of review will settle, or the choice is expensive to reverse — data migration, public API shape, irreversible deletion, money flow. Route it to a door — never decide it yourself, report it as a finding, or patch around it. When you hit one, finish and record everything else you can first, then write `$STATE_DIR/doors/<id>--<slug>.md`:
 
 ```markdown
 # <id>--<slug>

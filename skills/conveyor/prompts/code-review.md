@@ -4,4 +4,4 @@ Round `<n>`. Run /mattpocock-skills:code-review: the fixed point is base, the sp
 
 Write findings to `$STATE_DIR/issues/<id>/review-<n>.md` — each item concrete enough for a fixer to act on.
 
-Outcome verdict: `clean` (nothing found) or `fail` (report has items). A finding that is really an unresolvable judgment call is a door, not an item.
+Outcome verdict: `clean` (nothing found) or `fail` (report has items).

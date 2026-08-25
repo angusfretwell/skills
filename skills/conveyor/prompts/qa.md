@@ -4,4 +4,4 @@ Round `<n>`. Run /verify: the scope is the diff from base, the claim is the acce
 
 Write findings to `$STATE_DIR/issues/<id>/qa-<n>.md` — failed items concrete enough for a fixer to reproduce.
 
-Outcome verdict: `clean` or `fail`. Behavior that is arguably correct but ambiguous in the issue is a door, not an item.
+Outcome verdict: `clean` or `fail`.

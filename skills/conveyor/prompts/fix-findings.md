@@ -8,7 +8,7 @@ For every item, decide a disposition and act on it:
 - **won't fix** — a judgment call you're deciding against, with the reasoning written out. The next review round sees it and may dispute it.
 - **invalid** — the finding is factually wrong; show why (the line it misread, the behavior it missed).
 
-An item you can't judge from the report alone gets investigated — read the code, reproduce the behavior — before it gets a disposition. An item that is really an unresolvable judgment call is a door.
+An item you can't judge from the report alone gets investigated — read the code, reproduce the behavior — before it gets a disposition.
 
 Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit, push, and update the PR description if the fixes changed what the PR does.
 

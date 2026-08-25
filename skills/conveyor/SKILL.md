@@ -39,9 +39,7 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "stage": "code-review",
   "worktree": "/abs/path",
   "pr": 118,
-  "reviewRound": 1,
-  "qaRound": 0,
-  "ciAttempts": 0,
+  "rounds": { "review": 1, "qa": 0, "ci": 0 },
   "slices": [
     {
       "id": "api",
@@ -81,7 +79,7 @@ For each issue that has a lease:
 
 For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — the stuck findings and the choices: ship anyway, redirect, human takeover.
 
-Keep a single **interview** agent (opus) in the **root workspace** — spawn it if absent, forward new doors with an agent prompt if alive — and send a push notification naming the issues and questions.
+Keep a single **interview** agent (opus) in the **root workspace** — spawn it if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors with an agent prompt if alive — and send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
