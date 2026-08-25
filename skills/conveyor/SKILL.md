@@ -108,7 +108,7 @@ Fixes always return through `code-review` — new code gets fresh eyes. `fix-con
 
 Each issue gets a herdr **workspace** named `conveyor-<id>`; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees.
 
-Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
+Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
 Record the lease in state.json the moment the agent starts.
 
