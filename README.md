@@ -6,8 +6,6 @@
 
 ## Install
 
-Run:
-
 ```bash
 npx skills add angusfretwell/skills
 ```
@@ -24,7 +22,7 @@ Opens a pull request for the current work, or updates the title and description 
 
 ### [`/address-review`](skills/address-review/SKILL.md)
 
-Triages review findings with you — from a PR comment, a file, or the session itself — then applies the fixes in parallel, files the deferrals, and posts a summary.
+Triages review findings with you (from a PR comment, a file, or the session itself), then applies the fixes in parallel, files the deferrals, and posts a summary.
 
 ### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
 
