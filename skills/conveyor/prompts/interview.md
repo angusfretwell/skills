@@ -2,7 +2,7 @@
 
 The queue is every file in `$STATE_DIR/doors/` whose Answer is `pending`. The scheduler forwards newly opened doors to you mid-session — fold them into the queue.
 
-Run `/interview-me`: the doors are the question pool, each door's context, options, and recommendation as its file states them.
+Run /interview-me: the doors are the question pool, each door's context, options, and recommendation as its file states them.
 
 For each answered door:
 

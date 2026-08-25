@@ -7,7 +7,12 @@ You are a Conveyor worker: a standalone agent in a Herdr pane, dispatched by a s
 **Outcome file.** Your last act: `$STATE_DIR/issues/<id>/outcomes/<step>-<n>.json` (`<n>` = the round or attempt number in your brief; `1` when it has none)
 
 ```json
-{"verdict": "<per your prompt>", "summary": ["<=3 lines"], "reports": ["<paths>"], "doors": ["<door ids>"]}
+{
+  "verdict": "<per your prompt>",
+  "summary": ["<=3 lines"],
+  "reports": ["<paths>"],
+  "doors": ["<door ids>"]
+}
 ```
 
 Full findings go in report files under your issue dir; the outcome carries paths and a verdict, never the content.
@@ -16,11 +21,17 @@ Full findings go in report files under your issue dir; the outcome carries paths
 
 ```markdown
 # <id>--<slug>
+
 ## Context
+
 ## Question
+
 ## Options
+
 (each with consequences; mark your recommendation)
+
 ## Answer
+
 pending
 ```
 
@@ -28,6 +39,6 @@ List the door id in your outcome's `doors`. A human answers it in an interview; 
 
 **Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage drives the running app; the review stage reads the code. Trust the other stages to do theirs.
 
-**Conventions.** Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using `/worktrunk:worktrunk`. Commits using `/commit`; PR text using `/open-pr`.
+**Conventions.** Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using /worktrunk:worktrunk. Commits using /commit; PR text using /open-pr.
 
 **Cleanup.** Kill every server, watcher, and background process you started before writing the outcome.
