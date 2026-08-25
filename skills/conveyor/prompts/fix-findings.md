@@ -10,6 +10,6 @@ For every item, decide a disposition and act on it:
 
 An item you can't judge from the report alone gets investigated — read the code, reproduce the behavior — before it gets a disposition. An item that is really an unresolvable judgment call is a door.
 
-Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit per the `/commit` skill, push, and update the PR description per the `/open-pr` skill if the fixes changed what the PR does.
+Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit using `/commit`, push, and update the PR description using `/open-pr` if the fixes changed what the PR does.
 
 Outcome verdict: `fixed` (all items dispositioned), or `blocked` on a door.

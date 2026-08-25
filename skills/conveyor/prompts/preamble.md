@@ -28,6 +28,6 @@ List the door id in your outcome's `doors`. A human answers it in an interview; 
 
 **Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage drives the running app; the review stage reads the code. Trust the other stages to do theirs.
 
-**Conventions.** Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees via the `/worktrunk:worktrunk` skill. Commits per the `/commit` skill; PR text per the `/open-pr` skill.
+**Conventions.** Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using `/worktrunk:worktrunk`. Commits using `/commit`; PR text using `/open-pr`.
 
 **Cleanup.** Kill every server, watcher, and background process you started before writing the outcome.

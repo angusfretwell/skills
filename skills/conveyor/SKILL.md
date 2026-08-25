@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 One invocation is one **tick**: reconstruct where every issue stands from the tracker, git, Herdr, and the state dir; dispatch whatever is ready; report; exit. The invoker (`/loop` or a schedule) owns cadence.
 
-You are the scheduler, never the worker. Every job — planning, coding, reviewing, resolving a conflict, even merging a PR — goes to a dispatched agent; the urge to read a diff or run a command that changes anything is a dispatch signal. You read state, dispatch, and ingest outcome files. Your only writes: `state.json`, cap-exhaustion doors, and tracker label flips with their explanatory comments.
+You are the scheduler, never the worker. Every job — planning, coding, reviewing, resolving a conflict, even merging a PR — goes to a dispatched agent; the urge to read a diff or run a command that changes anything is a dispatch signal. You read state, dispatch, and ingest outcome files. Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, and reaping done issues' worktrees and workspaces.
 
 ## Settings
 
@@ -52,13 +52,15 @@ Live reality — CI status, PR mergeability, PR open/merged/closed, branch exist
 
 ## The tick
 
-**1. Gather.** Fetch issues carrying the ready-for-agent label. Read every `state.json`. Build the cross-issue dependency graph per the **dependency-graph** skill; a dependency clears only when the blocker's PR is **merged**. The frontier is the ready issues with no uncleared blockers.
+**1. Gather.** Fetch issues carrying the ready-for-agent label. Read every `state.json`. Build the cross-issue dependency graph using `/dependency-graph`; a dependency clears only when the blocker's PR is **merged**. The frontier is the ready issues with no uncleared blockers.
 
 **2. Reconcile** each issue that has a lease:
 
 - Live worker (Herdr shows the leased agent/pane alive) → in flight, skip this issue.
 - Dead pane, outcome file present → ingest the outcome, clear the lease, advance the stage (step 4).
 - Dead pane, no outcome → crashed: it produced nothing, whatever you expected it to conclude. Clear the lease, note the crash in state.json, redispatch the same step this tick.
+
+**Reap** each issue that reached `done`: remove its issue and slice worktrees, close its `conveyor-<id>` workspace.
 
 Then re-derive reality for every non-done issue: PR merged → dispatch ship (its brief says the PR is merged; it finalizes); PR closed by a human → `stopped`, flip its label to ready-for-human with a comment saying why. In `awaiting-merge`, an unmerged PR just keeps waiting.
 
