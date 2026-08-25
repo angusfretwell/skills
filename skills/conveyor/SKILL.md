@@ -38,24 +38,25 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "issue": "ENG-42",
   "stage": "code-review",
   "worktree": "/abs/path",
-  "pr": 118,
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
+  "lease": { "agent": "eng-42-code-review", "pane": "w3:p2" },
+  "blocked": { "doors": ["eng-42--auth-model"] },
   "slices": [
     {
       "id": "api",
       "dependsOn": [],
-      "status": "merged",
-      "worktree": "/abs/path"
+      "worktree": "/abs/path",
+      "lease": { "agent": "eng-42-implement-api", "pane": "w3:p4" }
     }
-  ],
-  "lease": { "agent": "eng-42-code-review", "pane": "w3:p2" },
-  "blocked": { "doors": ["eng-42--auth-model"] }
+  ]
 }
 ```
 
+The lease sits on the issue — or, during sliced implement, on each in-flight slice — never both (the example just shows both shapes).
+
 Stages: `plan`, `implement`, `integrate`, `code-review`, `fix-findings`, `qa`, `fix-ci`, `fix-conflict`, `ship`, `awaiting-merge`, `done`, `blocked`, `stopped`.
 
-CI status, PR state, branch existence, and pane liveness are re-derived every tick; where state.json disagrees, reality wins.
+CI status, PR state, branch existence, and pane liveness are re-derived every tick; where state.json disagrees, reality wins. A slice is implemented when its outcome file exists, merged when its branch is an ancestor of the issue branch.
 
 ## The tick
 
@@ -65,9 +66,9 @@ Fetch issues carrying the ready-for-agent label. Read every `state.json`. Build 
 
 ### 2. Reconcile
 
-For each issue that has a lease:
+For each live lease:
 
-- **Live worker (herdr shows the leased agent/pane alive):** in flight, skip this issue.
+- **Live worker (herdr shows the leased agent/pane alive):** in flight, skip it.
 - **Dead pane, outcome file present:** ingest the outcome, clear the lease, advance the stage.
 - **Dead pane, no outcome:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, note the crash in state.json, redispatch the same step this tick.
 
@@ -108,7 +109,7 @@ Fixes always return through `code-review` — new code gets fresh eyes. `fix-con
 
 Each issue gets a herdr **workspace** named `conveyor-<id>`; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees.
 
-Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`). Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
+Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
 Record the lease in state.json the moment the agent starts.
 
