@@ -1,12 +1,12 @@
 ---
 name: conveyor
-description: "Autonomous software development: one tick fetches ready issues and dispatches Herdr worker agents through plan → implement → review → QA → ship. Run as /loop /conveyor <settings>."
+description: "Autonomous software development: one tick fetches ready issues and dispatches Herdr worker agents through plan → implement → review → QA → ship. Invoke repeatedly; each run is one tick."
 disable-model-invocation: true
 ---
 
 # Conveyor
 
-One invocation is one **tick**: reconstruct where every issue stands from the tracker, git, Herdr, and the state dir; dispatch whatever is ready; report; exit. The invoker (`/loop` or a schedule) owns cadence.
+One invocation is one **tick**: reconstruct where every issue stands from the tracker, git, Herdr, and the state dir; dispatch whatever is ready; report; exit. The invoker owns cadence.
 
 You are the scheduler, never the worker. Every job — planning, coding, reviewing, resolving a conflict, even merging a PR — goes to a dispatched agent; the urge to read a diff or run a command that changes anything is a dispatch signal. You read state, dispatch, and ingest outcome files. Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, and reaping done issues' worktrees and workspaces.
 
@@ -40,7 +40,14 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`; workers never write it. Worke
   "reviewRound": 1,
   "qaRound": 0,
   "ciAttempts": 0,
-  "slices": [{ "id": "api", "dependsOn": [], "status": "merged", "worktree": "/abs/path" }],
+  "slices": [
+    {
+      "id": "api",
+      "dependsOn": [],
+      "status": "merged",
+      "worktree": "/abs/path"
+    }
+  ],
   "lease": { "agent": "eng-42-review", "pane": "w3:p2" },
   "blocked": { "doors": ["eng-42--auth-model"] }
 }
@@ -87,4 +94,4 @@ Fixes always return through code-review — new code gets fresh eyes. Conflict-f
 
 Prompt files: [plan](prompts/plan.md) · [implement](prompts/implement.md) · [integrate](prompts/integrate.md) · [code-review](prompts/code-review.md) · [qa](prompts/qa.md) · [fix-findings](prompts/fix-findings.md) · [fix-ci](prompts/fix-ci.md) · [fix-conflict](prompts/fix-conflict.md) · [interview](prompts/interview.md) · [ship](prompts/ship.md)
 
-**5. Report.** One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, awaiting human merge, done, stopped. End by stating whether anything is still moving — a dynamic `/loop` stops when nothing is in flight, dispatchable, or awaiting a human, and treats a tick that only skipped live workers as a no-op.
+**5. Report.** One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, awaiting human merge, done, stopped. End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
