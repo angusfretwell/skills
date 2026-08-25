@@ -36,6 +36,12 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 ## In progress
 
+### [`/conveyor`](skills/conveyor/SKILL.md)
+
+Runs autonomous software development in ticks: each tick fetches ready issues and dispatches worker agents through plan, implement, review, QA, and ship.
+
+The scheduler never touches the code itself; every job goes to a herdr agent in its own worktree.
+
 ### [`/show-me`](skills/show-me/SKILL.md)
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
