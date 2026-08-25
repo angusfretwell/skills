@@ -34,6 +34,10 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 ## In progress
 
+### [`/browser-qa`](skills/browser-qa/SKILL.md)
+
+QAs a change against its spec: launches the app, drives every affected flow in a real browser, probes the edge cases the change touches, and opens the report with a pass or fail verdict.
+
 ### [`/conveyor`](skills/conveyor/SKILL.md)
 
 Runs autonomous software development in ticks: each tick fetches ready issues and dispatches worker agents through plan, implement, review, QA, and ship.
