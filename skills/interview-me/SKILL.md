@@ -1,7 +1,6 @@
 ---
 name: interview-me
-description: Work through the session's open questions in rounds of AskUserQuestion.
-disable-model-invocation: true
+description: Work through the session's open questions in rounds of AskUserQuestion. Use when the user asks to be interviewed, or when a brief directs you to interview a human through open decisions.
 ---
 
 Harvest the session's open questions, including the implicit ones: TBDs, "either A or B" forks, assumptions that would change the work if wrong.
