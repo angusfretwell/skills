@@ -1,1 +1,0 @@
-Watch the PR's checks with `gh pr checks --watch` until they finish. Outcome: `{ "result": "GREEN" }` if all pass (or there are no checks), `{ "result": "RED" }` if any fail, `{ "result": "CONFLICT" }` if the branch conflicts with the default branch (`gh pr view --json mergeable`). That is the whole job.

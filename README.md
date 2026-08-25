@@ -36,19 +36,9 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 ## In progress
 
-### [`/afk-loop`](skills/afk-loop/SKILL.md)
-
-An autonomous issue-clearing loop: dispatches implementers, reviewers, and fixers over an issue tracker's ready issues.
-
-Run as `/loop /afk-loop`.
-
 ### [`/show-me`](skills/show-me/SKILL.md)
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
-
-### [`/stampede`](skills/stampede/SKILL.md)
-
-An autonomous issue-clearing orchestrator over herdr: one workspace and worktrunk worktree per issue, workers in tabs, the orchestrator keeps the herd moving and asks you only when stuck.
 
 ### [`/supervise`](skills/supervise/SKILL.md)
 
