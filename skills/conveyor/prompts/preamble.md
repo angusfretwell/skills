@@ -28,11 +28,11 @@ Full findings go in report files under your issue dir; the outcome carries paths
 
 ## Options
 
-(each with consequences; mark your recommendation)
+(Each with consequences; mark your recommendation)
 
 ## Answer
 
-pending
+Pending
 ```
 
 List the door id in your outcome's `doors`. A human answers it in an interview; your issue pauses until then.
