@@ -6,4 +6,4 @@ Read the failing check logs, reproduce the failure locally only as narrowly as n
 
 Commit, push, and update the PR description if the fix changed behavior.
 
-Outcome verdict: `fixed` (pushed, expecting green), or `blocked` on a door. Summary names the checks that were red and what broke them.
+Outcome verdict: `fixed` (pushed, expecting green), or `blocked` on a door. `summary` names the checks that were red and what broke them.

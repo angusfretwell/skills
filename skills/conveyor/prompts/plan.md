@@ -8,4 +8,4 @@ Claim the issue and produce the implementation plan the rest of the pipeline exe
 4. **Slice** only if the whole change is too large for one implementer to hold — each slice must be implementable within a 150k-token context. Give each slice an id, a scope (files and behavior), and `dependsOn` (a slice depends on another when it needs its code, or they collide on the same files — collisions are an ordering, pick one). Prefer few, coherent slices over many thin ones; an unsliced plan is the default. Create each slice's worktree and branch.
 5. **Write** `$STATE_DIR/issues/<id>/plan.md`: the change described concretely enough that an implementer who has never seen the issue can execute a slice from the plan plus the code alone — files to touch, interfaces, acceptance criteria, and per-slice scope when sliced.
 
-Outcome verdict: `planned` (with `"slices": [{"id", "dependsOn"}]` when sliced, else `"slices": []`), or `blocked` when a door prevents planning.
+Outcome verdict: `planned` (with `"slices": [{"id", "dependsOn"}]` when sliced, else `"slices": []`), or `blocked` on a door.

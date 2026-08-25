@@ -6,4 +6,4 @@ Update the branch from base, then resolve using /mattpocock-skills:resolving-mer
 
 Push, and update the PR description if the resolution changed behavior.
 
-Outcome verdict: `resolved-trivial` (mechanical resolution), `resolved-rerun` (non-trivial resolution or hand-written changes), or `blocked` on a door. Summary says what conflicted and how it was resolved.
+Outcome verdict: `resolved-trivial` (mechanical resolution), `resolved-rerun` (non-trivial resolution or hand-written changes), or `blocked` on a door. `summary` says what conflicted and how it was resolved.

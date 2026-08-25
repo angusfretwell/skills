@@ -22,7 +22,7 @@ From the invocation arguments:
 
 ## Preflight
 
-Load the **herdr** (pane/agent mechanics) and the **worktrunk:worktrunk** (worktree mechanics) skills. Confirm you are inside herdr and `wt` is installed; refuse otherwise.
+Load the /herdr and /worktrunk:worktrunk skills. Confirm you are inside herdr and `wt` is installed; refuse otherwise.
 
 Resolve the state dir — one per repo, reachable from any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`
 

@@ -6,4 +6,4 @@ Merge in dependency order from `plan.md`, resolving conflicts as you go using /m
 
 When every slice is in: push the issue branch and update the PR to describe the integrated whole.
 
-Outcome verdict: `integrated`, or `blocked` on a door. Note in `summary` any resolution non-trivial enough that reviewers should look at it.
+Outcome verdict: `integrated`, or `blocked` on a door. `summary` notes any resolution non-trivial enough that reviewers should look at it.
