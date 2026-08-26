@@ -33,21 +33,7 @@ Pending
 
 List the door id in your outcome's `doors`. A human answers it in an interview; your issue pauses until then.
 
-**Advisories.** An advisory is something real you observed outside your issue's scope, worth a human decision but blocking nothing — a pre-existing bug, a hazard for later work, an improvement you deferred. In-scope findings belong in your stage's report; blocking questions belong in a door. Write `$STATE_DIR/advisories/<id>--<slug>.md`:
-
-```markdown
-# <id>--<slug>
-
-## Advisory
-
-(The finding, its evidence, and your recommended action)
-
-## Disposition
-
-Pending
-```
-
-The scheduler routes pending advisories to a human on its own; finish your stage as if you'd never seen the thing.
+**Observations.** An observation is something real you noticed outside your issue's scope — a pre-existing bug, a hazard for later work, an improvement you deferred. In-scope findings belong in your stage's report; blocking questions belong in a door. Write the finding, its evidence, and your recommended action to `$STATE_DIR/issues/<id>/observations/<step>--<slug>.md`, then finish your stage as if you'd never seen the thing.
 
 **Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage verifies behaviour in the running app; the review stage reads the code. Trust the other stages to do theirs.
 

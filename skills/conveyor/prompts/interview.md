@@ -13,8 +13,6 @@ For each answered door:
 
 ## Advisories
 
-Before presenting an advisory, grep `$STATE_DIR/retros/` for prior occurrences of the same lesson and lead with the count — a repeat finding is its own argument.
-
 The dispositions to offer:
 
 - **Apply now** — for a tiny guidance append to CLAUDE.md/AGENTS.md only, committed straight to base using /commit.
