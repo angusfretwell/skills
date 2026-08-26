@@ -73,7 +73,7 @@ Workers close their own pane after writing their outcome, so for each lease in `
 
 ### 3. Doors and advisories
 
-For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — a pure continue-or-park choice: grant N more rounds, or park for human takeover. Findings stay in the reviewer's report, where the next fix round reads them; the door carries only the decision.
+For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — grant N more rounds, or park for human takeover. Findings stay in the reviewer's report.
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
