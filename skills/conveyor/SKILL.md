@@ -1,6 +1,6 @@
 ---
 name: conveyor
-description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, and ship."
+description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, ship, and retro."
 argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>]"
 ---
 
@@ -38,20 +38,18 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "stage": "code-review",
   "worktree": "/abs/path",
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
-  "lease": { "agent": "eng-42-code-review", "pane": "w3:p2" },
-  "blocked": { "doors": ["eng-42--auth-model"] },
-  "slices": [
+  "leases": [{ "agent": "eng-42-code-review", "pane": "w3:p2" }],
+  "sessions": [
     {
-      "id": "api",
-      "dependsOn": [],
-      "worktree": "/abs/path",
-      "lease": { "agent": "eng-42-implement-api", "pane": "w3:p4" }
+      "agent": "eng-42-plan",
+      "session": "<uuid>",
+      "transcript": "/abs/path.jsonl"
     }
-  ]
+  ],
+  "blocked": { "doors": ["eng-42--auth-model"] },
+  "slices": [{ "id": "api", "dependsOn": [], "worktree": "/abs/path" }]
 }
 ```
-
-The lease sits on the issue — or, during sliced implement, on each in-flight slice — never both (the example just shows both shapes).
 
 Stages: `plan`, `implement`, `integrate`, `code-review`, `fix-findings`, `qa`, `fix-ci`, `fix-conflict`, `ship`, `awaiting-merge`, `done`, `blocked`, `stopped`.
 
@@ -65,7 +63,7 @@ Fetch issues carrying the ready-for-agent label. Read every `state.json`. Build 
 
 ### 2. Reconcile
 
-Workers close their own pane after writing their outcome, so for each live lease:
+Workers close their own pane after writing their outcome, so for each lease in `leases`:
 
 - **Herdr shows the leased agent working:** in flight, skip it.
 - **Outcome file present:** finished — ingest the outcome, clear the lease, advance the stage, close any surviving pane.
@@ -73,15 +71,17 @@ Workers close their own pane after writing their outcome, so for each live lease
 
 **Reap** each issue that reached `done`: remove its issue and slice worktrees, close its `conveyor-<id>` workspace.
 
-**Done**: an issue whose PR is merged is `done`.
+**Done**: an issue whose PR is merged and whose leases are all cleared is `done`.
 
 **Stop** each issue whose PR a human closed: set `stopped`, flip its label to ready-for-human with a comment saying why.
 
-### 3. Doors
+### 3. Doors and advisories
 
 For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — the stuck findings and the choices: ship anyway, redirect, human takeover.
 
-Keep a single **interview** agent (opus) in the **root workspace** — spawn it if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors with an agent prompt if alive — and send a push notification naming the issues and questions.
+Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
+
+Keep a single **interview** agent (opus) in the **root workspace** — spawn it if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
@@ -99,7 +99,7 @@ For each unblocked issue, up to **parallel** in flight (an issue in flight = hol
 | Review fail                                 | `fix-findings` (code items)                 | opus   |
 | Review clean                                | `qa` (round++)                              | sonnet |
 | QA fail                                     | `fix-findings` (qa items)                   | opus   |
-| QA clean                                    | `ship`                                      | sonnet |
+| QA clean                                    | `ship` & `retro`                            | sonnet |
 | Awaiting merge, PR unmerged                 | nothing — keep waiting                      | —      |
 | PR unmergeable at any gate                  | `fix-conflict`                              | sonnet |
 
@@ -111,11 +111,11 @@ Each issue gets a herdr **workspace** named `conveyor-<id>`; workers run as agen
 
 Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
-Record the lease in state.json the moment the agent starts.
+Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session, transcript}` to `sessions`.
 
 ### 5. Report
 
-One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, awaiting human merge, done, stopped.
+One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, advisories pending, awaiting human merge, done, stopped.
 
 End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
 

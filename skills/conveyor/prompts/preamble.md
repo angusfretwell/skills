@@ -22,13 +22,9 @@ Full findings go in report files under your issue dir; the outcome carries paths
 ```markdown
 # <id>--<slug>
 
-## Context
+## Door
 
-## Question
-
-## Options
-
-(Each with consequences; mark your recommendation)
+(The question, its context, and the options with their consequences; mark your recommendation)
 
 ## Answer
 
