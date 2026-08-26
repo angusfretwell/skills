@@ -46,7 +46,7 @@ Runs autonomous software development in ticks: each tick fetches ready issues an
 
 The scheduler never touches the code itself; every job goes to a herdr agent in its own worktree.
 
-Depends on [`/herdr`](https://www.skills.sh/herdrdev/herdr/herdr), [`/worktrunk`](https://www.skills.sh/max-sixty/worktrunk/worktrunk), `/dependency-graph`, `/commit`, `/open-pr`, `/interview-me`, `/browser-qa`.
+Depends on [`/herdr`](https://www.skills.sh/herdrdev/herdr/herdr), [`/worktrunk`](https://www.skills.sh/max-sixty/worktrunk/worktrunk), [`/github-image-hosting`](https://www.skills.sh/img402/skills/github-image-hosting), `/dependency-graph`, `/commit`, `/open-pr`, `/interview-me`, `/browser-qa`.
 
 ### [`/show-me`](skills/show-me/SKILL.md)
 

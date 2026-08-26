@@ -73,6 +73,8 @@ Workers close their own pane after writing their outcome, so for each live lease
 
 **Reap** each issue that reached `done`: remove its issue and slice worktrees, close its `conveyor-<id>` workspace.
 
+**Done**: an issue whose PR is merged is `done`.
+
 **Stop** each issue whose PR a human closed: set `stopped`, flip its label to ready-for-human with a comment saying why.
 
 ### 3. Doors
@@ -97,8 +99,7 @@ For each unblocked issue, up to **parallel** in flight (an issue in flight = hol
 | Review fail                                 | `fix-findings` (code items)                 | opus   |
 | Review clean                                | `qa` (round++)                              | sonnet |
 | QA fail                                     | `fix-findings` (qa items)                   | opus   |
-| QA clean                                    | `ship`                                      | haiku  |
-| PR merged at any stage                      | `ship` (brief says merged)                  | haiku  |
+| QA clean                                    | `ship`                                      | sonnet |
 | Awaiting merge, PR unmerged                 | nothing — keep waiting                      | —      |
 | PR unmergeable at any gate                  | `fix-conflict`                              | sonnet |
 

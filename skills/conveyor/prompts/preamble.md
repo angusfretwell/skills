@@ -37,7 +37,7 @@ Pending
 
 List the door id in your outcome's `doors`. A human answers it in an interview; your issue pauses until then.
 
-**Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage drives the running app; the review stage reads the code. Trust the other stages to do theirs.
+**Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage verifies behaviour in the running app; the review stage reads the code. Trust the other stages to do theirs.
 
 **Conventions.** **Base** is the repo's default branch. Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using /worktrunk:worktrunk. Commits using /commit; PR text using /open-pr.
 

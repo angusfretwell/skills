@@ -1,9 +1,25 @@
 # Ship
 
-Your brief states the merge mode and whether the PR is already merged.
+## 1. Handoff
 
-- **PR unmerged, mode `auto`:** confirm CI is green and the PR mergeable (either false: outcome verdict `not-ready`, `summary` saying which). Merge the PR, then finalize.
-- **PR unmerged, mode `manual`:** mark the draft PR ready for review, flip the issue's label from ready-for-agent to ready-for-human, and comment on the PR that it passed review and QA. Outcome verdict: `awaiting-merge`. Finalization happens on a later dispatch, after the human merges.
-- **PR merged, any mode:** finalize.
+Finalize the PR description using /open-pr.
 
-**Finalize.** Mark the issue done in the tracker. Outcome verdict: `done`.
+Populate Evidence with the screenshots that best show the change to a reviewer, using /github-image-hosting: source each from the latest `$STATE_DIR/issues/<id>/artifacts/qa-<n>/`, or capture it with /run and /agent-browser into `artifacts/ship/`.
+
+Comment a summary on the PR, omitting any line whose count is zero:
+
+```markdown
+## Conveyor summary
+
+- 4 slices implemented
+- 2 rounds of code review
+- 1 round of QA
+- 2 rounds of CI fixes
+```
+
+## 2. Deliver
+
+Your brief states the merge mode.
+
+- **Mode `auto`:** confirm CI is green and the PR mergeable (either false: outcome verdict `not-ready`, `summary` saying which), then merge the PR. Outcome verdict: `done`.
+- **Mode `manual`:** mark the draft PR ready for review and flip the issue's label from ready-for-agent to ready-for-human. Outcome verdict: `awaiting-merge`.
