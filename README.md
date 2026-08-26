@@ -38,11 +38,15 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 QAs a change against its spec: launches the app, drives every affected flow in a real browser, and probes the edge cases the change touches.
 
+Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/agent-browser).
+
 ### [`/conveyor`](skills/conveyor/SKILL.md)
 
 Runs autonomous software development in ticks: each tick fetches ready issues and dispatches worker agents through plan, implement, review, QA, and ship.
 
 The scheduler never touches the code itself; every job goes to a herdr agent in its own worktree.
+
+Depends on [`/herdr`](https://www.skills.sh/herdrdev/herdr/herdr), [`/worktrunk`](https://www.skills.sh/max-sixty/worktrunk/worktrunk), `/dependency-graph`, `/commit`, `/open-pr`, `/interview-me`, `/browser-qa`.
 
 ### [`/show-me`](skills/show-me/SKILL.md)
 
@@ -53,6 +57,8 @@ Composes a visual explanation of how something works: screenshots, diagrams, and
 Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
 
 Other skills can call it with their own dispatch prompts.
+
+Depends on `/dependency-graph`.
 
 ### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
 
