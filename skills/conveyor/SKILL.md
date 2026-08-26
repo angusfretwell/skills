@@ -77,7 +77,7 @@ For each issue whose outcome listed doors, or whose round counter hit **cap**: s
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
-Keep a single **interview** agent (opus) in the **root workspace** — spawn it if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
+Keep a single **interview** agent (opus) in a pane split off your own — spawn it there if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
