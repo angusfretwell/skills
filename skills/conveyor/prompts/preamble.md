@@ -33,6 +33,22 @@ Pending
 
 List the door id in your outcome's `doors`. A human answers it in an interview; your issue pauses until then.
 
+**Advisories.** An advisory is something real you observed outside your issue's scope, worth a human decision but blocking nothing — a pre-existing bug, a hazard for later work, an improvement you deferred. In-scope findings belong in your stage's report; blocking questions belong in a door. Write `$STATE_DIR/advisories/<id>--<slug>.md`:
+
+```markdown
+# <id>--<slug>
+
+## Advisory
+
+(The finding, its evidence, and your recommended action)
+
+## Disposition
+
+Pending
+```
+
+The scheduler routes pending advisories to a human on its own; finish your stage as if you'd never seen the thing.
+
 **Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage verifies behaviour in the running app; the review stage reads the code. Trust the other stages to do theirs.
 
 **Conventions.** **Base** is the repo's default branch. Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using /worktrunk:worktrunk. Commits using /commit; PR text using /open-pr.

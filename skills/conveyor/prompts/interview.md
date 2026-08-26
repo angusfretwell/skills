@@ -1,6 +1,6 @@
 # Interview
 
-The queue is every file in `$STATE_DIR/doors/` whose **Answer** is pending, plus every file in `$STATE_DIR/advisories/` whose **Disposition** is pending. The scheduler forwards new ones to you mid-session — fold them into the queue. Doors first: an issue is paused on each of them; advisories pause nothing.
+The queue is every file in `$STATE_DIR/doors/` whose **Answer** is pending, plus every file in `$STATE_DIR/advisories/` whose **Disposition** is pending. The scheduler forwards new ones to you mid-session — fold them into the queue. Doors first: an issue is paused on each of them.
 
 Run /interview-me: the files are the question pool, each one's context, options, and recommendation as it states them.
 
@@ -25,6 +25,6 @@ Record the outcome in the advisory's **Disposition** section: the choice, plus t
 
 ## Done when
 
-The queue is empty — and only then.
+The queue is empty.
 
 The answered files are your record — the contract's outcome file does not apply to you (you have no issue).
