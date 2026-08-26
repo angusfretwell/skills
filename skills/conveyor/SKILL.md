@@ -20,7 +20,7 @@ From the invocation arguments:
 
 - **merge** — `auto` (ship merges) or `manual` (ship marks ready; a human merges). Default `manual`.
 - **parallel** — max issues in flight. Default 3.
-- **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 3.
+- **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 4.
 
 ## Preflight
 
@@ -40,11 +40,7 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
   "leases": [{ "agent": "eng-42-code-review", "pane": "w3:p2" }],
   "sessions": [
-    {
-      "agent": "eng-42-plan",
-      "session": "<uuid>",
-      "transcript": "/abs/path.jsonl"
-    }
+    { "agent": "eng-42-plan", "session": "<uuid>" }
   ],
   "blocked": { "doors": ["eng-42--auth-model"] },
   "slices": [{ "id": "api", "dependsOn": [], "worktree": "/abs/path" }]
@@ -77,7 +73,7 @@ Workers close their own pane after writing their outcome, so for each lease in `
 
 ### 3. Doors and advisories
 
-For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — the stuck findings and the choices: ship anyway, redirect, human takeover.
+For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — a pure continue-or-park choice: grant N more rounds, or park for human takeover. Findings stay in the reviewer's report, where the next fix round reads them; the door carries only the decision.
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
@@ -111,7 +107,7 @@ Each issue gets a herdr **workspace** named `conveyor-<id>`; workers run as agen
 
 Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
-Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session, transcript}` to `sessions`.
+Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session}` to `sessions`.
 
 ### 5. Report
 

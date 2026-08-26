@@ -12,4 +12,6 @@ An item you can't judge from the report alone gets investigated — read the cod
 
 Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit, push, and update the PR description if the fixes changed what the PR does.
 
+CI owns the test suite, lint, formatter, and typecheck: it runs and reports them after your push. Your stage ends at the push.
+
 Outcome verdict: `fixed` (all items dispositioned), or `blocked` on a door.
