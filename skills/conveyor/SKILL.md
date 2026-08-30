@@ -110,64 +110,45 @@ Agent names — the CLI handle, not a display name: `<id>-<step>` (lowercase, e.
 
 Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session}` to `sessions`.
 
+### 5. Report
+
+One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, advisories pending, awaiting human merge, done, stopped.
+
+End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
+
 ## Naming
 
 Three display names, all set by you — a worker never names itself.
 
 **Workspace** — `<ISSUE-ID>: <brief>`, e.g. `SA-271: levy collection view`. The brief is a two-to-four word noun phrase for what is changing; the sidebar truncates, so drop articles, the word the issue id already implies, and anything a reader could guess. Set it at `workspace create` and never touch it again; find the workspace by the id recorded in state.json, not by its label.
 
-**Tab** — a code for the worker type, so the tab bar reads as pipeline position:
+**Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again); slices carry numbers only because they co-exist. Your own tab is `Conveyor`, holding the `Scheduler` and `Interviewer` panes.
 
-| Worker         | Tab                                                      |
-| -------------- | -------------------------------------------------------- |
-| `plan`         | `PLN`                                                    |
-| `implement`    | `IMP`, or `SL1`, `SL2`, … in `PLAN.md` order when sliced |
-| `integrate`    | `INT`                                                    |
-| `code-review`  | `REV`                                                    |
-| `fix-findings` | `FIX`                                                    |
-| `qa`           | `QA`                                                     |
-| `fix-ci`       | `CI`                                                     |
-| `fix-conflict` | `MRG`                                                    |
-| `ship`         | `SHP`                                                    |
-| `retro`        | `RET`                                                    |
-
-Rounds are never numbered — a second review is `REV` again, and the round lives in the activity line. Slices carry numbers only because they co-exist. Your own tab is `Conveyor`, holding two labeled panes: `Scheduler` and `Interviewer`.
-
-**Activity** — the second line in herdr's agent list, which is the agent's terminal title. Claude Code writes it from the session display name, so pass the activity as a native `--name` arg at `agent start`; it is set before the first prompt and survives the work that follows:
+**Activity** — the second line in herdr's agent list: a verb plus only what the workspace and tab do not already say, with a round in parentheses for the stages that repeat. It is the agent's terminal title, which Claude Code writes from the session display name — so pass it as the `--name` native arg at `agent start`; it is set before the first prompt and survives the work that follows:
 
 ```bash
 herdr agent start eng-42-code-review --kind claude --pane w7:p1 \
   -- --effort high --dangerously-skip-permissions --name "Reviewing code (round 1)"
 ```
 
-| Worker         | Activity                                                               |
-| -------------- | ---------------------------------------------------------------------- |
-| `plan`         | `Planning`                                                             |
-| `implement`    | `Implementing <slice>`, or `Implementing`                              |
-| `integrate`    | `Integrating`                                                          |
-| `code-review`  | `Reviewing code (round <n>)`                                           |
-| `fix-findings` | `Fixing review findings (round <n>)`, `Fixing QA findings (round <n>)` |
-| `qa`           | `Running QA (round <n>)`                                               |
-| `fix-ci`       | `Fixing CI (attempt <n>)`                                              |
-| `fix-conflict` | `Resolving conflicts`                                                  |
-| `ship`         | `Shipping`                                                             |
-| `retro`        | `Writing retro`                                                        |
+| Worker         | Tab                                                  | Activity                                                               |
+| -------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `plan`         | `PLN`                                                | `Planning`                                                             |
+| `implement`    | `IMP`, or `SL1`, `SL2`, … in `PLAN.md` order         | `Implementing <slice>`, or `Implementing`                              |
+| `integrate`    | `INT`                                                | `Integrating`                                                          |
+| `code-review`  | `REV`                                                | `Reviewing code (round <n>)`                                           |
+| `fix-findings` | `FIX`                                                | `Fixing review findings (round <n>)`, `Fixing QA findings (round <n>)` |
+| `qa`           | `QA`                                                 | `Running QA (round <n>)`                                               |
+| `fix-ci`       | `CI`                                                 | `Fixing CI (attempt <n>)`                                              |
+| `fix-conflict` | `MRG`                                                | `Resolving conflicts`                                                  |
+| `ship`         | `SHP`                                                | `Shipping`                                                             |
+| `retro`        | `RET`                                                | `Writing retro`                                                        |
 
-A verb and only what the workspace and tab do not already say — no object a reader can infer, and a round in parentheses only for the stages that repeat.
-
-The two long-lived agents carry queue depth instead of an activity, so theirs changes while they run: `/rename <text>` sets the same name mid-session. Rename the interviewer whenever its queue changes — `<n> questions waiting`, or `No questions waiting`. Rename yourself at the very end of a tick, once you have the totals — `<n> running · <n> to merge · <n> blocked`, dropping any zero, or `Idle` when nothing is moving.
+You and the interviewer carry queue depth instead of a fixed activity: `/rename <text>` sets the same name mid-session. Rename the interviewer whenever its queue changes — `<n> questions waiting`, or `No questions waiting`. Rename yourself as the tick's last act, once you have the totals — `<n> running · <n> to merge · <n> blocked`, dropping any zero, or `Idle` when nothing is moving. Type it into your own pane rather than prompting yourself — `/rename` is an immediate local command, so it costs no turn — and the queued text lands only after your turn ends, which is why it belongs at the tick's end:
 
 ```bash
 herdr pane send-text "$HERDR_PANE_ID" "/rename 3 running · 2 to merge · 1 blocked" && herdr pane send-keys "$HERDR_PANE_ID" enter
 ```
-
-Type it into your own pane rather than prompting yourself — `/rename` is an immediate local command, so it costs no turn, but it lands after the tick ends. Never send it to yourself mid-tick.
-
-### 5. Report
-
-One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, advisories pending, awaiting human merge, done, stopped.
-
-End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
 
 ## Self-pacing invokers
 
