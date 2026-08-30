@@ -35,6 +35,8 @@ List the door id in your outcome's `doors`. A human answers it in an interview; 
 
 **Observations.** An observation is something real you noticed outside your issue's scope — a pre-existing bug, a hazard for later work, an improvement you deferred. In-scope findings belong in your stage's report; blocking questions belong in a door. Write the finding, its evidence, and your recommended action to `$STATE_DIR/issues/<id>/observations/<step>--<slug>.md`, then finish your stage as if you'd never seen the thing.
 
+**PR description.** When you commit and push to a branch with an open PR, update the PR description if your changes contradict what the body already says.
+
 **Stage ownership.** Do your stage's job only. CI runs the test suite, lint, and type checks; the QA stage verifies behaviour in the running app; the review stage reads the code. Trust the other stages to do theirs.
 
 **Conventions.** **Base** is the repo's default branch. Branches `conveyor/<id>` (issue, off base) and `conveyor/<id>--<slice>` (slice, off the issue branch). Worktrees using /worktrunk:worktrunk. Commits using /commit; PR text using /open-pr.

@@ -1,6 +1,6 @@
 # QA
 
-Round `<n>`. The scope is the diff from base; the spec is the acceptance criteria from the issue and `plan.md`. On later rounds, also re-exercise what the previous round's failed items covered.
+Round `<n>`. The scope is the diff from base; the spec is the acceptance criteria from the issue and `PLAN.md`. On later rounds, also re-exercise what the previous round's failed items covered.
 
 Verify each criterion by the strongest method that reaches it:
 

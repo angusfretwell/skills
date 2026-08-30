@@ -9,7 +9,7 @@ Run /interview-me: the files are the question pool, each one's context, options,
 For each answered door:
 
 1. Fill the door file's **Answer** section with the decision and its reasoning.
-2. Apply it where the pipeline will see it: update the issue description or `plan.md` when the decision changes the work, the PR description when it changes what shipped.
+2. Apply it where the pipeline will see it: update the issue description or `PLAN.md` when the decision changes the work, the PR description when it changes what shipped.
 
 ## Advisories
 
