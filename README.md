@@ -32,6 +32,18 @@ Builds a dependency graph over a batch of work items and shows the frontier: the
 
 Asks the session's open questions in rounds of AskUserQuestion, with a recommendation and a preview for each option.
 
+### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
+
+Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.
+
+### [`/supervise`](skills/supervise/SKILL.md)
+
+Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
+
+Other skills can call it with their own dispatch prompts.
+
+Depends on `/dependency-graph`.
+
 ## In progress
 
 ### [`/browser-qa`](skills/browser-qa/SKILL.md)
@@ -51,15 +63,3 @@ Depends on [`/herdr`](https://www.skills.sh/herdrdev/herdr/herdr), [`/worktrunk`
 ### [`/show-me`](skills/show-me/SKILL.md)
 
 Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
-
-### [`/supervise`](skills/supervise/SKILL.md)
-
-Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
-
-Other skills can call it with their own dispatch prompts.
-
-Depends on `/dependency-graph`.
-
-### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
-
-Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.

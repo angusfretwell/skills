@@ -10,7 +10,9 @@
         "commit",
         "open-pr",
         "dependency-graph",
-        "interview-me"
+        "interview-me",
+        "writing-for-humans",
+        "supervise"
       ]
     },
     {
@@ -18,8 +20,6 @@
       "description": "Skills that I'm still working on.",
       "skills": [
         "show-me",
-        "supervise",
-        "writing-for-humans",
         "conveyor",
         "browser-qa"
       ]
