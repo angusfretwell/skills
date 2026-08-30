@@ -1,7 +1,7 @@
 ---
 name: conveyor
 description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, ship, and retro."
-argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>]"
+argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>] [retro=<n>]"
 ---
 
 # Conveyor
@@ -21,6 +21,7 @@ From the invocation arguments:
 - **merge** — `auto` (ship merges) or `manual` (ship marks ready; a human merges). Default `manual`.
 - **parallel** — max issues in flight. Default 3.
 - **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 4; a granted raise overrides it per issue and counter via `caps` in state.json.
+- **retro** — shipped issues per retro batch. Default 5.
 
 ## Preflight
 
@@ -103,11 +104,13 @@ For each unblocked issue, up to **parallel** in flight (an issue in flight = hol
 | Review fail                                 | `fix-findings` (code items)                 | opus   |
 | Review clean                                | `qa` (round++)                              | sonnet |
 | QA fail                                     | `fix-findings` (qa items)                   | opus   |
-| QA clean                                    | `ship` & `retro`                            | sonnet |
+| QA clean                                    | `ship`                                      | sonnet |
 | Awaiting merge, PR unmerged                 | nothing — keep waiting                      | —      |
 | PR unmergeable at any gate                  | `fix-conflict`                              | sonnet |
 
 Fixes always return through `code-review` — new code gets fresh eyes. `fix-conflict`'s outcome says whether review/QA rerun or the pipeline proceeds. `integrate` is a sliced-issue stage: an unsliced implement goes straight to the CI and review gates.
+
+**Retro runs in batches.** An issue is retro-pending once it has shipped (stage `ship` or beyond) with no `$STATE_DIR/retros/<id>.md`. When **retro** or more are pending and no retro lease is live, dispatch one `retro` (sonnet) over all of them from the repo root, leased under the newest pending issue; its brief header lists every covered issue with its sessions and observations dir. A tick about to declare the run over first flushes the pending remainder, whatever its size — that dispatch keeps the run alive until the retro lands. A crashed retro needs no stored batch: the pending set recomputes next tick.
 
 #### Dispatch mechanics
 
@@ -148,7 +151,7 @@ Three display names, all set by you — a worker never names itself.
 | `fix-ci`       | `CI`                                         | `Fixing CI (attempt <n>)`                                              |
 | `fix-conflict` | `MRG`                                        | `Resolving conflicts`                                                  |
 | `ship`         | `SHP`                                        | `Shipping`                                                             |
-| `retro`        | `RET`                                        | `Writing retro`                                                        |
+| `retro`        | `Retro`, beside `Conveyor`                   | `Writing retro (<n> issues)`                                           |
 
 The activity is the agent's terminal title, which Claude Code writes from the session display name — the launcher passes it as the `--name` native arg at `agent start`, where it is set before the first prompt and survives the work that follows.
 

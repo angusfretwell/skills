@@ -54,7 +54,7 @@ Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/ag
 
 ### [`/conveyor`](skills/conveyor/SKILL.md)
 
-Runs autonomous software development in ticks: each tick fetches ready issues and dispatches worker agents through plan, implement, review, QA, ship, and a retro.
+Runs autonomous software development in ticks: each tick fetches ready issues and dispatches worker agents through plan, implement, review, QA, and ship, with retros batched across issues.
 
 The scheduler never touches the code itself; every job goes to a herdr agent in its own worktree.
 

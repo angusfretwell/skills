@@ -17,6 +17,7 @@ The union of the issues carrying the ready-for-agent label and every `$STATE_DIR
 - **Leases** — for each one in `state.json`, whether herdr shows that agent working, idle, or gone.
 - **Outcomes** — the files under `outcomes/` that the recorded stage has not yet ingested.
 - **Slices** — implemented where the outcome file exists, merged where the slice branch is an ancestor of the issue branch.
+- **Retro** — for an issue at `ship` or beyond: whether `$STATE_DIR/retros/<id>.md` exists.
 
 ## Across issues
 
