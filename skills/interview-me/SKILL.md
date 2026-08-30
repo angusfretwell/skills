@@ -9,4 +9,6 @@ Interview in rounds — one AskUserQuestion call per round of related questions.
 
 Between rounds, re-plan against the answers: retire questions an answer just mooted, sharpen the rest, append follow-ups an answer raised. An "Other" free-text reply is an answer — fold it in.
 
+When a reply asks for clarification, answer it in plain text first, then re-ask — text before the call renders above the question UI, and option descriptions are too compressed to carry an explanation.
+
 Done when every harvested question is answered or retired, and the last round's answers raised no follow-up.
