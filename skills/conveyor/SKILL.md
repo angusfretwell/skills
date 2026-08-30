@@ -28,7 +28,7 @@ Load the /herdr and /worktrunk:worktrunk skills. Confirm you are inside herdr an
 
 Resolve the state dir — one per repo, reachable from any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`
 
-Name your own tab `Conveyor` and your own pane `Scheduler` (see [Naming](#naming)); leave them that way for the rest of the run.
+Name your own tab and panes per [Naming](#naming); leave them that way for the rest of the run.
 
 ## State
 
