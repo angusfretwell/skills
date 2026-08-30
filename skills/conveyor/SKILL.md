@@ -20,7 +20,7 @@ From the invocation arguments:
 
 - **merge** — `auto` (ship merges) or `manual` (ship marks ready; a human merges). Default `manual`.
 - **parallel** — max issues in flight. Default 3.
-- **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 4.
+- **cap** — max review rounds, QA rounds, and CI-fix attempts, counted separately. Default 4; a granted raise overrides it per issue and counter via `caps` in state.json.
 
 ## Preflight
 
@@ -43,6 +43,7 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "worktree": "/abs/path",
   "workspace": "w7",
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
+  "caps": { "review": 5 },
   "leases": [{ "agent": "eng-42-code-review", "pane": "w3:p2" }],
   "sessions": [{ "agent": "eng-42-plan", "session": "<uuid>" }],
   "blocked": { "doors": ["eng-42--auth-model"] },
@@ -78,13 +79,15 @@ Workers close their own pane after writing their outcome, so for each lease:
 
 ### 3. Doors and advisories
 
-For each issue whose outcome listed doors, or whose round counter hit **cap**: set `blocked`, queue the doors. At cap, write the door yourself — grant N more rounds, or park for human takeover. Findings stay in the reviewer's report.
+For each issue whose outcome listed doors, or whose round counter hit its cap: set `blocked`, queue the doors. Findings stay in the reviewer's report.
+
+At cap, write the door yourself — `$STATE_DIR/doors/<id>--cap-<counter>.md`, stating how the rounds were spent, with exactly three options: **raise by 1**, **raise by 3**, **park for human**. A raise's answer sets `caps.<counter>` in state.json (cap + the grant); a park makes the issue `stopped` — flip its label to ready-for-human with a comment saying why.
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
 Keep a single **interview** agent (opus) in a tab beside yours: spawn it there if absent with the brief `$SKILL_DIR/prompts/preamble.md` + `$SKILL_DIR/prompts/interview.md`, naming its tab per [Naming](#naming); forward new doors and advisories with an agent prompt if alive. Either way, send a push notification naming the issues and questions.
 
-An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
+An issue whose doors are all answered unblocks (a park stops it instead): clear `blocked` and resume at the recorded stage.
 
 ### 4. Advance and dispatch
 
