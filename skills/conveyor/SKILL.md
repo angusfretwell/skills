@@ -28,6 +28,8 @@ Load the /herdr and /worktrunk:worktrunk skills. Confirm you are inside herdr an
 
 Resolve the state dir — one per repo, reachable from any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`
 
+Name your own tab `Conveyor` and your own pane `Scheduler` (see [Naming](#naming)); leave them that way for the rest of the run.
+
 ## State
 
 The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome, and door files under the same tree — their contract is [`prompts/preamble.md`](prompts/preamble.md), prepended to every brief.
@@ -37,11 +39,10 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "issue": "ENG-42",
   "stage": "code-review",
   "worktree": "/abs/path",
+  "workspace": "w7",
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
   "leases": [{ "agent": "eng-42-code-review", "pane": "w3:p2" }],
-  "sessions": [
-    { "agent": "eng-42-plan", "session": "<uuid>" }
-  ],
+  "sessions": [{ "agent": "eng-42-plan", "session": "<uuid>" }],
   "blocked": { "doors": ["eng-42--auth-model"] },
   "slices": [{ "id": "api", "dependsOn": [], "worktree": "/abs/path" }]
 }
@@ -65,7 +66,7 @@ Workers close their own pane after writing their outcome, so for each lease in `
 - **Outcome file present:** finished — ingest the outcome, clear the lease, advance the stage, close any surviving pane.
 - **No outcome, agent gone or idle:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, close any surviving pane, note the crash in state.json, redispatch the same step this tick.
 
-**Reap** each issue that reached `done`: remove its issue and slice worktrees, close its `conveyor-<id>` workspace.
+**Reap** each issue that reached `done`: remove its issue and slice worktrees, close its workspace.
 
 **Done**: an issue whose PR is merged and whose leases are all cleared is `done`.
 
@@ -77,7 +78,7 @@ For each issue whose outcome listed doors, or whose round counter hit **cap**: s
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
-Keep a single **interview** agent (opus) in a pane split off your own — spawn it there if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
+Keep a single **interview** agent (opus) in a pane split off your own — spawn it there if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, labeling its pane `Interviewer`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
@@ -103,11 +104,64 @@ Fixes always return through `code-review` — new code gets fresh eyes. `fix-con
 
 #### Dispatch mechanics
 
-Each issue gets a herdr **workspace** named `conveyor-<id>`; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees.
+Each issue gets its own herdr **workspace**; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees. Name every workspace, tab, and pane per [Naming](#naming).
 
-Agent names: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
+Agent names — the CLI handle, not a display name: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions --name "<activity>"` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
 Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session}` to `sessions`.
+
+## Naming
+
+Three display names, all set by you — a worker never names itself.
+
+**Workspace** — `<ISSUE-ID>: <brief>`, e.g. `SA-271: levy collection view`. The brief is a two-to-four word noun phrase for what is changing; the sidebar truncates, so drop articles, the word the issue id already implies, and anything a reader could guess. Set it at `workspace create` and never touch it again; find the workspace by the id recorded in state.json, not by its label.
+
+**Tab** — a code for the worker type, so the tab bar reads as pipeline position:
+
+| Worker         | Tab                                                      |
+| -------------- | -------------------------------------------------------- |
+| `plan`         | `PLN`                                                    |
+| `implement`    | `IMP`, or `SL1`, `SL2`, … in `PLAN.md` order when sliced |
+| `integrate`    | `INT`                                                    |
+| `code-review`  | `REV`                                                    |
+| `fix-findings` | `FIX`                                                    |
+| `qa`           | `QA`                                                     |
+| `fix-ci`       | `CI`                                                     |
+| `fix-conflict` | `MRG`                                                    |
+| `ship`         | `SHP`                                                    |
+| `retro`        | `RET`                                                    |
+
+Rounds are never numbered — a second review is `REV` again, and the round lives in the activity line. Slices carry numbers only because they co-exist. Your own tab is `Conveyor`, holding two labeled panes: `Scheduler` and `Interviewer`.
+
+**Activity** — the second line in herdr's agent list, which is the agent's terminal title. Claude Code writes it from the session display name, so pass the activity as a native `--name` arg at `agent start`; it is set before the first prompt and survives the work that follows:
+
+```bash
+herdr agent start eng-42-code-review --kind claude --pane w7:p1 \
+  -- --effort high --dangerously-skip-permissions --name "Reviewing code (round 1)"
+```
+
+| Worker         | Activity                                                               |
+| -------------- | ---------------------------------------------------------------------- |
+| `plan`         | `Planning`                                                             |
+| `implement`    | `Implementing <slice>`, or `Implementing`                              |
+| `integrate`    | `Integrating`                                                          |
+| `code-review`  | `Reviewing code (round <n>)`                                           |
+| `fix-findings` | `Fixing review findings (round <n>)`, `Fixing QA findings (round <n>)` |
+| `qa`           | `Running QA (round <n>)`                                               |
+| `fix-ci`       | `Fixing CI (attempt <n>)`                                              |
+| `fix-conflict` | `Resolving conflicts`                                                  |
+| `ship`         | `Shipping`                                                             |
+| `retro`        | `Writing retro`                                                        |
+
+A verb and only what the workspace and tab do not already say — no object a reader can infer, and a round in parentheses only for the stages that repeat.
+
+The two long-lived agents carry queue depth instead of an activity, so theirs changes while they run: `/rename <text>` sets the same name mid-session. Rename the interviewer whenever its queue changes — `<n> questions waiting`, or `No questions waiting`. Rename yourself at the very end of a tick, once you have the totals — `<n> running · <n> to merge · <n> blocked`, dropping any zero, or `Idle` when nothing is moving.
+
+```bash
+herdr pane send-text "$HERDR_PANE_ID" "/rename 3 running · 2 to merge · 1 blocked" && herdr pane send-keys "$HERDR_PANE_ID" enter
+```
+
+Type it into your own pane rather than prompting yourself — `/rename` is an immediate local command, so it costs no turn, but it lands after the tick ends. Never send it to yourself mid-tick.
 
 ### 5. Report
 
