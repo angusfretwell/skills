@@ -114,7 +114,7 @@ Record the lease in state.json the moment the agent starts, then ask herdr for t
 
 One line per touched issue (stage, what was dispatched or ingested, rounds), then the totals: in flight, blocked on doors, advisories pending, awaiting human merge, done, stopped.
 
-End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not).
+End by stating whether anything is still moving (nothing in flight, dispatchable, or awaiting a human means the run is over) and whether this tick changed anything (a tick that only skipped live workers did not). Then queue your own rename per [Naming](#naming).
 
 ## Naming
 
@@ -124,12 +124,7 @@ Three display names, all set by you — a worker never names itself.
 
 **Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again); slices carry numbers only because they co-exist. Your own tab is `Conveyor`, holding the `Scheduler` and `Interviewer` panes.
 
-**Activity** — the second line in herdr's agent list: a verb plus only what the workspace and tab do not already say, with a round in parentheses for the stages that repeat. It is the agent's terminal title, which Claude Code writes from the session display name — so pass it as the `--name` native arg at `agent start`; it is set before the first prompt and survives the work that follows:
-
-```bash
-herdr agent start eng-42-code-review --kind claude --pane w7:p1 \
-  -- --effort high --dangerously-skip-permissions --name "Reviewing code (round 1)"
-```
+**Activity** — the second line in herdr's agent list: a verb plus only what the workspace and tab do not already say, with a round in parentheses for the stages that repeat.
 
 | Worker         | Tab                                                  | Activity                                                               |
 | -------------- | ---------------------------------------------------- | ---------------------------------------------------------------------- |
@@ -144,7 +139,14 @@ herdr agent start eng-42-code-review --kind claude --pane w7:p1 \
 | `ship`         | `SHP`                                                | `Shipping`                                                             |
 | `retro`        | `RET`                                                | `Writing retro`                                                        |
 
-You and the interviewer carry queue depth instead of a fixed activity: `/rename <text>` sets the same name mid-session. Rename the interviewer whenever its queue changes — `<n> questions waiting`, or `No questions waiting`. Rename yourself as the tick's last act, once you have the totals — `<n> running · <n> to merge · <n> blocked`, dropping any zero, or `Idle` when nothing is moving. Type it into your own pane rather than prompting yourself — `/rename` is an immediate local command, so it costs no turn — and the queued text lands only after your turn ends, which is why it belongs at the tick's end:
+The activity is the agent's terminal title, which Claude Code writes from the session display name — so pass it as the `--name` native arg at `agent start`; it is set before the first prompt and survives the work that follows:
+
+```bash
+herdr agent start eng-42-code-review --kind claude --pane w7:p1 \
+  -- --effort high --dangerously-skip-permissions --name "Reviewing code (round 1)"
+```
+
+You and the interviewer carry queue depth instead of a fixed activity: `/rename <text>` sets the same name mid-session. Rename the interviewer whenever its queue changes — `<n> questions waiting`, or `No questions waiting`. Rename yourself with the tick's totals — `<n> running · <n> to merge · <n> blocked`, dropping any zero, or `Idle` when nothing is moving. Type the command into your own pane — a local command costs no turn — and it runs only once your turn ends, which is why the tick's last act is its slot:
 
 ```bash
 herdr pane send-text "$HERDR_PANE_ID" "/rename 3 running · 2 to merge · 1 blocked" && herdr pane send-keys "$HERDR_PANE_ID" enter
