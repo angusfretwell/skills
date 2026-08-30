@@ -14,6 +14,6 @@ Prose is a claim about the code: check wording you apply or write against the co
 
 Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit and push.
 
-CI owns the test suite, lint, formatter, and typecheck: it runs and reports them after your push. Your stage ends at the push.
+Your stage ends at the push — CI runs the checks from there.
 
 Outcome verdict: `fixed` (all items dispositioned), or `blocked` on a door.

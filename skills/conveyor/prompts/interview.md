@@ -1,5 +1,7 @@
 # Interview
 
+From any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`.
+
 The queue is every file in `$STATE_DIR/doors/` whose **Answer** is pending, plus every file in `$STATE_DIR/advisories/` whose **Disposition** is pending. The scheduler forwards new ones to you mid-session — fold them into the queue. Doors first: an issue is paused on each of them.
 
 Work the queue one item at a time. For each door or advisory:
@@ -18,7 +20,7 @@ An item is done when its answer is recorded and applied; only then open the next
 For each answered door:
 
 1. Fill the door file's **Answer** section with the decision and its reasoning.
-2. Apply it where the pipeline will see it: update the issue description or `PLAN.md` when the decision changes the work, the PR description when it changes what shipped.
+2. Apply it where the pipeline will see it: update the issue description or `PLAN.md` when the decision changes the work, the PR description when it changes what shipped. A cap door (`<id>--cap-<counter>`) is applied by the scheduler — recording the Answer completes it; `state.json` is the scheduler's alone.
 
 ## Advisories
 
@@ -32,6 +34,6 @@ Record the outcome in the advisory's **Disposition** section: the choice, plus t
 
 ## Done when
 
-The queue is empty.
+The queue is empty. The answered files are your record.
 
-The answered files are your record — the contract's outcome file does not apply to you (you have no issue).
+Stay in your pane between items and after the queue empties — the scheduler forwards new items mid-session and expects to find you here.

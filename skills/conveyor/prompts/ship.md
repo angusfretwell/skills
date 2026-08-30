@@ -21,5 +21,5 @@ Comment a summary on the PR, omitting any line whose count is zero:
 
 Your brief states the merge mode.
 
-- **Mode `auto`:** confirm CI is green and the PR mergeable (either false: outcome verdict `not-ready`, `summary` saying which), then merge the PR. Outcome verdict: `done`.
+- **Mode `auto`:** mark the draft PR ready for review, confirm CI is green and the PR mergeable (either false: outcome verdict `not-ready`, `summary` saying which), then merge the PR and move the issue to done in the tracker. Outcome verdict: `done`.
 - **Mode `manual`:** mark the draft PR ready for review and move the issue to in review. Outcome verdict: `awaiting-merge`.

@@ -10,7 +10,7 @@ One invocation is one **tick**; the invoker owns cadence.
 
 You are the scheduler, never the worker — you read state, dispatch, and ingest outcomes; every job, even merging the PR, goes to a dispatched agent. The urge to read a diff or run a command that changes anything is a dispatch signal.
 
-Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, and closing a dead worker's surviving pane. Everything else, reaping included, goes to an agent.
+Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, and closing workers' surviving panes. Everything else, reaping included, goes to an agent.
 
 ## Settings
 
@@ -73,7 +73,7 @@ Workers close their own pane after writing their outcome, so for each lease:
 
 - **Herdr shows the leased agent working:** in flight, skip it.
 - **Outcome file present:** finished — ingest the outcome, clear the lease, advance the stage, close any surviving pane.
-- **No outcome, agent gone or idle:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, close any surviving pane, note the crash in state.json, redispatch the same step this tick.
+- **No outcome, agent gone or idle:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, close any surviving pane, note the crash in state.json, and put the same step on this tick's dispatch list.
 
 **Reap**: hand every issue that reached `done` to one **reaper** subagent (haiku) — `$SKILL_DIR/prompts/reap.md` plus each issue's worktrees and workspace id. It reports what it removed, and anything it left behind.
 
@@ -81,11 +81,11 @@ Workers close their own pane after writing their outcome, so for each lease:
 
 For each issue whose outcome listed doors, or whose round counter hit its cap: set `blocked`, queue the doors. Findings stay in the reviewer's report.
 
-At cap, write the door yourself — `$STATE_DIR/doors/<id>--cap-<counter>.md`, stating how the rounds were spent, with exactly three options: **raise by 1**, **raise by 3**, **park for human**. A raise's answer sets `caps.<counter>` in state.json (cap + the grant); a park makes the issue `stopped` — flip its label to ready-for-human with a comment saying why.
+At cap, write the door yourself — `$STATE_DIR/doors/<id>--cap-<counter>.md`, stating how the rounds were spent, with exactly three options: **raise by 1**, **raise by 3**, **park for human**. You apply the answer on the tick that finds it: a raise sets `caps.<counter>` in state.json to cap + the grant; a park makes the issue `stopped` — flip its label to ready-for-human with a comment saying why.
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
-Keep a single **interview** agent (opus) in a tab beside yours: spawn it there if absent with the brief `$SKILL_DIR/prompts/preamble.md` + `$SKILL_DIR/prompts/interview.md`, naming its tab per [Naming](#naming); forward new doors and advisories with an agent prompt if alive. Either way, send a push notification naming the issues and questions.
+Keep a single **interview** agent (opus) in a tab beside yours: spawn it there if absent with the brief `$SKILL_DIR/prompts/interview.md`, naming its tab per [Naming](#naming); forward new doors and advisories with an agent prompt if alive. Either way, send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks (a park stops it instead): clear `blocked` and resume at the recorded stage.
 
@@ -107,7 +107,7 @@ For each unblocked issue, up to **parallel** in flight (an issue in flight = hol
 | Awaiting merge, PR unmerged                 | nothing — keep waiting                      | —      |
 | PR unmergeable at any gate                  | `fix-conflict`                              | sonnet |
 
-Fixes always return through `code-review` — new code gets fresh eyes. `fix-conflict`'s outcome says whether review/QA rerun or the pipeline proceeds.
+Fixes always return through `code-review` — new code gets fresh eyes. `fix-conflict`'s outcome says whether review/QA rerun or the pipeline proceeds. `integrate` is a sliced-issue stage: an unsliced implement goes straight to the CI and review gates.
 
 #### Dispatch mechanics
 
