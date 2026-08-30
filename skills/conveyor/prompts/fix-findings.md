@@ -10,6 +10,8 @@ For every item, decide a disposition and act on it:
 
 An item you can't judge from the report alone gets investigated — read the code, reproduce the behavior — before it gets a disposition.
 
+Prose is a claim about the code: check wording you apply or write against the code, ADR, or doc it describes. Prescribed wording without a citation is a description of the problem — verify it or author your own.
+
 Write `$STATE_DIR/issues/<id>/<review|qa>-<n>-response.md`: every item from the report with its disposition and, for fixes, what changed. Every item accounted for — no silent drops. Commit and push.
 
 CI owns the test suite, lint, formatter, and typecheck: it runs and reports them after your push. Your stage ends at the push.
