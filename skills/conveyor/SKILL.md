@@ -154,7 +154,7 @@ herdr pane send-text "$HERDR_PANE_ID" "/rename 3 running · 2 to merge · 1 bloc
 
 ## Self-pacing invokers
 
-To tick on worker finishes instead of a fixed interval: after each tick, spawn one background command per live lease:
+To tick on worker finishes instead of a fixed interval: after each tick, spawn one background command per live lease, each waiting on a single agent so any one exit wakes you:
 
 ```bash
 herdr agent wait <agent-name> || true
