@@ -71,3 +71,5 @@ Each link hangs off the PR's changes view, relative to the PR page (`./<pr-numbe
 - **A file** — `[expired.tsx](./123/changes#diff-<hash>)`. Label is the bare filename, no path. `<hash>` is the SHA-256 of the file's repo-relative path with no trailing newline: `printf '%s' "src/example-file.ts" | shasum -a 256`.
 - **A symbol** (function, component, hook) — `[exampleFunction](./123/changes#diff-<hash>R24)`. The same file `<hash>`, then `R` and the symbol's line number in the new file (`L<line>` for a line that exists only in the old version). Label is the symbol name — JSX for components, e.g. `[<ExampleComponent />](./123/changes#diff-<hash>R12)`.
 - **A commit** — `[1cf036f](./123/changes/<full-sha>)`. Label is the short SHA; the path takes the full 40-character SHA.
+
+A link that needs an absolute GitHub URL — a CI run, a file on another branch — takes its `<owner>/<repo>` from `git remote -v` or `gh repo view`, never from memory of the project's name.
