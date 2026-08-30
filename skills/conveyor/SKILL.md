@@ -28,7 +28,7 @@ Load the /herdr and /worktrunk:worktrunk skills. Confirm you are inside herdr an
 
 Resolve the state dir — one per repo, reachable from any worktree: `STATE_DIR="$(git rev-parse --git-common-dir)/conveyor"`
 
-Name your own tab and panes per [Naming](#naming); leave them that way for the rest of the run.
+Name your own tab per [Naming](#naming); leave it that way for the rest of the run.
 
 ## State
 
@@ -78,7 +78,7 @@ For each issue whose outcome listed doors, or whose round counter hit **cap**: s
 
 Also queue each advisory in `$STATE_DIR/advisories/` whose **Disposition** is pending — an advisory never blocks its issue.
 
-Keep a single **interview** agent (opus) in a pane split off your own — spawn it there if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, labeling its pane `Interviewer`, forward new doors and advisories with an agent prompt if alive — and send a push notification naming the issues and questions.
+Keep a single **interview** agent (opus) in a tab beside yours: spawn it there if absent with the brief `prompts/preamble.md` + `prompts/interview.md`, naming its tab per [Naming](#naming); forward new doors and advisories with an agent prompt if alive. Either way, send a push notification naming the issues and questions.
 
 An issue whose doors are all answered unblocks: clear `blocked` and resume at the recorded stage.
 
@@ -104,7 +104,7 @@ Fixes always return through `code-review` — new code gets fresh eyes. `fix-con
 
 #### Dispatch mechanics
 
-Each issue gets its own herdr **workspace**; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees. Name every workspace, tab, and pane per [Naming](#naming).
+Each issue gets its own herdr **workspace**; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees. Name every workspace, tab, and activity per [Naming](#naming).
 
 Agent names — the CLI handle, not a display name: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions --name "<activity>"` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
@@ -122,7 +122,7 @@ Three display names, all set by you — a worker never names itself.
 
 **Workspace** — `<ISSUE-ID>: <brief>`, e.g. `SA-271: levy collection view`. The brief is a two-to-four word noun phrase for what is changing; the sidebar truncates, so drop articles, the word the issue id already implies, and anything a reader could guess. Set it at `workspace create` and never touch it again; find the workspace by the id recorded in state.json, not by its label.
 
-**Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again); slices carry numbers only because they co-exist. Your own tab is `Conveyor`, holding the `Scheduler` and `Interviewer` panes.
+**Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again); slices carry numbers only because they co-exist. Your own tab is `Conveyor`; the interviewer lives in its own `Interviewer` tab.
 
 **Activity** — the second line in herdr's agent list: a verb plus only what the workspace and tab do not already say, with a round in parentheses for the stages that repeat.
 
