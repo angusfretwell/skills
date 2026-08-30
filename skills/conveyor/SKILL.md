@@ -1,6 +1,6 @@
 ---
 name: conveyor
-description: "Fetches ready issues and dispatches herdr workers through plan, implement, review, QA, ship, and retro."
+description: "Fetches ready issues and dispatches herdr workers through implement, review, QA, ship, and retro."
 argument-hint: "[merge=auto|manual] [parallel=<n>] [cap=<n>] [retro=<n>]"
 ---
 
@@ -10,7 +10,7 @@ One invocation is one **tick**; the invoker owns cadence.
 
 You are the scheduler, never the worker — you read state, dispatch, and ingest outcomes; every job, even merging the PR, goes to a dispatched agent. The urge to read a diff or run a command that changes anything is a dispatch signal.
 
-Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, closing workers' surviving panes, and reaping done issues' worktrees and workspaces.
+Your only writes: `state.json`, cap-exhaustion doors, tracker label flips with their explanatory comments, creating issue worktrees, closing workers' surviving panes, and reaping done issues' worktrees and workspaces.
 
 ## Settings
 
@@ -44,15 +44,14 @@ The tick owns `$STATE_DIR/issues/<id>/state.json`. Workers write report, outcome
   "rounds": { "review": 1, "qa": 0, "ci": 0 },
   "caps": { "review": 5 },
   "leases": [{ "agent": "eng-42-code-review", "pane": "w3:p2" }],
-  "sessions": [{ "agent": "eng-42-plan", "session": "<uuid>" }],
-  "blocked": { "doors": ["eng-42--auth-model"] },
-  "slices": [{ "id": "api", "dependsOn": [], "worktree": "/abs/path" }]
+  "sessions": [{ "agent": "eng-42-implement", "session": "<uuid>" }],
+  "blocked": { "doors": ["eng-42--auth-model"] }
 }
 ```
 
-Stages: `plan`, `implement`, `integrate`, `code-review`, `fix-findings`, `qa`, `fix-ci`, `fix-conflict`, `ship`, `awaiting-merge`, `done`, `blocked`, `stopped`.
+Stages: `implement`, `code-review`, `fix-findings`, `qa`, `fix-ci`, `fix-conflict`, `ship`, `awaiting-merge`, `done`, `blocked`, `stopped`.
 
-CI status, PR state, branch existence, and pane liveness are re-derived every tick; where state.json disagrees, reality wins. A slice is implemented when its outcome file exists, merged when its branch is an ancestor of the issue branch.
+CI status, PR state, branch existence, and pane liveness are re-derived every tick; where state.json disagrees, reality wins.
 
 ## The tick
 
@@ -68,7 +67,7 @@ Workers close their own pane after writing their outcome, so for each lease in `
 - **Outcome file present:** finished — ingest the outcome, clear the lease, advance the stage, close any surviving pane.
 - **No outcome, agent gone or idle:** crashed — it produced nothing, whatever you expected it to conclude. Clear the lease, close any surviving pane, note the crash in state.json, and put the same step on this tick's dispatch list.
 
-**Reap** each issue that reached `done`: remove its issue and slice worktrees, close its workspace.
+**Reap** each issue that reached `done`: remove its worktree, close its workspace.
 
 **Done**: an issue whose PR is merged and whose leases are all cleared is `done`.
 
@@ -88,31 +87,29 @@ An issue whose doors are all answered unblocks (a park stops it instead): clear 
 
 ### 4. Advance and dispatch
 
-For each unblocked issue, up to **parallel** in flight (an issue in flight = holds a live lease; new plans start only with spare capacity):
+For each unblocked issue, up to **parallel** in flight (an issue in flight = holds a live lease; new issues start only with spare capacity):
 
-| Condition                                   | Dispatch                                    | Model  |
-| ------------------------------------------- | ------------------------------------------- | ------ |
-| Fresh from frontier                         | `plan`                                      | opus   |
-| Planned, slice frontier open                | `implement` (one per ready slice, parallel) | opus   |
-| Every slice implemented, not yet integrated | `integrate`                                 | sonnet |
-| Implemented or later, CI red on latest push | `fix-ci` (attempt++)                        | sonnet |
-| CI green, awaiting review                   | `code-review` (round++)                     | opus   |
-| Review fail                                 | `fix-findings` (code items)                 | opus   |
-| Review clean                                | `qa` (round++)                              | sonnet |
-| QA fail                                     | `fix-findings` (qa items)                   | opus   |
-| QA clean                                    | `ship`                                      | sonnet |
-| Awaiting merge, PR unmerged                 | nothing — keep waiting                      | —      |
-| PR unmergeable at any gate                  | `fix-conflict`                              | sonnet |
+| Condition                                   | Dispatch                    | Model  |
+| ------------------------------------------- | --------------------------- | ------ |
+| Fresh from frontier                         | `implement`                 | opus   |
+| Implemented or later, CI red on latest push | `fix-ci` (attempt++)        | sonnet |
+| CI green, awaiting review                   | `code-review` (round++)     | opus   |
+| Review fail                                 | `fix-findings` (code items) | opus   |
+| Review clean                                | `qa` (round++)              | sonnet |
+| QA fail                                     | `fix-findings` (qa items)   | opus   |
+| QA clean                                    | `ship`                      | sonnet |
+| Awaiting merge, PR unmerged                 | nothing — keep waiting      | —      |
+| PR unmergeable at any gate                  | `fix-conflict`              | sonnet |
 
-Fixes always return through `code-review` — new code gets fresh eyes. `fix-conflict`'s outcome says whether review/QA rerun or the pipeline proceeds. `integrate` is a sliced-issue stage: an unsliced implement goes straight to the CI and review gates.
+Fixes always return through `code-review` — new code gets fresh eyes. `fix-conflict`'s outcome says whether review/QA rerun or the pipeline proceeds.
 
 **Retro runs in batches.** An issue is retro-pending once it has shipped (stage `ship` or beyond) with no `$STATE_DIR/retros/<id>.md`. When **retro** or more are pending and no retro lease is live, dispatch one `retro` (sonnet) over all of them from the repo root, leased under the newest pending issue; its brief header lists every covered issue with its sessions and observations dir. A tick about to declare the run over first flushes the pending remainder, whatever its size — that dispatch keeps the run alive until the retro lands. A crashed retro needs no stored batch: the pending set recomputes next tick.
 
 #### Dispatch mechanics
 
-Each issue gets its own herdr **workspace**; workers run as agents in tabs within it, each tab started in the worker's worktree — the issue worktree, or the slice worktree for a slice implementer. Plan alone starts at the repo root: it creates the worktrees. Name every workspace, tab, and activity per [Naming](#naming).
+Each issue gets its own herdr **workspace**; workers run as agents in tabs within it, each tab started in the issue worktree. Before a fresh issue's first dispatch: create its worktree and branch `conveyor/<id>` off base using /worktrunk:worktrunk, record the path in state.json, and mark the issue in-progress in the tracker. Name every workspace, tab, and activity per [Naming](#naming).
 
-Agent names — the CLI handle, not a display name: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`); a slice implementer's step is `implement-<slice>`. Every agent starts with `--effort high --dangerously-skip-permissions --name "<activity>"` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
+Agent names — the CLI handle, not a display name: `<id>-<step>` (lowercase, e.g. `eng-42-code-review`). Every agent starts with `--effort high --dangerously-skip-permissions --name "<activity>"` as native args. Start each worker with its model per the table, then prompt it with its **brief**: `prompts/preamble.md` + `prompts/<stage>.md` + a header giving issue id, tracker, round number, and paths to the state dir files it needs — pointers, never pasted content.
 
 Record the lease in state.json the moment the agent starts, then ask herdr for the pane agent's Claude session (reported by the SessionStart hook) and append `{agent, session}` to `sessions`.
 
@@ -128,22 +125,20 @@ Three display names, all set by you — a worker never names itself.
 
 **Workspace** — `<ISSUE-ID>: <brief>`, e.g. `SA-271: levy collection view`. The brief is a two-to-four word noun phrase for what is changing; the sidebar truncates, so drop articles, the word the issue id already implies, and anything a reader could guess. Set it at `workspace create` and never touch it again; find the workspace by the id recorded in state.json, not by its label.
 
-**Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again); slices carry numbers only because they co-exist. Your own tab is `Conveyor`; the interviewer lives in its own `Interviewer` tab.
+**Tab** — a code for the worker type, so the tab bar reads as pipeline position. The round lives in the activity, so a repeat round's tab stays bare (`REV` again). Your own tab is `Conveyor`; the interviewer lives in its own `Interviewer` tab.
 
 **Activity** — the second line in herdr's agent list: a verb plus only what the workspace and tab do not already say, with a round in parentheses for the stages that repeat.
 
-| Worker         | Tab                                          | Activity                                                               |
-| -------------- | -------------------------------------------- | ---------------------------------------------------------------------- |
-| `plan`         | `PLN`                                        | `Planning`                                                             |
-| `implement`    | `IMP`, or `SL1`, `SL2`, … in `PLAN.md` order | `Implementing <slice>`, or `Implementing`                              |
-| `integrate`    | `INT`                                        | `Integrating`                                                          |
-| `code-review`  | `REV`                                        | `Reviewing code (round <n>)`                                           |
-| `fix-findings` | `FIX`                                        | `Fixing review findings (round <n>)`, `Fixing QA findings (round <n>)` |
-| `qa`           | `QA`                                         | `Running QA (round <n>)`                                               |
-| `fix-ci`       | `CI`                                         | `Fixing CI (attempt <n>)`                                              |
-| `fix-conflict` | `MRG`                                        | `Resolving conflicts`                                                  |
-| `ship`         | `SHP`                                        | `Shipping`                                                             |
-| `retro`        | `Retro`, beside `Conveyor`                   | `Writing retro (<n> issues)`                                           |
+| Worker         | Tab                        | Activity                                                               |
+| -------------- | -------------------------- | ---------------------------------------------------------------------- |
+| `implement`    | `IMP`                      | `Implementing`                                                         |
+| `code-review`  | `REV`                      | `Reviewing code (round <n>)`                                           |
+| `fix-findings` | `FIX`                      | `Fixing review findings (round <n>)`, `Fixing QA findings (round <n>)` |
+| `qa`           | `QA`                       | `Running QA (round <n>)`                                               |
+| `fix-ci`       | `CI`                       | `Fixing CI (attempt <n>)`                                              |
+| `fix-conflict` | `MRG`                      | `Resolving conflicts`                                                  |
+| `ship`         | `SHP`                      | `Shipping`                                                             |
+| `retro`        | `Retro`, beside `Conveyor` | `Writing retro (<n> issues)`                                           |
 
 The activity is the agent's terminal title, which Claude Code writes from the session display name — so pass it as the `--name` native arg at `agent start`; it is set before the first prompt and survives the work that follows:
 

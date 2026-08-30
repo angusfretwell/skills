@@ -11,7 +11,6 @@ Comment a summary on the PR, omitting any line whose count is zero:
 ```markdown
 ## Conveyor summary
 
-- 4 slices implemented
 - 2 rounds of code review
 - 1 round of QA
 - 2 rounds of CI fixes

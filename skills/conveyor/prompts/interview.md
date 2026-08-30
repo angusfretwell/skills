@@ -20,7 +20,7 @@ An item is done when its answer is recorded and applied; only then open the next
 For each answered door:
 
 1. Fill the door file's **Answer** section with the decision and its reasoning.
-2. Apply it where the pipeline will see it: update the issue description or `PLAN.md` when the decision changes the work, the PR description when it changes what shipped. A cap door (`<id>--cap-<counter>`) is applied by the scheduler — recording the Answer completes it; `state.json` is the scheduler's alone.
+2. Apply it where the pipeline will see it: update the issue description when the decision changes the work, the PR description when it changes what shipped. A cap door (`<id>--cap-<counter>`) is applied by the scheduler — recording the Answer completes it; `state.json` is the scheduler's alone.
 
 ## Advisories
 
