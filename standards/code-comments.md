@@ -1,61 +1,32 @@
 # Comment Standards
 
-Default to zero comments. Names, types, and structure carry the meaning; when something is unclear, rename or extract before reaching for a comment. A comment earns its place only by stating something the code _cannot_ say.
+Default to zero comments, in every hand-written file. Names, types, and structure carry the meaning.
 
-**The deletion test:** imagine the comment gone. If the code loses nothing, don't write it. If something is lost, first try moving it into a name or type; comment only what's left over.
+A comment earns its place only when what it says comes from **outside** this codebase. Anything inside is a refactor target: rename, extract, or restructure until the comment has nothing left to say.
 
-## Never write these
+## What earns a comment
 
-The common failure mode is narrating your work instead of documenting the code. Delete on sight:
+Three things, and nothing else:
 
-- **Narration** — restating what the next line does: `// fetch the user`, `// return early if empty`.
-- **Section headers** — `// --- helpers ---`, `// Step 2: validate`. Extract a named function instead.
-- **Process commentary** — talking to the reviewer, not the next reader: `// changed to use the new API`, `// this is safe because we validated above`, `// as requested`. That belongs in the commit message or PR description, never in the code.
-- **Signature echoes** — JSDoc that restates the types: `@param userId - the user's id`.
-- **Obvious summaries** — a doc comment saying what the name already says: `/** Formats a date. */` on `formatDate`.
+- A workaround for an external quirk we cannot reshape: a library bug, an API oddity, a vendor or protocol constraint. Say what breaks without it.
+- A constraint set outside this code that no name or type can carry: what a caller must honour, what an upstream module guarantees.
+- A link to a decision record or an external authority: `@see docs/adr/NNNN-slug.md`. The link, never a summary.
 
-```typescript
-// BAD: every comment restates the code or narrates the session
-/**
- * Gets the review for a branch.
- * @param branch - the branch name
- */
-export function reviewForBranch(branch: string) {
-  // look up the record
-  const record = store.get(branch);
-  // return null when missing (changed from throwing)
-  if (!record) return null;
-  return record.review;
-}
+A pointer at our own code is none of them. An import or a name should already have led the reader there.
 
-// GOOD: the code already says all of this
-export function reviewForBranch(branch: string) {
-  const record = store.get(branch);
-  if (!record) return null;
-  return record.review;
-}
-```
+Reference only what stays true: no PR numbers, issue IDs, "new", "temporary".
 
-Many inline comments in one function is a decomposition smell — split it into named pieces rather than annotating the steps.
+Put it in JSDoc at the function or export level. `@throws` earns its place where `@param` and `@returns` would only echo the types. Several inline comments in one function is a decomposition smell; split it into named pieces.
 
-## When a comment earns its place
+## Delete on review
 
-- A workaround for an external quirk (library bug, API oddity) — say what breaks without it.
-- A domain rule or invariant the types can't express.
-- A non-obvious constraint: ordering, concurrency, performance, security.
-- A deliberate choice that looks wrong without context — say why the obvious alternative fails.
+Imagine the comment gone. If the code loses nothing, delete it. If it loses something held inside this codebase, reshape until it loses nothing, then delete it.
 
-```typescript
-// GOOD: states a constraint the code can't show
-/** The driver returns binary columns as Buffer on one runtime and Uint8Array on the other — normalize before hashing. */
+The failure mode is narrating your work instead of documenting the code. A long justification is a confession, not a defence. Delete:
 
-// GOOD: the obvious alternative was tried and fails
-/** Polling, not the filesystem watcher: watchers drop events on network volumes. */
-```
-
-## Format
-
-- Use the language's doc-comment convention (JSDoc in JavaScript/TypeScript), at the function/export level. Inline comments are a last resort.
-- Use tags like `@param`/`@returns`/`@throws`/`@example`/`@deprecated` only when they add information beyond the signature.
-- Don't re-explain what an ADR or doc records — reference it with `@see <path|url>`.
-- No references that go stale: PR numbers, issue IDs, "new", "temporary", "recently".
+- **Narration** restating the next line: `// fetch the user`.
+- **Section headers**: `// Step 2: validate`. Extract a named function.
+- **Process commentary**: `// as requested`. It belongs in the commit message.
+- **Signature echoes**: `@param userId - the user's id`.
+- **Obvious summaries** the name already gives: `/** Formats a date. */` on `formatDate`.
+- **Rationale** for a choice over its alternatives: `/** A Map rather than an object, because the keys collide. */`.
