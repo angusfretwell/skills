@@ -9,7 +9,7 @@ Paste this prompt into an agent session in your repo:
 ````md
 Set up agent standards docs from angusfretwell/skills:
 
-Download code-style.md, code-comments.md, testing.md, and writing-style.md from the `standards/` directory of angusfretwell/skills into `docs/agents/` — or into this repo's existing agent-docs location if it has one:
+Download coding-standards.md, comments.md, tests.md, and writing-style.md from the `standards/` directory of angusfretwell/skills into `docs/agents/` — or into this repo's existing agent-docs location if it has one:
 
 ```sh
 # Using gh
@@ -22,21 +22,21 @@ curl -fsSL https://raw.githubusercontent.com/angusfretwell/skills/main/standards
 Add these sections to AGENTS.md (create it if missing), with paths adjusted to where the files landed:
 
 ```md
-## Code style
+## Coding standards
 
-Read `docs/agents/code-style.md` before writing or reviewing code.
+Read [coding-standards.md](docs/agents/coding-standards.md) before writing or reviewing code.
 
 ## Comments
 
-Default to zero comments. Read `docs/agents/code-comments.md` when writing or judging comments.
+Read [comments.md](docs/agents/comments.md) before writing or judging a comment.
 
 ## Tests
 
-Read `docs/agents/testing.md` when writing or modifying tests.
+Read [tests.md](docs/agents/tests.md) before writing or modifying tests.
 
-## Writing
+## Writing style
 
-Read `docs/agents/writing-style.md` when writing prose or interface copy.
+Read [writing-style.md](docs/agents/writing-style.md) before writing prose or interface copy.
 ```
 
 Launch one subagent per downloaded file to tailor it to this repo. Each subagent edits only its own file, and is done when:

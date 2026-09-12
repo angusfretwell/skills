@@ -1,4 +1,4 @@
-# Comment Standards
+# Code Comments
 
 Default to zero comments, in every hand-written file. Names, types, and structure carry the meaning.
 
