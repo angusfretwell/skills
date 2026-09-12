@@ -7,21 +7,14 @@
       "description": "Skills for software engineering.",
       "skills": [
         "address-review",
+        "browser-qa",
         "commit",
-        "open-pr",
         "dependency-graph",
         "interview-me",
-        "writing-for-humans",
-        "supervise"
-      ]
-    },
-    {
-      "title": "In progress",
-      "description": "Skills that I'm still working on.",
-      "skills": [
+        "open-pr",
         "show-me",
-        "conveyor",
-        "browser-qa"
+        "supervise",
+        "writing-for-humans"
       ]
     }
   ]
