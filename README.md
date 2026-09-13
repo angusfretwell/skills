@@ -16,6 +16,10 @@ npx skills add angusfretwell/skills
 
 Triages review findings with you (from a PR comment, a file, or the session itself), then applies the fixes in parallel, files the deferrals, and posts a summary.
 
+### [`/attach-media`](skills/attach-media/SKILL.md)
+
+Attaches screenshots and recordings to GitHub issues, PRs, and comments with `gh --attach`.
+
 ### [`/browser-qa`](skills/browser-qa/SKILL.md)
 
 QAs a change against its spec: launches the app, drives every affected flow in a real browser, and probes the edge cases the change touches.

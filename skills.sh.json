@@ -7,6 +7,7 @@
       "description": "Skills for software engineering.",
       "skills": [
         "address-review",
+        "attach-media",
         "browser-qa",
         "commit",
         "dependency-graph",
