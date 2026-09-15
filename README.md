@@ -42,10 +42,6 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 Opens a pull request for the current work, or updates the title and description of an open one when later commits leave them stale.
 
-### [`/show-me`](skills/show-me/SKILL.md)
-
-Composes a visual explanation of how something works: screenshots, diagrams, and prose on one HTML page.
-
 ### [`/supervise`](skills/supervise/SKILL.md)
 
 Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
@@ -57,3 +53,25 @@ Depends on `/dependency-graph`.
 ### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
 
 Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.
+
+## Work in progress
+
+### [`/how`](skills/how/SKILL.md)
+
+Explains how something in the codebase works, at the depth a senior engineer needs to start working in it. Parallel explorers trace every claim back to a file.
+
+### [`/showcase`](skills/showcase/SKILL.md)
+
+Composes a visual explanation of how something works: captures, diagrams, and prose on one page, each point in the medium that proves it.
+
+Depends on `/to-artifact`.
+
+### [`/to-artifact`](skills/to-artifact/SKILL.md)
+
+Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
+
+### [`/why`](skills/why/SKILL.md)
+
+Investigates why code is the way it is across commits, tickets, docs, chat, and telemetry, and answers with cited findings, each carrying a confidence tier and the gaps behind it.
+
+Companion to `/how`.

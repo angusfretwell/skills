@@ -13,10 +13,14 @@
         "dependency-graph",
         "interview-me",
         "open-pr",
-        "show-me",
         "supervise",
         "writing-for-humans"
       ]
+    },
+    {
+      "title": "Work in progress",
+      "description": "Skills I'm still working on.",
+      "skills": ["how", "why", "to-artifact", "showcase"]
     }
   ]
 }
