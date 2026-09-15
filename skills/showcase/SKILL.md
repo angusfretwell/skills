@@ -64,7 +64,7 @@ The subject, points, and media below are settled. Take them as given, and start 
 
 ## Media
 
-Publish these alongside `brand.css` as supporting files:
+Publish these as supporting files:
 
 - `shots/01-signin.png` — <what it shows, and what the reader just did>
 ```
