@@ -4,8 +4,6 @@ description: Open pull requests in a consistent format. Use when opening or upda
 argument-hint: "[--[no-]capture] [--[no-]annotate]"
 ---
 
-`--capture` and `--annotate` settle the two questions of step 3 in advance, and their `--no-` forms settle them the other way. A flag skips the question, not the judgement: with nothing worth capturing or nothing that earns a comment, you produce neither.
-
 ## Process
 
 ### 1. Establish the state
@@ -35,9 +33,11 @@ Two questions then go to the user in one `AskUserQuestion` call, each asked only
 - **Evidence** — when the Overview describes something a user sees and the session holds no captures: capture evidence now, take a file the user points at, or skip.
 - **Annotation** — when you drafted comments: post them with the PR, or leave the diff clean. Name what they'd say.
 
+`--capture` and `--annotate` settle these two in advance, and their `--no-` forms settle them the other way. A flag skips the question, not the judgement: with nothing worth capturing or nothing that earns a comment, you produce neither.
+
 Capture before the PR exists so it lands complete; when capture fails, carry on without it.
 
-Done when a title and every non-optional section are drafted, any evidence sits on disk, and you know which comments (if any) to post.
+Done when a title and every live section are drafted, any evidence sits on disk, and you know which comments (if any) to post.
 
 ### 4. Create or update
 
@@ -45,7 +45,7 @@ Push the branch, then create the PR or edit the existing one, attaching Evidence
 
 ### 5. Annotate the diff
 
-Post the comments you drafted as one batched review. `gh pr review` has no inline support, so it's `gh api repos/<owner>/<repo>/pulls/<number>/reviews` with `event: COMMENT` and a `comments[]` array of `{path, line, side, body}`. On an update, read what's already there (`gh api repos/<owner>/<repo>/pulls/<number>/comments`) and post only the lines that don't carry a comment yet. Done when every drafted comment is posted.
+Post the comments you drafted, if any, as one batched review. `gh pr review` has no inline support, so it's `gh api repos/<owner>/<repo>/pulls/<number>/reviews` with `event: COMMENT` and a `comments[]` array of `{path, line, side, body}`. On an update, read what's already there (`gh api repos/<owner>/<repo>/pulls/<number>/comments`) and post only the lines that don't carry a comment yet. Done when every drafted comment is posted.
 
 ## Title format
 
@@ -74,12 +74,14 @@ Reference a commit by its bare short SHA, which GitHub autolinks.
 
 ## Evidence
 
-Captures a reviewer can look at, each referenced inline beneath the prose that says what it proves, attached per `/attach-media`.
+Captures a reviewer can look at, each referenced inline beneath the prose that says what it proves.
 
 ## To-do
 
 What a human must do to land or operate this change: run a migration, set an env var, flip a flag, merge a dependent PR first. Short checkbox bullets (`- [ ]`). Work this PR defers or leaves out of scope belongs in the issue tracker; generic local-testing steps don't belong at all.
 ```
+
+The `Closes` line, Evidence, and To-do are live only when there's something to put in them.
 
 ## Shapes
 
