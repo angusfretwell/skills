@@ -40,7 +40,7 @@ Asks the session's open questions in rounds of AskUserQuestion, with a recommend
 
 ### [`/open-pr`](skills/open-pr/SKILL.md)
 
-Opens a pull request for the current work, or updates the title and description of an open one when later commits leave them stale.
+Opens a pull request for the current work, or refreshes an open one when later commits leave it stale. Writes the description so reviewers can follow the change, and annotates the diff where a line needs explaining.
 
 ### [`/supervise`](skills/supervise/SKILL.md)
 
