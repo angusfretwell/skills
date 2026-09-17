@@ -34,10 +34,6 @@ Creates git commits in [Conventional Commits](https://www.conventionalcommits.or
 
 Builds a dependency graph over a batch of work items and shows the frontier: the items that can start now.
 
-### [`/explain-irl`](skills/explain-irl/SKILL.md)
-
-Explains a bug, edge case, limitation, or trade-off as a real-world scenario: one invented person, traced numbers, and what happens to them.
-
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
 Asks the session's open questions in rounds of AskUserQuestion, with a recommendation and a preview for each option.
@@ -59,6 +55,10 @@ Depends on `/dependency-graph`.
 Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.
 
 ## Work in progress
+
+### [`/explain-irl`](skills/explain-irl/SKILL.md)
+
+Explains a bug, edge case, limitation, or trade-off as a real-world scenario: one invented person, traced numbers, and what happens to them.
 
 ### [`/how`](skills/how/SKILL.md)
 
