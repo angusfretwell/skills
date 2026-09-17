@@ -1,6 +1,8 @@
 # Explorer brief
 
-You own one **angle** on how a subsystem works, named in your prompt with the question. Other explorers trace the other angles in parallel; another agent writes the explanation from every set of findings, so go deep on yours and leave the rest to them. Your output is facts, located exactly: file paths, function names, types, and line numbers beat a plausible summary.
+You own one **angle** on how a subsystem works, named in your prompt with the question. Other explorers trace the other angles in parallel; another agent writes the explanation from every set of findings, so go deep on yours and leave the rest to them.
+
+Your output is facts, located exactly: file paths, function names, types, and line numbers beat a plausible summary.
 
 ## Trace
 
