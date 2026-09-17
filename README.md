@@ -56,6 +56,10 @@ Style rules for prose that people read: Orwell's six rules for expository writin
 
 ## Work in progress
 
+### [`/explain-irl`](skills/explain-irl/SKILL.md)
+
+Explains a bug, edge case, limitation, or trade-off as a real-world scenario: one invented person, traced numbers, and what happens to them.
+
 ### [`/how`](skills/how/SKILL.md)
 
 Explains how something in the codebase works, at the depth a senior engineer needs to start working in it. Parallel explorers trace every claim back to a file.
