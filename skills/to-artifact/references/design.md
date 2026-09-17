@@ -8,9 +8,9 @@ Make the page precise, calm, direct, technically literate, evidence-led, editori
 
 Treat the page as an editorial surface even when it carries product-like interaction. It is evidence, not product UI, a landing page, or a marketing campaign.
 
-## Type and color
+## Type, color, and measure
 
-The three faces are fixed. `artifact-design` advises against Inter; here it is the body face by decision, and its guidance on face choice does not apply. Familjen Grotesk carries headings. Google Sans Code carries code, commands, paths, and short operational identifiers.
+The three faces are fixed. `artifact-design` advises against Inter; here it is the body face by decision, and its guidance on face choice does not apply. Familjen Grotesk carries headings and only headings; emphasis stays in the body face. Google Sans Code carries code, commands, and paths.
 
 Open the page with this, before any other page CSS:
 
@@ -25,30 +25,53 @@ Open the page with this, before any other page CSS:
   :root {
     color-scheme: light dark;
 
-    --font-heading: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
-    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --font-mono: "Google Sans Code", "SFMono-Regular", Menlo, monospace;
+    --font-heading: "Familjen Grotesk", ui-sans-serif, sans-serif;
+    --font-body: "Inter", ui-sans-serif, sans-serif;
+    --font-mono: "Google Sans Code", ui-monospace, monospace;
 
-    --bg: light-dark(oklch(1 0 0), oklch(0 0 0));
-    --bg-subtle: light-dark(oklch(0.984 0 0), oklch(0.027 0 0));
-    --text: light-dark(oklch(0.205 0 0), oklch(0.946 0 0));
-    --text-muted: light-dark(oklch(0.42 0 0), oklch(0.706 0 0));
-    --border: light-dark(oklch(0.925 0 0), oklch(0.281 0 0));
-    --accent: light-dark(oklch(0.5761 0.2508 258.23), oklch(0.5761 0.2321 258.23));
-    --success: light-dark(oklch(0.5175 0.1453 147.65), oklch(0.731 0.2158 148.29));
-    --warning: light-dark(oklch(0.5279 0.1496 54.65), oklch(0.7721 0.1991 64.28));
-    --danger: light-dark(oklch(0.5499 0.232 25.29), oklch(0.6996 0.2136 22.03));
+    --typeset-size: 16px;
+    --typeset-leading: 1.6;
+    --typeset-flow: 1.25em;
+    --typeset-measure: 80ch;
+
+    --color-bg: light-dark(oklch(1 0 0), oklch(0 0 0));
+    --color-bg-subtle: light-dark(oklch(0.984 0 0), oklch(0.027 0 0));
+    --color-text: light-dark(oklch(0.205 0 0), oklch(0.946 0 0));
+    --color-text-muted: light-dark(oklch(0.42 0 0), oklch(0.706 0 0));
+    --color-border: light-dark(oklch(0.925 0 0), oklch(0.281 0 0));
+    --color-accent: light-dark(
+      oklch(0.5761 0.2508 258.23),
+      oklch(0.5761 0.2321 258.23)
+    );
+    --color-success: light-dark(
+      oklch(0.5175 0.1453 147.65),
+      oklch(0.731 0.2158 148.29)
+    );
+    --color-warning: light-dark(
+      oklch(0.5279 0.1496 54.65),
+      oklch(0.7721 0.1991 64.28)
+    );
+    --color-danger: light-dark(
+      oklch(0.5499 0.232 25.29),
+      oklch(0.6996 0.2136 22.03)
+    );
   }
 
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-sans);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: var(--typeset-size);
+    line-height: var(--typeset-leading);
   }
 </style>
 ```
 
-Design in monochrome. `--text` and `--text-muted` carry hierarchy, `--border` and `--bg-subtle` separate, and every size, weight, and gap the page uses is its own consistent scale built on those two colors. Reach for `--accent` and the semantic tokens only where color adds meaning to state, action, or data, and pair every color cue with a non-color one. A recommendation, saving, or longer bar stays neutral however favorable it is.
+`--typeset-size` and `--typeset-flow` are bases rather than values: type steps from one, space between elements from the other, and the page reaches for a step rather than a fresh number.
+
+Prose blocks hold `--typeset-measure`. The page around them is wider: 64rem at minimum, and wider still where tables, charts, or side-by-side evidence earn the room.
+
+Design in monochrome. `--color-text` and `--color-text-muted` carry hierarchy, `--color-border` and `--color-bg-subtle` separate, and every size, weight, and gap the page uses is its own consistent scale built on those two colors. Reach for `--color-accent` and the semantic tokens only where color adds meaning to state, action, or data, and pair every color cue with a non-color one. A recommendation, saving, or longer bar stays neutral however favorable it is.
 
 The tokens resolve both themes themselves, so the page writes no theme blocks and shows no theme switcher.
 

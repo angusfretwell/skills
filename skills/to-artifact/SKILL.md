@@ -6,7 +6,7 @@ argument-hint: "[subject]"
 
 The deliverable is an **Artifact**, published in the house style.
 
-Load `artifact-design` and `writing-for-humans` before designing, and `dataviz` before writing any chart. [references/design.md](references/design.md) carries the house style: the voice, the type and color it is built from, and the reflexes it leaves out. Every word of page copy follows `writing-for-humans`.
+Load `artifact-design` and `writing-for-humans` before designing, and `dataviz` before writing any chart. [references/design.md](references/design.md) carries the house style: the voice, the type, and color it is built from, and the reflexes it leaves out. Every word of page copy follows `writing-for-humans`.
 
 ## 1. Fix the subject
 
