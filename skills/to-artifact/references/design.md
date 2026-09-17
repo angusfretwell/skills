@@ -32,7 +32,7 @@ Open the page with this, before any other page CSS:
     --typeset-size: 16px;
     --typeset-leading: 1.6;
     --typeset-flow: 1.25em;
-    --typeset-measure: 80ch;
+    --typeset-measure: 60ch;
 
     --color-bg: light-dark(oklch(1 0 0), oklch(0 0 0));
     --color-bg-subtle: light-dark(oklch(0.984 0 0), oklch(0.027 0 0));
