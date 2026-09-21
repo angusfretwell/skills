@@ -83,6 +83,8 @@ What a human must do to land or operate this change: run a migration, set an env
 
 The `Closes` line, Evidence, and To-do are live only when there's something to put in them.
 
+The description ends with its last live section. No attribution footer, no generated-with line, no link back to the session that wrote it.
+
 ## Shapes
 
 A shape carries at a glance what prose would spend a paragraph building. Reach for one when the change moves control flow, introduces a state machine, moves data across more than two modules, runs a sequence across services, or reorganises files broadly. A single-file change is prose.
