@@ -2,6 +2,8 @@
 
 What every page shares. [SKILL.md](../SKILL.md) is the order of work; the structure of any one page is yours to choose.
 
+Check the project root for `DESIGN.md`: a brand there — faces, colors, a logo — replaces the house values below, and anything it leaves unsaid keeps its house value. It supplies values, never discipline: the scale, the measure, the monochrome default, and the reflexes hold whatever the brand brings.
+
 ## Voice
 
 Make the page precise, calm, direct, technically literate, evidence-led, editorial, and restrained. Build confidence through clarity, proof, and command of the material.
@@ -10,7 +12,7 @@ Treat the page as an editorial surface even when it carries product-like interac
 
 ## Type, color, and measure
 
-The three faces are fixed. `artifact-design` advises against Inter; here it is the body face by decision, and its guidance on face choice does not apply. Familjen Grotesk carries headings and only headings; emphasis stays in the body face. Google Sans Code carries code, commands, and paths.
+Familjen Grotesk carries headings and only headings; emphasis stays in the body face. Google Sans Code carries code, commands, and paths. `artifact-design` advises against Inter; here it is the body face by decision, and its guidance on face choice does not apply.
 
 Open the page with this, before any other page CSS:
 
