@@ -6,7 +6,7 @@ argument-hint: "[subject]"
 
 The deliverable is an **Artifact**, published in the house style.
 
-Load `artifact-design` and `writing-for-humans` before designing, and `dataviz` before writing any chart. [references/design.md](references/design.md) carries the house style: the voice, the type, and color it is built from, and the reflexes it leaves out. Every word of page copy follows `writing-for-humans`.
+Load `artifact-design` and `writing-for-humans` before designing, and `dataviz` before writing any chart. [references/design.md](references/design.md) carries the house style: the voice, the type and color it is built from, the stylesheet that sets them, and the reflexes it leaves out. Every word of page copy follows `writing-for-humans`.
 
 ## 1. Fix the subject
 
@@ -32,7 +32,7 @@ Done when the **argument** is written down — the reader's question, the strong
 
 ## 3. Build and check
 
-Let the argument choose the structure. The first viewport is the argument rather than a masthead and setup; past that, compose whatever the material warrants. Take type, color, and voice from [references/design.md](references/design.md), and ship none of its **reflexes**.
+Let the argument choose the structure. The first viewport is the argument rather than a masthead and setup; past that, compose whatever the material warrants. Take type, color, and voice from [references/design.md](references/design.md), publish [assets/style.css](assets/style.css) beside the page as it sets out, and ship none of the **reflexes** it lists.
 
 Render the published page and read it in both themes and at narrow width:
 
@@ -42,4 +42,4 @@ Render the published page and read it in both themes and at narrow width:
 
 Fix the highest-impact defect, render again, and repeat.
 
-Done when a render of the published page clears all three checks, and the user holds the page itself: this review stays internal, so deliver no score, process diary, or self-critique.
+Done when the page is published with the stylesheet beside it, a render clears all three checks, and the user holds the page itself: this review stays internal, so deliver no score, process diary, or self-critique.
