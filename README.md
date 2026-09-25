@@ -34,6 +34,12 @@ Creates git commits in [Conventional Commits](https://www.conventionalcommits.or
 
 Builds a dependency graph over a batch of work items and shows the frontier: the items that can start now.
 
+### [`/finish`](skills/finish/SKILL.md)
+
+Gets a branch shippable: runs code review, standards and spec review, and browser QA in parallel sub-agents, triages the findings, fixes and simplifies in rounds until nothing worth fixing remains, and commits along the way. Asks you only about fixes that are hard to reverse; deferrals come back as a list for you to decide.
+
+Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/interview-me`, and `/open-pr`.
+
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
 Asks the session's open questions in rounds of AskUserQuestion, with a recommendation and a preview for each option.
