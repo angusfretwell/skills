@@ -6,6 +6,14 @@
 
 ## Install
 
+Globally, for every project:
+
+```bash
+npx skills add angusfretwell/skills --global
+```
+
+Or for the current project only:
+
 ```bash
 npx skills add angusfretwell/skills
 ```
