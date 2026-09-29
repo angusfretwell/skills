@@ -22,7 +22,7 @@ npx skills add angusfretwell/skills
 
 ### [`/address-review`](skills/address-review/SKILL.md)
 
-Triages review findings with you (from a PR comment, a file, or the session itself), then applies the fixes in parallel, files the deferrals, and posts a summary.
+Triages review findings with you, then fixes them in parallel, files the deferrals, and reports what it did.
 
 ### [`/attach-media`](skills/attach-media/SKILL.md)
 
@@ -30,7 +30,7 @@ Attaches screenshots and recordings to GitHub issues, PRs, and comments with `gh
 
 ### [`/browser-qa`](skills/browser-qa/SKILL.md)
 
-QAs a change against its spec: launches the app, drives every affected flow in a real browser, and probes the edge cases the change touches.
+QAs a change against its spec: drives every affected flow in a real browser, probes the edge cases, and reports pass or fail.
 
 Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/agent-browser).
 
@@ -44,15 +44,15 @@ Builds a dependency graph over a batch of work items and shows the frontier: the
 
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
-Asks the session's open questions in rounds of AskUserQuestion, with a recommendation and a preview for each option.
+Asks the session's open questions, stated or not, in rounds of AskUserQuestion.
 
 ### [`/open-pr`](skills/open-pr/SKILL.md)
 
-Opens a pull request for the current work, or refreshes an open one when later commits leave it stale. Writes the description so reviewers can follow the change, and annotates the diff where a line needs explaining.
+Opens or refreshes a pull request, with a description written for reviewers and comments on the lines that need explaining.
 
 ### [`/supervise`](skills/supervise/SKILL.md)
 
-Runs a task through sub-agents. The supervisor's context holds only the index; the disk holds the content.
+Runs a task through sub-agents that write their reports to disk, so your session's context stays small.
 
 Other skills can call it with their own dispatch prompts.
 
@@ -60,27 +60,27 @@ Depends on `/dependency-graph`.
 
 ### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
 
-Style rules for prose that people read: Orwell's six rules for expository writing, ASD-STE100 Simplified Technical English for procedural writing, and the project's own vocabulary over both.
+Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simplified Technical English for text the reader acts on.
 
 ## Work in progress
 
 ### [`/explain-irl`](skills/explain-irl/SKILL.md)
 
-Explains a bug, edge case, limitation, or trade-off as a real-world scenario: one invented person, traced numbers, and what happens to them.
+Explains a bug, edge case, limitation, or trade-off by following one invented person through it.
 
 ### [`/finish`](skills/finish/SKILL.md)
 
-Gets a branch shippable: runs code review, standards and spec review, and browser QA in parallel sub-agents, triages the findings, fixes and simplifies in rounds until nothing worth fixing remains, and commits along the way. Asks you only about fixes that are hard to reverse; deferrals come back as a list for you to decide.
+Gets a branch shippable: reviews, QAs, and fixes it in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Asks you only about fixes that are hard to reverse.
 
 Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/interview-me`, and `/open-pr`.
 
 ### [`/how`](skills/how/SKILL.md)
 
-Explains how something in the codebase works, at the depth a senior engineer needs to start working in it. Parallel explorers trace every claim back to a file.
+Explains how part of the codebase works, deep enough to start working in it, with every claim traced to a file.
 
 ### [`/showcase`](skills/showcase/SKILL.md)
 
-Composes a visual explanation of how something works: captures, diagrams, and prose on one page, each point in the medium that proves it.
+Builds a one-page visual explanation of how something works, each point shown as a screenshot, diagram, or prose.
 
 Depends on `/to-artifact`.
 
@@ -90,6 +90,6 @@ Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the 
 
 ### [`/why`](skills/why/SKILL.md)
 
-Investigates why code is the way it is across commits, tickets, docs, chat, and telemetry, and answers with cited findings, each carrying a confidence tier and the gaps behind it.
+Investigates why code is the way it is, from commits, tickets, docs, chat, and telemetry, and cites each finding with a confidence tier.
 
 Companion to `/how`.
