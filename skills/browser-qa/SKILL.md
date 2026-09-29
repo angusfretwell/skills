@@ -24,7 +24,14 @@ Look for the originating spec, in this order:
 
 Refuse if `agent-browser` isn't installed: stop and tell the user. Invoke the **run** skill and get the URL the app is serving on; refuse likewise if the app won't run.
 
-Invoke the **agent-browser** skill and load its **dogfood** workflow. Follow it against the URL: it owns the browser mechanics, evidence capture, and the report. Scope to the diff, not dogfood's full-app default. Drive every flow the change affects end-to-end, then pick probes from dogfood's edge-case checklist that fit the change.
+Invoke the **agent-browser** skill and load its **dogfood** workflow with `agent-browser skills get dogfood --full`; `--full` inlines the report template and edge-case checklist. Follow it against the URL, with two changes:
+
+- Scope to the diff, not the full app. The diff is the only code you read, and only to list the flows it affects.
+- The report is your reply, not a file, citing screenshots and videos by absolute path.
+
+Drive every flow the change affects end-to-end, then pick probes from the edge-case checklist that fit the change.
+
+When the brief hands you **fixtures**, test data already set up, drive the flows with them and build only what they lack.
 
 ### 4. Verdict
 
