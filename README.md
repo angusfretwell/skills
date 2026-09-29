@@ -62,15 +62,15 @@ Other skills can call it with their own dispatch prompts.
 
 Explains a bug, edge case, limitation, or trade-off by following one invented person through it.
 
-### [`/finish`](skills/finish/SKILL.md)
-
-Gets a branch shippable: reviews, QAs, and fixes it in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Asks you only about fixes that are hard to reverse.
-
-Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/interview-me`, and `/open-pr`.
-
 ### [`/how`](skills/how/SKILL.md)
 
 Explains how part of the codebase works, deep enough to start working in it, with every claim traced to a file.
+
+### [`/polish`](skills/polish/SKILL.md)
+
+Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Reports what it fixed, what it won't, and what needs your call.
+
+Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
 
 ### [`/showcase`](skills/showcase/SKILL.md)
 
