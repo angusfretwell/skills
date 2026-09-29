@@ -74,7 +74,7 @@ Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:cod
 
 ### [`/ship-it`](skills/ship-it/SKILL.md)
 
-Decides whether a PR can merge without human review, and merges it when it can. It holds only for an unmet pre-merge requirement, a one-way door the spec never agreed to, or a high-impact failure with no evidence against it. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
+Merges a PR without human review when a fresh judge sub-agent rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
 
 Depends on `/humanize`.
 
