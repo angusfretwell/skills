@@ -50,6 +50,8 @@ Asks the session's open questions, stated or not, in rounds of AskUserQuestion.
 
 Opens or refreshes a pull request, with a description written for reviewers and comments on the lines that need explaining.
 
+Depends on `/attach-media`, `/commit`, and `/humanize`.
+
 ### [`/supervise`](skills/supervise/SKILL.md)
 
 Runs a task through sub-agents that write their reports to disk, so your session's context stays small.
@@ -66,15 +68,19 @@ Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the 
 
 Explains a bug, edge case, limitation, or trade-off by following one invented person through it.
 
+Depends on `/humanize`.
+
 ### [`/how`](skills/how/SKILL.md)
 
 Explains how part of the codebase works, deep enough to start working in it, with every claim traced to a file.
+
+Depends on `/humanize`.
 
 ### [`/polish`](skills/polish/SKILL.md)
 
 Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Reports what it fixed, what it won't fix and why, and what needs your call.
 
-Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
+Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
 
 ### [`/ship-it`](skills/ship-it/SKILL.md)
 
@@ -86,7 +92,7 @@ Depends on `/humanize`.
 
 Builds a one-page visual explanation of how something works, each point shown as a screenshot, diagram, or prose.
 
-Depends on `/to-artifact`.
+Depends on `/to-artifact`, `/how`, and `/why`.
 
 ### [`/why`](skills/why/SKILL.md)
 
@@ -98,4 +104,4 @@ Companion to `/how`.
 
 Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
 
-Depends on `/polish`, `/ship-it`, `/open-pr`, `/supervise`, the built-in `/workflow-authoring`, and [`/mattpocock-skills:tdd` and `/mattpocock-skills:code-review`](https://github.com/mattpocock/skills).
+Depends on `/polish`, `/ship-it`, `/open-pr`, `/supervise`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
