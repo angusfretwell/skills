@@ -13,13 +13,13 @@ You **author** a workflow and report on what it returns. The work is the spec or
 
 Each ticket is one work item, with the spec as context when there is one. A spec without tickets is one work item.
 
-Find each work item's **blockers** per `/supervise`'s frontier rules, the implicit ones as well as the declared. A blocker is **done** when its PR has merged; one outside the batch that is not done keeps its dependents blocked.
+Find each work item's **blockers** per `/supervise`'s frontier rules. A blocker is **done** when its PR has merged; one outside the batch that is not done keeps its dependents blocked.
 
 Done when every work item is on the **frontier** or names every blocker it waits on.
 
 ## 2. Author the script
 
-Load `/workflow-authoring`. Read the `SKILL.md` of `/polish` and `/ship-it`, and ship-it's `references/judge.md`. They are the source of truth for their stages: the script encodes their orchestration and points each agent at their rules.
+Read the `SKILL.md` of `/polish` and `/ship-it`, and ship-it's `references/judge.md`. They are the source of truth for their stages: the script encodes their orchestration.
 
 ### Translation
 
