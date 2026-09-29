@@ -24,13 +24,13 @@ Done when every artifact you can find is listed, by content or path.
 
 ## 3. Dispatch the judge
 
-Dispatch one fresh sub-agent on the most capable model available. It is read-only: it reads, runs read-only commands and tools, and changes nothing. The brief carries the path to [references/judge.md](references/judge.md), to read first; the PR; and the evidence.
+Dispatch one fresh sub-agent on the most capable model available. It is read-only: it reads, runs read-only commands and tools, and changes nothing. The brief carries the path to [references/judge.md](references/judge.md), to read first; the PR and its head commit; and the evidence.
 
 Done when the judge returns a verdict in `judge.md`'s shape.
 
 ## 4. Act
 
-- **merge**: merge the PR per the repository's merge settings, unless `--dry-run`. When the merge is refused, that refusal is the outcome.
+- **merge**: merge the PR per the repository's merge settings, pinned to the head commit the judge reviewed, unless `--dry-run`. When the merge is refused, that refusal is the outcome.
 - **hold**: leave the PR open.
 
 With `--comment`, post the judge's report on the PR, whatever the verdict.
