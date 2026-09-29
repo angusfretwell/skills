@@ -10,7 +10,6 @@
         "attach-media",
         "browser-qa",
         "commit",
-        "dependency-graph",
         "humanize",
         "interview-me",
         "open-pr",

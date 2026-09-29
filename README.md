@@ -38,10 +38,6 @@ Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/ag
 
 Creates git commits in [Conventional Commits](https://www.conventionalcommits.org) format.
 
-### [`/dependency-graph`](skills/dependency-graph/SKILL.md)
-
-Builds a dependency graph over a batch of work items and shows the frontier: the items that can start now.
-
 ### [`/humanize`](skills/humanize/SKILL.md)
 
 Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simplified Technical English for text the reader acts on.
@@ -59,8 +55,6 @@ Opens or refreshes a pull request, with a description written for reviewers and 
 Runs a task through sub-agents that write their reports to disk, so your session's context stays small.
 
 Other skills can call it with their own dispatch prompts.
-
-Depends on `/dependency-graph`.
 
 ## Work in progress
 
