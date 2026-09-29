@@ -39,6 +39,8 @@ Merge the lists into the ledger, collapsing findings that make the same claim in
 
 A **fix** finding that is a bug an earlier round fixed, back by a new route, is a **recurrence**: that fix was too shallow, so its fix brief names the earlier fix and targets the shared cause.
 
+From round 2 on, a naming finding, test names included, is a **fix** only when the name **misleads**: it claims something the code doesn't do, or contradicts the project's glossary. A name that could merely be better is **won't fix**, so later rounds stop relitigating names earlier rounds chose.
+
 Done when every finding in the ledger carries a disposition.
 
 ## 4. Fix
@@ -61,10 +63,10 @@ When this round fixed nothing, go to step 6.
 Otherwise, plan the next round's passes. A **settled** finding this round predicts more oscillation, so lean toward skipping passes, narrower ranges, and lower effort.
 
 - **Range**: the commits since this round began for contained fixes; the fixed point when a fix reshaped the change.
-- **Effort**: `low` or `medium` for small, local fixes; `high` when a fix changed control flow, error handling, or state shared across callers, or fixed a **recurrence**.
+- **Effort**: `low` for small, local fixes; `medium` when a fix changed control flow, error handling, or state shared across callers, or fixed a **recurrence**.
 - `/mattpocock-skills:code-review` runs only when a fix changed behaviour.
 - `/browser-qa` runs only when live for the fixes' diff.
-- After a **dense** round 1, one that fixed many findings, round 2 also runs `/code-review` at `high` over the fixed point: a dense round leaves misses in unchanged code.
+- After a **dense** round 1, one that fixed many findings, round 2's `/code-review` covers the fixed point: a dense round leaves misses in unchanged code.
 
 Each brief names the fixes behind its range, so the pass hunts **regressions** in them.
 

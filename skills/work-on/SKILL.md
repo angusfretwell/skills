@@ -28,7 +28,7 @@ Workflow agents are **leaves**: they have no Agent tool and no way to reach the 
 - Each sub-agent a skill dispatches becomes an `agent()` call, briefed as the skill says and on the model it names.
 - The skill's own orchestrator work (polish's scoping, triage, and round planning; ship-it's readiness check and acting on the verdict) becomes an `agent()` call that returns its result through a schema.
 - The skill's loops, exits, and carried state become script control flow. Polish's ledger and fixtures live in the script and ride into every brief that needs them.
-- `/mattpocock-skills:code-review`, wherever the chain runs it, becomes two parallel `agent()` calls, one for its Spec axis and one for its Standards axis, each briefed per that skill.
+- Polish's `/mattpocock-skills:code-review` pass becomes two parallel `agent()` calls, one for its Spec axis and one for its Standards axis, each briefed per that skill.
 
 Every brief names the work item, its worktree and branch, the spec, and the skill step it performs, so the agent reads that step at the source.
 
@@ -38,7 +38,7 @@ Each work item runs in one worktree on its own branch, cut from the freshly fetc
 
 For each work item, in order:
 
-1. **Implement.** Use `/mattpocock-skills:tdd` where possible. The seams the spec names count as agreed; where it names none, the agent picks them and reports its choice. Run typechecking and single test files regularly, and the full test suite once at the end. Commit to the work item's branch. Then review the work with `/mattpocock-skills:code-review`, translated, and an agent addresses the findings and commits.
+1. **Implement.** Use `/mattpocock-skills:tdd` where possible. The seams the spec names count as agreed; where it names none, the agent picks them and reports its choice. Run typechecking and single test files regularly, and the full test suite once at the end. Commit to the work item's branch.
 2. **Polish.** `/polish`, translated, with the work item as its spec.
 3. **Open the PR**, unless `--no-pr`. `/open-pr --capture --annotate`, as a draft when polish left an **ask** open.
 4. **Ship**, with `--ship` and a PR that is not a draft. Wait for checks; when one fails, an agent fixes it and pushes, then wait again, for at most 2 fixes. Then `/ship-it --comment`, translated, with polish's report as its evidence.
