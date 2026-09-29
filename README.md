@@ -93,3 +93,9 @@ Depends on `/to-artifact`.
 Investigates why code is the way it is, from commits, tickets, docs, chat, and telemetry, and cites each finding with a confidence tier.
 
 Companion to `/how`.
+
+### [`/work-on`](skills/work-on/SKILL.md)
+
+Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
+
+Depends on `/polish`, `/ship-it`, `/open-pr`, `/supervise`, the built-in `/workflow-authoring`, and [`/mattpocock-skills:tdd` and `/mattpocock-skills:code-review`](https://github.com/mattpocock/skills).
