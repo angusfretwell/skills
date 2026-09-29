@@ -42,6 +42,10 @@ Creates git commits in [Conventional Commits](https://www.conventionalcommits.or
 
 Builds a dependency graph over a batch of work items and shows the frontier: the items that can start now.
 
+### [`/humanize`](skills/humanize/SKILL.md)
+
+Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simplified Technical English for text the reader acts on.
+
 ### [`/interview-me`](skills/interview-me/SKILL.md)
 
 Asks the session's open questions, stated or not, in rounds of AskUserQuestion.
@@ -57,10 +61,6 @@ Runs a task through sub-agents that write their reports to disk, so your session
 Other skills can call it with their own dispatch prompts.
 
 Depends on `/dependency-graph`.
-
-### [`/writing-for-humans`](skills/writing-for-humans/SKILL.md)
-
-Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simplified Technical English for text the reader acts on.
 
 ## Work in progress
 

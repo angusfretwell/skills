@@ -27,7 +27,7 @@ Done when every number the system produces on each path is traced, and every oth
 
 ## 3. Tell it
 
-Tell the scenario in the conversation, as prose per `/writing-for-humans`. Bring the cause in at the moment it bites, in product terms: "the search index rebuilds overnight, so the listing she posts at 9am can't be found until tomorrow".
+Tell the scenario in the conversation, as prose per `/humanize`. Bring the cause in at the moment it bites, in product terms: "the search index rebuilds overnight, so the listing she posts at 9am can't be found until tomorrow".
 
 Bring in what fits the subject:
 

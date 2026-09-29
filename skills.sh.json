@@ -11,10 +11,10 @@
         "browser-qa",
         "commit",
         "dependency-graph",
+        "humanize",
         "interview-me",
         "open-pr",
-        "supervise",
-        "writing-for-humans"
+        "supervise"
       ]
     },
     {

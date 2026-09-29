@@ -1,5 +1,5 @@
 ---
-name: writing-for-humans
+name: humanize
 description: Writing prose for human readers. Use when writing docs, READMEs, PR or issue text, release notes, commit messages, error messages, or UI copy.
 ---
 

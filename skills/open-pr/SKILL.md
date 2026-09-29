@@ -20,7 +20,7 @@ Study the branch as a whole — `git diff <base>...HEAD` and `git log <base>..HE
 
 ### 3. Compose
 
-Load `/writing-for-humans` first: every word of the title, the description, and the comments follows it.
+Load `/humanize` first: every word of the title, the description, and the comments follows it.
 
 Compose the title and description fresh from the branch you just read — whether the PR is new or already open — per the formats below. If the repo ships a PR template (e.g. `.github/pull_request_template.md`), its structure wins — apply the section guidance here within the template's sections.
 

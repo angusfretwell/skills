@@ -23,7 +23,7 @@ Done when every return traces its angle to code, a file path behind each compone
 
 ## 3. Explain
 
-Synthesise the findings into one **mental model**. Where explorers overlap, merge; where they contradict, settle it by reading the code yourself. Write per `/writing-for-humans`, and:
+Synthesise the findings into one **mental model**. Where explorers overlap, merge; where they contradict, settle it by reading the code yourself. Write per `/humanize`, and:
 
 - Name the real things: "`UserService` calls `AuthClient.refresh()`", not "the service delegates to the client".
 - Where something is complex, explain why; where it is simple, give it one sentence.
