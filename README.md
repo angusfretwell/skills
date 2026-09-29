@@ -72,6 +72,12 @@ Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round 
 
 Depends on the built-in `/code-review` and `/simplify`, [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
 
+### [`/ship-it`](skills/ship-it/SKILL.md)
+
+Decides whether a PR can merge without human review, and merges it when it can. It holds only for an unmet pre-merge requirement, a one-way door the spec never agreed to, or a high-impact failure with no evidence against it. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
+
+Depends on `/humanize`.
+
 ### [`/showcase`](skills/showcase/SKILL.md)
 
 Builds a one-page visual explanation of how something works, each point shown as a screenshot, diagram, or prose.
