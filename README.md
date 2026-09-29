@@ -56,6 +56,10 @@ Runs a task through sub-agents that write their reports to disk, so your session
 
 Other skills can call it with their own dispatch prompts.
 
+### [`/to-artifact`](skills/to-artifact/SKILL.md)
+
+Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
+
 ## Work in progress
 
 ### [`/explain-irl`](skills/explain-irl/SKILL.md)
@@ -83,10 +87,6 @@ Depends on `/humanize`.
 Builds a one-page visual explanation of how something works, each point shown as a screenshot, diagram, or prose.
 
 Depends on `/to-artifact`.
-
-### [`/to-artifact`](skills/to-artifact/SKILL.md)
-
-Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
 
 ### [`/why`](skills/why/SKILL.md)
 
