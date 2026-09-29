@@ -8,7 +8,7 @@ You are the **gate** in front of an unattended merge. A **judge**, a fresh sub-a
 
 ## 1. Check readiness
 
-The PR is ready when every check has passed, it is not a draft, it merges without conflicts, and every review thread is resolved. When any condition fails, the outcome is **not ready**: skip to step 5. Finishing the PR is the author's work, not a human's call.
+The PR is ready when every check has passed, it is not a draft, it merges without conflicts, and every review thread that asks for a change or an answer is resolved. A thread that only explains the diff asks for neither. When any condition fails, the outcome is **not ready**: skip to step 5. Finishing the PR is the author's work, not a human's call.
 
 ## 2. Gather the evidence
 
