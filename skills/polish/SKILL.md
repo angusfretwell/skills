@@ -3,7 +3,7 @@ name: polish
 description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks to polish a branch, or when another skill needs a branch polished.
 ---
 
-A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent; you plan, triage, and integrate.
+A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
 
 ## 1. Establish the scope
 
@@ -17,7 +17,7 @@ Done when you hold the fixed point, the spec, and whether QA is live.
 
 ## 2. Run the passes
 
-Dispatch each pass in the round's plan as its own sub-agent, all in parallel. Each brief carries the spec, the exact commit range to review (`<from>..HEAD`), and the ledger file, so its **won't fix**, **defer**, **ask**, and **settled** entries are not raised again. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters.
+Dispatch each pass in the round's plan as its own sub-agent, all in parallel. Each brief carries the exact commit range to review (`<from>..HEAD`) and the ledger file, so the pass skips findings the ledger holds as **won't fix**, **defer**, **ask**, or **settled**. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters.
 
 Round 1's plan is every pass against the fixed point:
 
@@ -25,11 +25,7 @@ Round 1's plan is every pass against the fixed point:
 - `/mattpocock-skills:code-review`.
 - `/browser-qa`, when live.
 
-Later rounds run the plan made in step 5.
-
-A reply without the list means the pass is still working: message it to finish and send the list.
-
-Done when every pass in the plan has returned its list.
+Done when every pass in the plan has returned its list. A reply without the list means the pass is still working: message it to finish and send the list.
 
 ## 3. Triage
 
@@ -47,7 +43,7 @@ Done when every finding in the ledger carries a disposition.
 
 ## 4. Fix
 
-Cluster the **fix** findings by file: one sub-agent per cluster, in parallel, each briefed with its findings and the spec. Each brief asks the sub-agent to:
+Cluster the **fix** findings by file: one sub-agent per cluster, in parallel, each briefed with its findings. Each brief asks the sub-agent to:
 
 - Confirm each finding holds before changing code.
 - Fix the class: find the same bug elsewhere and fix those instances too.
@@ -62,7 +58,7 @@ Done when every **fix** finding is committed or moved to **won't fix**.
 
 When this round fixed nothing, go to step 6.
 
-Otherwise, weigh what the fixes touched and plan the next round's passes. For each pass, choose whether it runs, its range, and for `/code-review` its effort. A **settled** finding this round predicts more oscillation, so lean each choice toward skipping, the narrower range, and lower effort.
+Otherwise, plan the next round's passes. A **settled** finding this round predicts more oscillation, so lean toward skipping passes, narrower ranges, and lower effort.
 
 - **Range**: the commits since this round began for contained fixes; the fixed point when a fix reshaped the change.
 - **Effort**: `low` or `medium` for small, local fixes; `high` when a fix changed control flow, error handling, or state shared across callers, or fixed a **recurrence**.
