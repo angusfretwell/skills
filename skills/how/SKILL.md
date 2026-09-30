@@ -17,7 +17,7 @@ Done when every angle names a file or symbol to start from, and every part of th
 
 ## 2. Explore
 
-Dispatch one **explorer** per angle in a single message (`subagent_type: Explore`, `model: sonnet`, search breadth `very thorough`). Each prompt carries the path to [references/explorer-brief.md](references/explorer-brief.md), the question, and that explorer's angle.
+Dispatch one **explorer** per angle in a single message (`subagent_type: Explore`, search breadth `very thorough`). Each prompt carries the path to [references/explorer-brief.md](references/explorer-brief.md), the question, and that explorer's angle.
 
 Done when every return traces its angle to code, a file path behind each component and each flow step. Re-dispatch an explorer that came back on names alone.
 

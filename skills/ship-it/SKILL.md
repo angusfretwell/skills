@@ -20,7 +20,7 @@ Done when every piece of evidence you can find is listed, by content or path.
 
 ## 3. Dispatch the judge
 
-Dispatch one fresh sub-agent on the most capable model available. It is read-only. The brief carries the path to [references/judge.md](references/judge.md), to read first; the PR and its head commit; and the evidence.
+Dispatch one fresh, read-only sub-agent. The brief carries the path to [references/judge.md](references/judge.md), to read first; the PR and its head commit; and the evidence.
 
 Done when the judge returns a verdict in `judge.md`'s shape.
 
