@@ -23,11 +23,11 @@ Done when the coverage map marks every source **covered** (a server, or git and 
 
 ## 3. Anchor
 
-Dispatch the **anchorer** (`model: sonnet`). The prompt carries: the path to [references/anchor.md](references/anchor.md), which gives the `git` and `gh` invocations and what to record in each section; the target; the question, with its hypothesis. Done when every section of the anchor has returned filled and **defensive** reads yes or no.
+Dispatch the **anchorer** (`subagent_type: Explore`). The prompt carries: the path to [references/anchor.md](references/anchor.md), which gives the `git` and `gh` invocations and what to record in each section; the target; the question, with its hypothesis. Done when every section of the anchor has returned filled and **defensive** reads yes or no.
 
 ## 4. Investigate
 
-Dispatch one **investigator** per covered source (`model: sonnet`) in a single message. Each prompt carries:
+Dispatch one **investigator** per covered source in a single message. Each prompt carries:
 
 - the path to [references/investigator.md](references/investigator.md), to read first
 - the path to its source playbook, `references/sources/<source>.md` (source control is `source-control.md`), to read second
@@ -39,7 +39,7 @@ Done when every covered source has one investigator of its own, none merged, eac
 
 ## 5. Synthesize
 
-Once every investigator has returned, dispatch the **synthesizer** (`model: opus`) with the paths to [references/synthesizer.md](references/synthesizer.md) and [references/epistemics.md](references/epistemics.md), and carrying:
+Once every investigator has returned, dispatch the **synthesizer** with the paths to [references/synthesizer.md](references/synthesizer.md) and [references/epistemics.md](references/epistemics.md), and carrying:
 
 - every investigator's findings verbatim
 - the anchor

@@ -11,13 +11,13 @@ The fixed point is the one the user named, else the current branch's merge-base 
 
 Find the spec once: the one already in this session, issue references in the commit messages, the open PR, or a spec file matching the branch under `docs/`, `specs/`, or `.scratch/`. If none turns up, ask the user once. The spec, or its confirmed absence, goes into every brief.
 
-Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees. When it is, dispatch a Sonnet sub-agent to set up the **fixtures** every round's QA reuses: the test data the affected flows need, built with the project's seeds or the **run** skill. It returns each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event.
+Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees. When it is, dispatch a sub-agent to set up the **fixtures** every round's QA reuses: the test data the affected flows need, built with the project's seeds or the **run** skill. It returns each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event.
 
 Done when you hold the fixed point, the spec, whether QA is live, and, when it is, the fixtures.
 
 ## 2. Run the passes
 
-Dispatch each pass in the round's plan as its own sub-agent, all in parallel. Each brief carries the exact commit range to review (`<from>..HEAD`) and the ledger file, so the pass skips findings the ledger holds as **won't fix**, **defer**, **ask**, or **settled**. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters. A `/browser-qa` pass runs on Sonnet, and its brief also carries the fixtures and where effects land.
+Dispatch each pass in the round's plan as its own sub-agent, all in parallel. Each brief carries the exact commit range to review (`<from>..HEAD`) and the ledger file, so the pass skips findings the ledger holds as **won't fix**, **defer**, **ask**, or **settled**. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters. A `/browser-qa` pass's brief also carries the fixtures and where effects land.
 
 Round 1's plan is every pass against the fixed point:
 

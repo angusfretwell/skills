@@ -25,7 +25,7 @@ Read the `SKILL.md` of `/polish` and `/ship-it`, and ship-it's `references/judge
 
 Workflow agents are **leaves**: they have no Agent tool and no way to reach the user. So the script makes every dispatch, and each brief answers the questions its skill would put to the user.
 
-- Each sub-agent a skill dispatches becomes an `agent()` call, briefed as the skill says and on the model it names.
+- Each sub-agent a skill dispatches becomes an `agent()` call, briefed as the skill says.
 - The skill's own orchestrator work (polish's scoping, triage, and round planning; ship-it's readiness check and acting on the verdict) becomes an `agent()` call that returns its result through a schema.
 - The skill's loops, exits, and carried state become script control flow. Polish's ledger and fixtures live in the script and ride into every brief that needs them.
 - Polish's `/mattpocock-skills:code-review` pass becomes two parallel `agent()` calls, one for its Spec axis and one for its Standards axis, each briefed per that skill.
