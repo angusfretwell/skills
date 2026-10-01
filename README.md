@@ -82,6 +82,12 @@ Explains how part of the codebase works, deep enough to start working in it, wit
 
 Depends on `/humanize`.
 
+### [`/review-pr`](skills/in-progress/review-pr/SKILL.md)
+
+Reviews a PR with you: runs code review, standards and spec review, and browser QA, triages each finding with you, then drafts the review on GitHub for you to submit, with a recommendation to approve, comment, or request changes.
+
+Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/humanize`. Comment shapes adapted from [`/show-me`](https://github.com/humanlayer/skills).
+
 ### [`/ship-it`](skills/in-progress/ship-it/SKILL.md)
 
 Merges a PR without human review when a fresh judge sub-agent rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
