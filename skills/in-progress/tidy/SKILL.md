@@ -3,7 +3,7 @@ name: tidy
 description: Remove AI slop from a branch and make its code easier to read. Use when asked to tidy or deslop code.
 ---
 
-Tidy every function the branch's diff touches, uncommitted changes included. Preserve behaviour unless fixing a clear bug.
+Tidy all code the branch's diff touches, uncommitted changes included. Preserve behaviour unless fixing a clear bug.
 
 Remove slop, judged against the surrounding code:
 
@@ -20,4 +20,4 @@ Make the code easier to read:
 - Flatten nesting into guard clauses.
 - Name complex conditions.
 
-When every touched function is tidy, summarise the changes in 1–3 sentences.
+When all touched code is tidy, summarise the changes in 1–3 sentences.
