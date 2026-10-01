@@ -72,11 +72,11 @@ Each brief names the fixes behind its range, so the pass hunts **regressions** i
 
 Done when you have stated the plan to the user: every pass run or skipped with its reason, and each that runs with its range and, for `/code-review`, its effort. Return to step 2 with the plan.
 
-## 6. Simplify
+## 6. Simplify and tidy
 
-Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `/commit`. When it changed anything, dispatch `/code-review low --fix` in a sub-agent over its commits, and commit per `/commit`.
+Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `/commit`. Then do the same with `/tidy`. When either changed anything, dispatch `/code-review low --fix` in a sub-agent over their commits, and commit per `/commit`.
 
-Done when simplify's changes and the review's fixes are committed.
+Done when simplify's and tidy's changes and the review's fixes are committed.
 
 ## 7. Report
 

@@ -60,9 +60,9 @@ Depends on `/attach-media`, `/commit`, and `/humanize`.
 
 ### [`/polish`](skills/engineering/polish/SKILL.md)
 
-Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Reports what it fixed, what it won't fix and why, and what needs your call.
+Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies and tidies it. Reports what it fixed, what it won't fix and why, and what needs your call.
 
-Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
+Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, and `/tidy`.
 
 ### [`/supervise`](skills/engineering/supervise/SKILL.md)
 
