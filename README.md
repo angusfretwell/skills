@@ -100,6 +100,10 @@ Builds a one-page visual explanation of how something works, each point shown as
 
 Depends on `/to-artifact`, `/how`, and `/why`.
 
+### [`/tidy`](skills/in-progress/tidy/SKILL.md)
+
+Cleans up a branch's changes: removes AI slop, such as needless comments and defensive code, and spaces the code out so it reads easily.
+
 ### [`/why`](skills/in-progress/why/SKILL.md)
 
 Investigates why code is the way it is, from commits, tickets, docs, chat, and telemetry, and cites each finding with a confidence tier.
