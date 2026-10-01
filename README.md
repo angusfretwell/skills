@@ -38,6 +38,12 @@ Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/ag
 
 Creates git commits in [Conventional Commits](https://www.conventionalcommits.org) format.
 
+### [`/explain-irl`](skills/engineering/explain-irl/SKILL.md)
+
+Explains a bug, edge case, limitation, or trade-off by following one invented person through it.
+
+Depends on `/humanize`.
+
 ### [`/humanize`](skills/engineering/humanize/SKILL.md)
 
 Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simplified Technical English for text the reader acts on.
@@ -52,6 +58,12 @@ Opens or refreshes a pull request, with a description written for reviewers and 
 
 Depends on `/attach-media`, `/commit`, and `/humanize`.
 
+### [`/polish`](skills/engineering/polish/SKILL.md)
+
+Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Reports what it fixed, what it won't fix and why, and what needs your call.
+
+Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
+
 ### [`/supervise`](skills/engineering/supervise/SKILL.md)
 
 Runs a task through sub-agents that write their reports to disk, so your session's context stays small.
@@ -64,23 +76,11 @@ Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the 
 
 ## Work in progress
 
-### [`/explain-irl`](skills/in-progress/explain-irl/SKILL.md)
-
-Explains a bug, edge case, limitation, or trade-off by following one invented person through it.
-
-Depends on `/humanize`.
-
 ### [`/how`](skills/in-progress/how/SKILL.md)
 
 Explains how part of the codebase works, deep enough to start working in it, with every claim traced to a file.
 
 Depends on `/humanize`.
-
-### [`/polish`](skills/in-progress/polish/SKILL.md)
-
-Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies it. Reports what it fixed, what it won't fix and why, and what needs your call.
-
-Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/commit`.
 
 ### [`/ship-it`](skills/in-progress/ship-it/SKILL.md)
 

@@ -10,9 +10,11 @@
         "attach-media",
         "browser-qa",
         "commit",
+        "explain-irl",
         "humanize",
         "interview-me",
         "open-pr",
+        "polish",
         "supervise",
         "to-artifact"
       ]
@@ -20,7 +22,13 @@
     {
       "title": "Work in progress",
       "description": "Skills I'm still working on.",
-      "skills": ["how", "why", "showcase", "explain-irl", "polish", "ship-it", "work-on"]
+      "skills": [
+        "how",
+        "why",
+        "showcase",
+        "ship-it",
+        "work-on"
+      ]
     }
   ]
 }
