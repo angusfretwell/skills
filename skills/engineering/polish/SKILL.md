@@ -1,6 +1,6 @@
 ---
 name: polish
-description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks to polish a branch, or when another skill needs a branch polished.
+description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks to polish a branch, or when another skill needs a branch polished. Runs a faster single-round pass with --quick or when the user asks for a quick polish.
 ---
 
 A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
@@ -86,3 +86,13 @@ Report in this shape:
 - `## Fixed`: each **fix** finding, one line apiece.
 - `## Won't fix`: each with its reason; each **settled** finding names the fix that stands.
 - `## Needs you`: each **ask** with its candidate fixes, your recommendation first; then each **defer** as a plain item to act on.
+
+## Quick mode
+
+With `--quick`, or when the user asks for a quick polish, run the steps above with these changes:
+
+- Step 1: when no spec turns up, proceed without one rather than asking. Browser QA is never live.
+- Step 2: the plan is `/code-review` at `medium` effort, plus `/mattpocock-skills:code-review` when there is a spec.
+- Step 5: skip it. One round only.
+- Step 6: dispatch `/tidy` only. Then dispatch `/code-review low --fix` over the fix and tidy commits together, so the round's fixes get a regression check.
+- Step 7: the opening lines say this was a quick pass and name what it skipped.
