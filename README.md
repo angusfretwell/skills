@@ -100,6 +100,10 @@ Builds a one-page visual explanation of how something works, each point shown as
 
 Depends on `/to-artifact`, `/how`, and `/why`.
 
+### [`/status-report`](skills/in-progress/status-report/SKILL.md)
+
+Reports what your session still has in flight: open PRs with their checks and reviews, running agents and workflows, active watches, and what's waiting on you.
+
 ### [`/tidy`](skills/in-progress/tidy/SKILL.md)
 
 Cleans up a branch's changes: removes AI slop, such as needless comments and defensive code, and spaces the code out so it reads easily.

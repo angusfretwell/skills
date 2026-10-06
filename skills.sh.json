@@ -29,7 +29,8 @@
         "review-pr",
         "ship-it",
         "tidy",
-        "work-on"
+        "work-on",
+        "status-report"
       ]
     }
   ]
