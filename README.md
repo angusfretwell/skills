@@ -84,6 +84,8 @@ Depends on `/humanize`.
 
 ### [`/record-demo`](skills/in-progress/record-demo/SKILL.md)
 
+Records a demo video of each flow you name, or of each user-visible flow your branch changes. A sub-agent rehearses every step first, then records the flow at human pace with a visible cursor and no devtools on screen. Pass `--gif` to get a GIF of each video too, or `--compact` for smaller files.
+
 Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/agent-browser).
 
 ### [`/review-pr`](skills/in-progress/review-pr/SKILL.md)
