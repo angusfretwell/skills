@@ -82,6 +82,10 @@ Explains how part of the codebase works, deep enough to start working in it, wit
 
 Depends on `/humanize`.
 
+### [`/record-demo`](skills/in-progress/record-demo/SKILL.md)
+
+Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/agent-browser).
+
 ### [`/review-pr`](skills/in-progress/review-pr/SKILL.md)
 
 Reviews a PR with you: runs code review, standards and spec review, and browser QA, triages each finding with you, then drafts the review on GitHub for you to submit, with a recommendation to approve, comment, or request changes.
