@@ -18,20 +18,20 @@ Refuse if `agent-browser` or `ffmpeg` isn't installed: stop and tell the user. I
 
 Every take shares one **frame**: a 1440×900 viewport at 2x DPR, recorded at 60 fps. When the user asks for mobile or another form factor, pick a viewport that fits it, such as 390×844 at 3x for a phone. `--compact` drops the frame to 1x DPR at 30 fps.
 
-Make a run directory under the system temp dir and copy [`scripts/hide-dev-chrome.js`](scripts/hide-dev-chrome.js) into it.
+Make a run directory under the system temp dir and copy [`scripts/hide-devtools.js`](scripts/hide-devtools.js) into it.
 
 Done when the app serves on a URL and the run directory holds the copy.
 
 ## 3. Rehearse
 
-Drive each flow off the record, in a session launched with `--init-script <run-dir>/hide-dev-chrome.js` and set to the frame.
+Drive each flow off the record, in a session launched with `--init-script <run-dir>/hide-devtools.js` and set to the frame.
 
-- **Start screen**: screenshot it and look for **dev chrome**: framework indicators, devtools toggles, debug bars, preview toolbars. Add a selector for each to the copy's list, relaunch, and screenshot again until it's clean.
+- **Start screen**: screenshot it and look for **devtools**: framework indicators, debug bars, preview toolbars, floating panel toggles. Add a selector for each to the copy's list, relaunch, and screenshot again until it's clean.
 - **Auth**: when the flow sits behind a login, log in and `agent-browser state save <run-dir>/auth.json`. Record login only when login is the flow.
 - **Steps**: the take clicks with `click <selector> --human`, so give each step a CSS selector, or an `xpath=` selector to match by text. A scroll step takes a notch count instead, and a hover step the centre of its element's `get box`, which the take glides to with `mouse move <x> <y> --human`. Snapshot `@ref`s don't survive into the take. Only `click --human` and `mouse move --human` glide the cursor; `find`, `hover`, and `dblclick` jump it. Note what the page shows once the step has **settled**: a URL, text, or element to `wait` for.
 - **Side effects**: undo what the rehearsal created, so the take starts from the state the rehearsal did.
 
-Done when every step has its target (a selector, notch count, or hover point) and a settle condition that worked, and the start screen shows no dev chrome.
+Done when every step has its target (a selector, notch count, or hover point) and a settle condition that worked, and the start screen shows no devtools.
 
 ## 4. Write the take
 
@@ -61,7 +61,7 @@ scroll_down() {
   done
 }
 
-agent-browser --init-script "$run_dir/hide-dev-chrome.js" --state "$run_dir/auth.json" open http://localhost:3000/projects
+agent-browser --init-script "$run_dir/hide-devtools.js" --state "$run_dir/auth.json" open http://localhost:3000/projects
 agent-browser set viewport 1440 900 2
 agent-browser wait --load networkidle
 
@@ -103,7 +103,7 @@ With `--gif`, convert the video to a GIF beside it, scaled to the viewport's CSS
 ffmpeg -i new-project.mp4 -vf "fps=15,scale=1440:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" new-project.gif
 ```
 
-Done when the script exits 0, the contact sheet shows only screens the rehearsal saw and ends on the payoff screen, with no dev chrome, and the GIF exists when `--gif` asked for one.
+Done when the script exits 0, the contact sheet shows only screens the rehearsal saw and ends on the payoff screen, with no devtools, and the GIF exists when `--gif` asked for one.
 
 ## 6. Report
 
