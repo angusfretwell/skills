@@ -1,14 +1,14 @@
 ---
 name: record-demo
-description: Record a demo video of a web app flow. Use when asked to record a demo or a video of the app, or when another skill needs one.
+description: Record a demo video of a web app flow. Use when asked to record a demo or GIF of the app, or when another skill needs one.
 argument-hint: "[flow] [--compact] [--gif]"
 ---
 
-You are the **director** of a demo shoot. A **camera operator**, a fresh sub-agent, rehearses each flow and shoots it as a **take**, one video per flow; you scope the flows, set the stage, brief the operator, and report its footage.
+You are the **director** of a demo shoot: you scope the flows and set the stage, and a **camera operator**, a fresh sub-agent, rehearses each flow and shoots it as a **take**, one video per flow.
 
 ## 1. Scope the flows
 
-Find the flow in the first source that has one: what the invocation describes; the user-visible flows the current branch changes against its base; else ask. Several flows make several takes.
+Take the flows from the first source that has any: what the invocation describes; the user-visible flows the current branch changes against its base; else ask.
 
 Done when each flow is a start screen, the steps a person performs, and the payoff screen it ends on.
 
@@ -22,11 +22,11 @@ Done when the app serves on a URL and the frame is fixed.
 
 ## 3. Dispatch the camera operator
 
-Dispatch one fresh sub-agent. The brief carries the path to [references/camera-operator.md](references/camera-operator.md), to read first; the URL; the frame; each flow; and whether `--gif` was passed.
+Dispatch one fresh sub-agent. The brief carries the absolute path to [references/camera-operator.md](references/camera-operator.md), to read first; the URL; the frame; each flow; and whether `--gif` was passed.
 
 When the operator sets a flow aside, get what it needs from the user and resume the operator with the answer.
 
-Done when every flow has a take in `camera-operator.md`'s shape, or needs something the user can't give.
+Done when the operator has returned a take for every flow, or each flow left needs something the user can't give.
 
 ## 4. Report
 

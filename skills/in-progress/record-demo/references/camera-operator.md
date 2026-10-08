@@ -10,11 +10,20 @@ Invoke the **agent-browser** skill. Make a run directory under the system temp d
 
 - **Start screen**: screenshot it and look for **devtools**: framework indicators, debug bars, preview toolbars, floating panel toggles. Add a selector for each to the copy's list, relaunch, and screenshot again until it's clean.
 - **Auth**: when the flow sits behind a login, log in and `agent-browser state save <run-dir>/auth.json`. Record login only when login is the flow.
-- **Steps**: the take clicks with `click <selector> --human`, so give each step a CSS selector, or an `xpath=` selector to match by text. A scroll step takes a notch count instead, and a hover step the centre of its element's `get box`, which the take glides to with `mouse move <x> <y> --human`. Snapshot `@ref`s don't survive into the take. Only `click --human` and `mouse move --human` glide the cursor; `find`, `hover`, and `dblclick` jump it. Note what the page shows once the step has **settled**: a URL, text, or element to `wait` for.
+- **Steps**: find each step's target from the step table below; snapshot `@ref`s don't survive into the take. Note what the page shows once the step has **settled**: a URL, text, or element to `wait` for.
 - **Side effects**: undo what the rehearsal created, so the take starts from the state the rehearsal did.
 - **Blocked**: when a flow needs what only the user can give, such as login credentials, or won't drive, set it aside with what it needs and what you tried.
 
-Done when every flow is set aside or rehearsed: each step has a target (a selector, notch count, or hover point) and a settle condition that worked, and the start screen shows no devtools.
+| Step   | Target                                              | Take command                                            |
+| ------ | --------------------------------------------------- | ------------------------------------------------------- |
+| Click  | a CSS selector, or an `xpath=` one to match by text | `click <selector> --human`                              |
+| Type   | the field's selector, and the text                  | `click <selector> --human`, then `type_slowly '<text>'` |
+| Hover  | the centre of the element's `get box`               | `mouse move <x> <y> --human`                            |
+| Scroll | a notch count, 120 px each                          | `scroll_down <notches>`                                 |
+
+Only `click --human` and `mouse move --human` glide the cursor; `find`, `hover`, and `dblclick` jump it. The wheel scrolls whatever sits under the cursor, so hover a panel before scrolling inside it.
+
+Done when every flow is set aside or rehearsed: each step has its target from the step table and a settle condition that worked, and the start screen shows no devtools.
 
 ## 2. Write the take
 
@@ -69,12 +78,10 @@ Each take runs in a session of its own, because `--init-script` and `--state` ap
 Pacing:
 
 - Hold the start screen 1.5 s.
-- After each action, wait for its settle condition, then dwell 800 ms.
-- Click a field, then type into it with `type_slowly`.
-- Scroll with `scroll_down <notches>`, 120 px a notch. The wheel scrolls whatever sits under the cursor.
+- After each step, wait for its settle condition, then dwell 800 ms.
 - Hold the payoff screen 2 s.
 
-Done when every rehearsed step is in the script with its settle condition and dwell.
+Done when every rehearsed step is in the script as its take command, with its settle condition and dwell.
 
 ## 3. Shoot
 
@@ -86,10 +93,8 @@ When the brief asks for GIFs, convert the video to a GIF beside it, scaled to th
 ffmpeg -i new-project.mp4 -vf "fps=15,scale=1440:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" new-project.gif
 ```
 
-Done when the script exits 0, the contact sheet shows only screens the rehearsal saw and ends on the payoff screen, with no devtools, and the GIF exists when the brief asked for one.
+Done when every rehearsed flow has a take: its script exits 0, its contact sheet shows only screens the rehearsal saw and ends on the payoff screen, with no devtools, and its GIF exists when the brief asked for one.
 
 ## Return
 
 For each take: the video's absolute path, duration, and size; the GIF's absolute path and size, when GIFs were asked for; and the contact sheet's absolute path. For each flow set aside: what it needs, and what you tried.
-
-Done when every flow has a take or is set aside.
