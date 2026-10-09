@@ -35,7 +35,7 @@ Done when you hold the points in order.
 
 **Captures** — when the subject renders, captures carry the journey. A diagram standing in for screens the app could have shown is a defect.
 
-Invoke `/run` to get the app serving, then drive the flow from that URL, preferring a sub-agent per flow: flows run in parallel and the logs stay out of your context. Take one capture per step, in sequence, and note for each what the user just did and what changed on screen. Captures land as files on disk and reach the page as supporting files, so the pixels stay out of your context too. Resize and compress each one before it ships.
+Invoke `/run` to get the app serving, then drive the flow from that URL, preferring a sub-agent per flow: flows run in parallel and the logs stay out of your context. Take one capture per step, in sequence, and note for each what the user just did and what changed on screen. Captures land as files on disk and reach the page as supporting files, so the pixels stay out of your context too. Resize and compress each one before it ships. Each flow's agent closes its browser session once its captures are on disk; once every flow is done, stop the app if `/run` launched it.
 
 When a planned capture can't be produced — the app won't launch, or the flow won't drive — stop and ask, offering the page without captures as one option.
 

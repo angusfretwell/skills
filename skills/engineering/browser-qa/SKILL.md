@@ -37,4 +37,6 @@ When the brief hands you **fixtures**, test data already set up, drive the flows
 
 Open the report with a verdict on the first line: **pass** or **fail**. Fail on any issue that breaks the specified behaviour or fails a probe. There is no partial pass: anything short is a fail, with the passing parts noted.
 
-Before replying, close every browser session you opened with `agent-browser --session <name> close`, whatever the verdict. An unclosed session keeps its Chrome running after you've gone.
+Then **tear down** what you started: close each browser session you opened with `agent-browser --session <name> close`, and stop any app process you launched, leaving one you found running. Each session holds a headless Chrome until it's closed. Teardown runs on every exit, refusals included.
+
+Done when the report opens on its verdict and teardown is complete.

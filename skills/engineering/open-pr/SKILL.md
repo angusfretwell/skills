@@ -35,7 +35,7 @@ Two questions then go to the user in one `AskUserQuestion` call, each asked only
 
 `--capture` and `--annotate` settle these two in advance, and their `--no-` forms settle them the other way. A flag skips the question, not the judgement: with nothing worth capturing or nothing that earns a comment, you produce neither.
 
-Capture before the PR exists so it lands complete; when capture fails, carry on without it.
+Capture before the PR exists so it lands complete; when capture fails, carry on without it. Either way, tear down any browser session or app process the capture started.
 
 Done when a title and every live section are drafted, any evidence sits on disk, and you know which comments (if any) to post.
 
