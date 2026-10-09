@@ -36,3 +36,5 @@ When the brief hands you **fixtures**, test data already set up, drive the flows
 ### 4. Verdict
 
 Open the report with a verdict on the first line: **pass** or **fail**. Fail on any issue that breaks the specified behaviour or fails a probe. There is no partial pass: anything short is a fail, with the passing parts noted.
+
+Before replying, close every browser session you opened with `agent-browser --session <name> close`, whatever the verdict. An unclosed session keeps its Chrome running after you've gone.
