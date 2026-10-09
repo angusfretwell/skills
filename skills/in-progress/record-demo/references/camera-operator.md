@@ -23,7 +23,7 @@ Invoke the **agent-browser** skill. Make a run directory under the system temp d
 
 Only `click --human` and `mouse move --human` glide the cursor; `find`, `hover`, and `dblclick` jump it. The wheel scrolls whatever sits under the cursor, so hover a panel before scrolling inside it.
 
-Done when every flow is set aside or rehearsed: each step has its target from the step table and a settle condition that worked, and the start screen shows no devtools.
+Done when every flow is set aside or rehearsed: each step has its target from the step table and a settle condition that worked, and the start screen shows no devtools. Then **tear down** the rehearsal: close every session it launched with `agent-browser --session <name> close`.
 
 ## 2. Write the take
 

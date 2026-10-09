@@ -30,4 +30,6 @@ Done when the operator has returned a take for every flow, or each flow left nee
 
 ## 4. Report
 
+First **tear down** the stage: stop the app if the **run** skill launched it in step 2, leaving one you found running.
+
 Reply with each take's files from the operator's return, and each flow left unshot with what it needs.
