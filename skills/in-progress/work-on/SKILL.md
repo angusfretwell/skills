@@ -13,9 +13,15 @@ You **author** a workflow and report on what it returns. The work is the spec or
 
 Each ticket is one work item, with the spec as context when there is one. A spec without tickets is one work item.
 
-Find each work item's **blockers** per `/supervise`'s frontier rules. A blocker is **done** when its PR has merged; one outside the batch that is not done keeps its dependents blocked.
+Work item B is **blocked by** work item A when B's ticket declares it, and also when the dependency is implicit:
 
-Done when every work item is on the **frontier** or names every blocker it waits on.
+- B needs something A produces: code, infrastructure, or data,
+- B and A touch overlapping files or modules: a collision, not an order; pick one to go first and treat the other as blocked by it, or
+- B's requirements hinge on a decision or interface A will establish.
+
+A blocker is **done** when its PR has merged; one outside the batch that is not done keeps its dependents blocked. The **frontier** is every work item whose blockers are all done.
+
+Done when every work item is on the frontier or names every blocker it waits on.
 
 ## 2. Author the script
 

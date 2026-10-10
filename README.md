@@ -64,23 +64,11 @@ Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round 
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, and `/tidy`.
 
-### [`/supervise`](skills/engineering/supervise/SKILL.md)
-
-Runs a task through sub-agents that write their reports to disk, so your session's context stays small.
-
-Other skills can call it with their own dispatch prompts.
-
 ### [`/to-artifact`](skills/engineering/to-artifact/SKILL.md)
 
 Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
 
 ## Work in progress
-
-### [`/how`](skills/in-progress/how/SKILL.md)
-
-Explains how part of the codebase works, deep enough to start working in it, with every claim traced to a file.
-
-Depends on `/humanize`.
 
 ### [`/record-demo`](skills/in-progress/record-demo/SKILL.md)
 
@@ -100,12 +88,6 @@ Merges a PR without human review when a fresh judge sub-agent rules out each of 
 
 Depends on `/humanize`.
 
-### [`/showcase`](skills/in-progress/showcase/SKILL.md)
-
-Builds a one-page visual explanation of how something works, each point shown as a screenshot, diagram, or prose.
-
-Depends on `/to-artifact`, `/how`, and `/why`.
-
 ### [`/status-report`](skills/in-progress/status-report/SKILL.md)
 
 Reports what your session still has in flight: open PRs with their checks and reviews, running agents and workflows, active watches, and what's waiting on you.
@@ -114,14 +96,8 @@ Reports what your session still has in flight: open PRs with their checks and re
 
 Cleans up a branch's changes: removes AI slop, such as needless comments and defensive code, and spaces the code out so it reads easily.
 
-### [`/why`](skills/in-progress/why/SKILL.md)
-
-Investigates why code is the way it is, from commits, tickets, docs, chat, and telemetry, and cites each finding with a confidence tier.
-
-Companion to `/how`.
-
 ### [`/work-on`](skills/in-progress/work-on/SKILL.md)
 
 Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
 
-Depends on `/polish`, `/ship-it`, `/open-pr`, `/supervise`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
+Depends on `/polish`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
