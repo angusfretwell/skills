@@ -1,6 +1,7 @@
 ---
 name: polish
 description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks for a polish or a quick polish, or when another skill needs a branch polished.
+argument-hint: "[--quick]"
 ---
 
 A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.

@@ -64,9 +64,25 @@ Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round 
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, and `/tidy`.
 
+### [`/ship-it`](skills/engineering/ship-it/SKILL.md)
+
+Merges a PR without human review when a fresh judge sub-agent rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
+
+Depends on `/humanize`.
+
+### [`/tidy`](skills/engineering/tidy/SKILL.md)
+
+Cleans up a branch's changes: removes AI slop, such as needless comments and defensive code, and spaces the code out so it reads easily.
+
 ### [`/to-artifact`](skills/engineering/to-artifact/SKILL.md)
 
 Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
+
+### [`/work-on`](skills/engineering/work-on/SKILL.md)
+
+Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
+
+Depends on `/polish`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
 
 ## Work in progress
 
@@ -82,22 +98,6 @@ Reviews a PR with you: runs code review, standards and spec review, and browser 
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/humanize`. Comment shapes adapted from [`/show-me`](https://github.com/humanlayer/skills).
 
-### [`/ship-it`](skills/in-progress/ship-it/SKILL.md)
-
-Merges a PR without human review when a fresh judge sub-agent rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
-
-Depends on `/humanize`.
-
 ### [`/status-report`](skills/in-progress/status-report/SKILL.md)
 
 Reports what your session still has in flight: open PRs with their checks and reviews, running agents and workflows, active watches, and what's waiting on you.
-
-### [`/tidy`](skills/in-progress/tidy/SKILL.md)
-
-Cleans up a branch's changes: removes AI slop, such as needless comments and defensive code, and spaces the code out so it reads easily.
-
-### [`/work-on`](skills/in-progress/work-on/SKILL.md)
-
-Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
-
-Depends on `/polish`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).

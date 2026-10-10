@@ -15,7 +15,10 @@
         "interview-me",
         "open-pr",
         "polish",
-        "to-artifact"
+        "ship-it",
+        "tidy",
+        "to-artifact",
+        "work-on"
       ]
     },
     {
@@ -23,9 +26,6 @@
       "description": "Skills I'm still working on.",
       "skills": [
         "review-pr",
-        "ship-it",
-        "tidy",
-        "work-on",
         "status-report",
         "record-demo"
       ]
