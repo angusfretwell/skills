@@ -1,8 +1,12 @@
 # Shapes
 
-- A simple fix, complete as written and confined to the anchored lines, as a GitHub suggestion the author applies in one click:
+Each shape stands in for prose: the comment's sentence captions it, and the shape carries the rest.
+
+- A simple fix, complete as written and confined to lines inside the diff's hunks, as a GitHub suggestion the author applies in one click:
 
 ````md
+A `timeout` of `0` falls through to the default here.
+
 ```suggestion
 const timeout = options.timeout ?? DEFAULT_TIMEOUT
 ```
@@ -48,6 +52,9 @@ src/
 
 - Component interaction or data flow as Mermaid:
 
+````md
+A conflict retries the save straight away, so two tabs editing one draft loop.
+
 ```mermaid
 sequenceDiagram
     participant UI
@@ -56,6 +63,7 @@ sequenceDiagram
     API-->>UI: conflict
     UI->>API: save draft (retried, no backoff)
 ```
+````
 
 - A change to a shape that already exists as a `diff` of that shape, a call tree for a call-order change, pseudocode for a control-flow change:
 

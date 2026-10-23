@@ -55,22 +55,25 @@ Done when every finding is **keep**, **ask the author**, or **discard**.
 
 ## 6. Write the comments
 
-Ask the user once whether they have notes still to add. Then load `/humanize`: every word of the review follows it.
+Ask the user once whether they have notes still to add. Then load `/humanize` and read [references/shapes.md](references/shapes.md): both govern every comment.
 
-Write a comment for each **keep** and **ask the author** finding:
+Write a comment for each **keep** and **ask the author** finding, from the code, as the user, a teammate talking to the author. Show, don't tell:
 
-- **Anchor** it on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a range, `start_line` to `line`, when a suggestion replaces several lines.
-- A finding with no owning line in the hunks goes in the review body. The body holds those findings and nothing else, so it is empty when everything anchors.
-- Write as the user, a teammate talking to the author: first person where it's natural, the problem, why it matters, and what to do about it.
+- When the fix replaces lines inside the diff's hunks, the comment is a `suggestion` over those lines with a one-sentence caption.
+- When the point is about logic, flow, or structure, pick its **shape** from the menu and caption it.
+- Otherwise, write one or two sentences: the problem, then the fix. Add why it matters only when the author couldn't infer it.
 - Phrase an **ask the author** finding as the question the user wants answered.
 - Give a `/browser-qa` failure as its repro.
-- When prose alone won't make the point, add the smallest **shape** that does, next to the sentence it supports: a one-click `suggestion` for a fix confined to the anchored lines; pseudocode, a tree, a diff, or a diagram for logic, flow, or structure. Read [references/shapes.md](references/shapes.md) before writing one.
 
-Done when every **keep** and **ask the author** finding has a comment or a place in the body.
+Then edit each comment against `/humanize`: cut every sentence the shape already shows or the author would infer.
+
+Done when every **keep** and **ask the author** finding has a comment, every fix that replaces lines inside the hunks is a `suggestion`, and every comment has had its edit pass.
 
 ## 7. Draft the review
 
 GitHub allows each user one pending review per PR. When the user already has one on this PR, ask whether to delete it first.
+
+Anchor each comment on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a `suggestion` on the lines it replaces, a range from `start_line` to `line` when it spans several. A comment with no owning line in the hunks goes in the review body. The body holds those comments and nothing else, so it is empty when everything anchors.
 
 Create the pending review in one call: write the payload as JSON and send it with `gh api repos/<owner>/<repo>/pulls/<number>/reviews --input <file>`. The payload holds `commit_id` (the head SHA), `body`, and `comments[]` of `{path, line, side, body}`, adding `start_line` for a range. `side` is `"RIGHT"`, or `"LEFT"` on a line the PR deletes. Omit `event`: that is what keeps the review pending.
 
