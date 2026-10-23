@@ -9,6 +9,6 @@ Interview in rounds — one AskUserQuestion call per round of related questions.
 
 Between rounds, re-plan against the answers: retire questions an answer just mooted, sharpen the rest, append follow-ups an answer raised. An "Other" free-text reply is an answer — fold it in.
 
-When a reply asks for clarification, answer it in plain text first, then re-ask — text before the call renders above the question UI, and option descriptions are too compressed to carry an explanation.
+When a reply asks for clarification, or they need to see something before the next round, write it as a message and end your turn. Re-ask once they've replied, folding in anything the reply already settles. Ending the turn is what delivers the message: mid-turn, an answer drafted while thinking feels sent but isn't, so the re-ask that leans on it ("Given that…") lands on someone who never saw it.
 
 Done when every harvested question is answered or retired, and the last round's answers raised no follow-up.
