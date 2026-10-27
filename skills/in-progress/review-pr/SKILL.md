@@ -1,7 +1,7 @@
 ---
 name: review-pr
 description: Review a pull request with the user, then draft the review on GitHub for them to submit.
-argument-hint: "<PR>"
+argument-hint: "<PR> [passes]"
 disable-model-invocation: true
 ---
 
@@ -15,21 +15,19 @@ Done when you hold the head SHA, the range, and the existing threads.
 
 ## 2. Choose the passes
 
-Detect which passes apply:
-
 - `/code-review` at `high` effort: always.
 - `/mattpocock-skills:code-review`: always. It finds the spec itself.
 - `/browser-qa`: when the app is browser-driven and the diff touches something a user sees.
 
-Confirm with one multiSelect AskUserQuestion that lists every pass, marking the ones that apply as recommended, each with a one-line reason.
+When the user has named the passes, take those. Otherwise choose them by the rules above. Ask only when a rule is a close call, such as a diff whose effect on what users see you can't settle from the code: one multiSelect AskUserQuestion listing every pass, your picks marked recommended, each with a one-line reason.
 
-Done when the user has chosen the passes.
+Done when the passes are chosen.
 
 ## 3. Run the passes
 
 Dispatch each chosen pass as its own sub-agent, all in parallel. Each brief carries the range, names the skill to invoke, and asks for the findings back as a list: file, line (or none), one-line claim, why it matters. A `/browser-qa` brief asks for each failure as a **repro**: steps to reproduce, expected against actual.
 
-While the passes run, tell the user they can add notes at any point before step 6.
+While the passes run, name them to the user with a one-line reason each, and tell them they can add notes at any point before step 6.
 
 Done when every pass has returned its list. A reply without the list means the pass is still working: message it to finish and send the list.
 
