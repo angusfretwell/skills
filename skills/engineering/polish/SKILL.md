@@ -4,7 +4,7 @@ description: Polish a branch by reviewing, QAing, fixing, and simplifying it in 
 argument-hint: "[--quick]"
 ---
 
-A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
+A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **severity** and **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
 
 ## Quick mode
 
@@ -13,18 +13,20 @@ A **quick** polish, asked for by name or with `--quick`, trades depth for speed.
 - Step 1: when no spec turns up, proceed without one. Browser QA is never live.
 - Step 2: the plan is `/code-review` at `medium` effort, plus `/mattpocock-skills:code-review` when there is a spec.
 - Step 5: go straight to step 6.
-- Step 6: dispatch `/tidy` alone, then `/code-review low --fix` over the fix and tidy commits together, so it hunts **regressions** in the round's fixes.
+- Step 6: skip `/simplify`.
 - Step 7: the opening lines say this was a quick polish and name what it skipped.
 
 ## 1. Establish the scope
 
-The fixed point is the one the user named, else the current branch's merge-base with its base branch. Commit any uncommitted changes per `/commit` first, so every pass reads the same tree.
+The fixed point is the one the user named, else the current branch's merge-base with its base branch. Commit the uncommitted changes that belong to the branch's work per `/commit`, so every pass reads the same tree, and leave the rest uncommitted. When the two can't be separated cleanly, ask the user. Then record the diff size against the fixed point (`git diff --shortstat`) for the report.
 
 Find the spec once: the one already in this session, issue references in the commit messages, the open PR, or a spec file matching the branch under `docs/`, `specs/`, or `.scratch/`. If none turns up, ask the user once. The spec, or its confirmed absence, goes into every brief.
 
+Dispatch a sub-agent to run the project's tests, typecheck, and lint that cover the change. It fixes each failure the branch causes and commits per `/commit`, so no pass reviews broken code. It returns each check's result, naming each failure the branch didn't cause; those go into every brief as **pre-existing**, so no pass or fix chases them.
+
 Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees. When it is, dispatch a sub-agent to set up the **fixtures** every round's QA reuses: the test data the affected flows need, built with the project's seeds or the **run** skill. It returns each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event. Once the fixtures are saved, it tears down any browser session or app process it started.
 
-Done when you hold the fixed point, the spec, whether QA is live, and, when it is, the fixtures.
+Done when you hold the fixed point, the diff size, the spec, the checks' results, whether QA is live, and, when it is, the fixtures.
 
 ## 2. Run the passes
 
@@ -40,7 +42,15 @@ Done when every pass in the plan has returned its list. A reply without the list
 
 ## 3. Triage
 
-Merge the lists into the ledger, collapsing findings that make the same claim into one entry naming its sources. Then give each new finding its disposition, on its face:
+Merge the lists into the ledger, collapsing findings that make the same claim into one entry naming its sources. Then judge each new finding on its face, whatever its pass called it, and give it a severity and a disposition.
+
+The **severity** is measured against the spec, or the intent the commits state when there is none:
+
+- **blocker**: the case the spec intends is wrong.
+- **should**: a real bug that callers will hit within the spec.
+- **nit**: everything else, including other paths, rare cases, and small costs.
+
+The **disposition**:
 
 - **fix**: valid, and fixed this round.
 - **won't fix**: invalid, or the change costs more than it earns. Keep the one-line reason.
@@ -52,24 +62,26 @@ A **fix** finding that is a bug an earlier round fixed, back by a new route, is 
 
 From round 2 on, a naming finding, test names included, is a **fix** only when the name **misleads**: it claims something the code doesn't do, or contradicts the project's glossary. A name that could merely be better is **won't fix**, so later rounds stop relitigating names earlier rounds chose.
 
-Done when every finding in the ledger carries a disposition.
+From round 3 on, a **blocker** or **should** is an **ask**, not a **fix**: one that serious this late means the fixes aren't converging, so a human looks. One in security, auth, permissions, data loss, or concurrency stays a **fix** through round 5.
+
+Done when every finding in the ledger carries a severity and a disposition.
 
 ## 4. Fix
 
 Cluster the **fix** findings by file: one sub-agent per cluster, in parallel, each briefed with its findings. Each brief asks the sub-agent to:
 
 - Confirm each finding holds before changing code.
-- Fix the class: find the same bug elsewhere and fix those instances too.
+- Fix the class: find the same bug elsewhere in the code the branch changes and fix those instances too. Note any instance outside it, unfixed.
 - Trace every path into the code it changes and run the tests that cover it, so the fix lands no **regression**.
-- Return what it changed, which behaviour moved, and what it checked and left alone, with why.
+- Return what it changed, which behaviour moved, what it checked and left alone with why, and the instances it noted.
 
-Each item left alone enters the ledger as **won't fix** with that reason. Commit per `/commit`.
+Each item left alone enters the ledger as **won't fix** with that reason, and each noted instance as **defer**. Commit per `/commit`.
 
 Done when every **fix** finding is committed or moved to **won't fix**.
 
 ## 5. Plan the next round
 
-When this round fixed nothing, go to step 6.
+When no **blocker** or **should** fix this round changed behaviour, go to step 6.
 
 Otherwise, plan the next round's passes. A **settled** finding this round predicts more oscillation, so lean toward skipping passes, narrower ranges, and lower effort.
 
@@ -85,7 +97,7 @@ Done when you have stated the plan to the user: every pass run or skipped with i
 
 ## 6. Simplify and tidy
 
-Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `/commit`. Then do the same with `/tidy`. When either changed anything, dispatch `/code-review low --fix` in a sub-agent over their commits, and commit per `/commit`.
+Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `/commit`. Then do the same with `/tidy`. When the last round, simplify, or tidy committed anything, dispatch `/code-review low --fix` in a sub-agent over those commits together, so it hunts **regressions** in them, and commit per `/commit`.
 
 Done when simplify's and tidy's changes and the review's fixes are committed.
 
@@ -93,7 +105,7 @@ Done when simplify's and tidy's changes and the review's fixes are committed.
 
 Report in this shape:
 
-- One or two opening lines: whether the branch is ready or has items that need the user, and the rounds run, flagging more than three.
-- `## Fixed`: each **fix** finding, one line apiece.
+- One or two opening lines: whether the branch is ready or has items that need the user, the rounds run, flagging more than three, and the diff size before and after.
+- `## Fixed`: each **fix** finding with its severity, one line apiece.
 - `## Won't fix`: each with its reason; each **settled** finding names the fix that stands.
 - `## Needs you`: each **ask** with its candidate fixes, your recommendation first; then each **defer** as a plain item to act on.
