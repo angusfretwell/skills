@@ -2,7 +2,6 @@
 name: work-on
 description: Carry a spec or tickets through implementation, polish, and PRs in one workflow.
 argument-hint: "[--no-pr] [--ship]"
-disable-model-invocation: true
 ---
 
 You **author** a workflow and report on what it returns. The work is the spec or tickets the user has provided; each **work item** runs through the **chain** in its own agents, and your context holds only the results.

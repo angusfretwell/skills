@@ -1,7 +1,6 @@
 ---
 name: address-review
 description: Triage review findings with the user, then action them.
-disable-model-invocation: true
 ---
 
 **Triage** is a sorting pass: every finding lands on a **disposition** before any finding is actioned.
