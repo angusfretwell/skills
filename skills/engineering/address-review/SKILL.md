@@ -19,8 +19,8 @@ Present each finding as a one-line summary and offer its applicable **dispositio
 
 - **fix** — valid, and should be fixed. Name the fix if the review suggests one or it's obvious to you; if several fixes are plausible, ask a follow-up to choose.
 - **won't fix** — invalid, or you won't action it.
-- **explain** *(interim)* — the user wants to understand it; you'll read the code and explain.
-- **investigate** *(interim)* — you'll read the code to confirm whether it holds.
+- **explain** _(interim)_ — the user wants to understand it; you'll read the code and explain.
+- **investigate** _(interim)_ — you'll read the code to confirm whether it holds.
 - **defer** — valid, but actioned as separate work (another task or issue).
 
 Reading the code to settle a finding is itself a disposition — an interim one — chosen now and carried out in step 3.
