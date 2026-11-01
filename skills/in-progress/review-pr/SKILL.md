@@ -2,7 +2,6 @@
 name: review-pr
 description: Review a pull request with the user, then draft the review on GitHub for them to submit.
 argument-hint: "<PR> [passes]"
-disable-model-invocation: true
 ---
 
 A **finding** is one claim about the PR: where it applies, what's wrong, and why it matters. A **note** is a finding the user adds themselves, a `file:line` and a rough remark; it enters as **keep** and skips triage. **Triage** sorts every finding onto a **disposition** before a word of the review is written. The review lands as a **pending review**, visible only to the user until they submit it from GitHub.
