@@ -2,6 +2,7 @@
 name: to-artifact
 description: Publish a page as an Artifact in the house style. Use when asked for an artifact, or for a report, brief, plan, comparison, dashboard, or tool built as one.
 argument-hint: "[subject]"
+disable-model-invocation: true
 ---
 
 The deliverable is an **Artifact**, published in the house style.
