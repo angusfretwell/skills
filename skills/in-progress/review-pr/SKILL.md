@@ -1,6 +1,6 @@
 ---
 name: review-pr
-description: Review a pull request with the user, then post the review to GitHub, submitted or pending.
+description: Review a pull request with the user, then post the review to GitHub, submitted or pending. Use when asked to review a PR.
 argument-hint: "<PR> [passes]"
 ---
 
@@ -13,9 +13,9 @@ A **finding** is one claim about the PR: where it applies, what's wrong, and why
 
 ## 1. Establish the PR
 
-Take the PR from the invocation; otherwise ask. Read its title, body, base, head SHA, and every existing review thread, from any reviewer. The **range** every pass reviews runs from the head SHA's merge-base with the base branch to the head SHA.
+Take the PR from the invocation; otherwise ask. Read its title, body, base, head SHA, and every existing review thread, from any reviewer. GitHub allows each user one pending review per PR: when the user already has one here, take each of its comments as a note, and keep its ID for step 8 to replace. The **range** every pass reviews runs from the head SHA's merge-base with the base branch to the head SHA.
 
-Done when you hold the head SHA, the range, and the existing threads.
+Done when you hold the head SHA, the range, the existing threads, and any pending review's comments as notes.
 
 ## 2. Choose the passes
 
@@ -60,7 +60,7 @@ Reviewed **#<number> <title>** with <passes>. <N> findings; I investigated <K> b
 
 ### Questions (<count>)
 ### Nits (<count>)
-### Drop (<count>)
+### Drops (<count>)
 ```
 
 - Number the findings straight through every section, so the user can name them by number.
@@ -79,12 +79,14 @@ Recommend a **mode** from the dispositions:
 
 On the user's own PR, GitHub offers only Comment, so recommend Comment.
 
-Then ask the user how to proceed (AskUserQuestion), and say in the question that they can type changes instead:
+Then ask the user how to proceed (AskUserQuestion) with three options, and say in the question that they can type changes into the free-text answer instead:
 
-- **Post as pending**, recommended: post the review pending, for the user to read and submit from GitHub.
+- **Post as pending**: post the review pending, for the user to read and submit from GitHub.
 - **Submit as <mode>**: post it submitted, in the recommended mode, once the user has read the comments.
 - **Interview me**: work through every finding, or the ones the user names, one per question, four per call, offering the dispositions with yours first. Then ask again.
-- **Changes**, typed: apply them, from moves between dispositions to a different mode, new notes, and explanations. Reply with the lines that changed, and ask again.
+- Typed changes: apply them, from moves between dispositions to a different mode, new notes, and explanations. Reply with the lines that changed, and ask again.
+
+Recommend **Post as pending**, or **Submit** when the review would hold no comments, and list the recommended option first.
 
 Done when the user picks **Post as pending** or **Submit**.
 
@@ -107,11 +109,11 @@ Done when every finding not dropped has a comment, every fix that replaces lines
 
 ## 8. Post the review
 
-GitHub allows each user one pending review per PR. When the user already has one on this PR, ask whether to delete it first.
-
 Anchor each comment on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a `suggestion` on the lines it replaces, a range from `start_line` to `line` when it spans several. A comment with no owning line in the hunks goes in the review body. The body holds those comments and nothing else, so it is empty when everything anchors.
 
 To submit, first show the user every comment with its anchor, then confirm (AskUserQuestion): **Submit as <mode>**, or **Post as pending** instead. Apply typed edits and ask again.
+
+When step 1 found a pending review, delete it first (`gh api -X DELETE repos/<owner>/<repo>/pulls/<number>/reviews/<id>`): its comments live on as notes in this one.
 
 Create the review in one call: write the payload as JSON and send it with `gh api repos/<owner>/<repo>/pulls/<number>/reviews --input <file>`. The payload holds `commit_id` (the head SHA), `body`, and `comments[]` of `{path, line, side, body}`, adding `start_line` for a range. `side` is `"RIGHT"`, or `"LEFT"` on a line the PR deletes. To submit, set `event` to the mode: `REQUEST_CHANGES`, `COMMENT`, or `APPROVE`. To post pending, omit `event`.
 
