@@ -99,12 +99,7 @@ Done when every finding not dropped has a comment, every fix that replaces lines
 
 GitHub allows each user one pending review per PR. When the user already has one on this PR, ask whether to delete it first.
 
-Anchor each comment on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a `suggestion` on the lines it replaces, a range from `start_line` to `line` when it spans several. A comment with no owning line in the hunks goes in the review body. The body opens with this callout, and those comments sit below it; it holds nothing else:
-
-```md
-> [!NOTE]
-> 🤖 Claude submitted this review on behalf of Angus.
-```
+Anchor each comment on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a `suggestion` on the lines it replaces, a range from `start_line` to `line` when it spans several. A comment with no owning line in the hunks goes in the review body. The body holds those comments and nothing else, so it is empty when everything anchors.
 
 Create the pending review in one call: write the payload as JSON and send it with `gh api repos/<owner>/<repo>/pulls/<number>/reviews --input <file>`. The payload holds `commit_id` (the head SHA), `body`, and `comments[]` of `{path, line, side, body}`, adding `start_line` for a range. `side` is `"RIGHT"`, or `"LEFT"` on a line the PR deletes. Omit `event`: that is what keeps the review pending.
 
