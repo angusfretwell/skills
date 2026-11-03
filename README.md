@@ -94,7 +94,7 @@ Depends on [`/agent-browser`](https://www.skills.sh/vercel-labs/agent-browser/ag
 
 ### [`/review-pr`](skills/in-progress/review-pr/SKILL.md)
 
-Reviews a PR with you: runs code review, standards and spec review, and browser QA, triages each finding with you, then drafts the review on GitHub for you to submit, with a recommendation to approve, comment, or request changes.
+Reviews a PR with you: runs code review, standards and spec review, and browser QA, sorts the findings into blockers, questions, nits, and drops for you to adjust, then posts the review on GitHub, either submitted in the recommended mode or pending for you to submit.
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, and `/humanize`. Comment shapes adapted from [`/show-me`](https://github.com/humanlayer/skills).
 

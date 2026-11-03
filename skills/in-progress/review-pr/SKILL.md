@@ -1,10 +1,10 @@
 ---
 name: review-pr
-description: Review a pull request with the user, then draft the review on GitHub for them to submit.
+description: Review a pull request with the user, then post the review to GitHub, submitted or pending.
 argument-hint: "<PR> [passes]"
 ---
 
-A **finding** is one claim about the PR: where it applies, what's wrong, and why it matters. A **note** is a finding the user adds themselves, a `file:line` and a rough remark; it is triaged like any finding but never dropped. The review lands as a **pending review**, visible only to the user until they submit it from GitHub. **Triage** sorts every finding onto a **disposition** before a word of the review is written:
+A **finding** is one claim about the PR: where it applies, what's wrong, and why it matters. A **note** is a finding the user adds themselves, a `file:line` and a rough remark; it is triaged like any finding but never dropped. The review lands on GitHub submitted, or as a **pending review**, visible only to the user until they submit it there. **Triage** sorts every finding onto a **disposition** before a word of the review is written:
 
 - **blocker**: would do harm on merge: a bug, a missed requirement, a risk to data.
 - **question**: a suspected problem the code can't settle; it goes in the review as a question.
@@ -71,12 +71,22 @@ Reviewed **#<number> <title>** with <passes>. <N> findings; I investigated <K> b
 - Phrase a **question** claim as its question; end a **drop** claim with why it drops.
 - Leave out an empty section.
 
-Then ask the user how to proceed (AskUserQuestion): **Draft the review**, recommended, or **Interview me**, and say in the question that they can type changes instead.
+Recommend a **mode** from the dispositions:
 
-- **Changes**: apply them, from moves between dispositions to new notes and explanations, reply with the lines that changed, and ask again.
-- **Interview me**: work through every finding, or the ones the user names, one per question, four per call, offering the dispositions with yours first.
+- **Request changes**: any **blocker**.
+- **Comment**: no blocker, but a **question**.
+- **Approve**: only **nits**, or nothing.
 
-Done when the user picks **Draft the review**, or the interview has settled every finding it covered.
+On the user's own PR, GitHub offers only Comment, so recommend Comment.
+
+Then ask the user how to proceed (AskUserQuestion), and say in the question that they can type changes instead:
+
+- **Submit as <mode>**, recommended: post the review submitted, in the recommended mode.
+- **Post as pending**: post it pending, for the user to read and submit from GitHub.
+- **Interview me**: work through every finding, or the ones the user names, one per question, four per call, offering the dispositions with yours first. Then ask again.
+- **Changes**, typed: apply them, from moves between dispositions to a different mode, new notes, and explanations. Reply with the lines that changed, and ask again.
+
+Done when the user picks **Submit** or **Post as pending**.
 
 ## 7. Write the comments
 
@@ -95,26 +105,18 @@ Then edit each comment against `/humanize`: cut every sentence the shape already
 
 Done when every finding not dropped has a comment, every fix that replaces lines inside the hunks is a `suggestion`, and every comment has had its edit pass.
 
-## 8. Draft the review
+## 8. Post the review
 
 GitHub allows each user one pending review per PR. When the user already has one on this PR, ask whether to delete it first.
 
 Anchor each comment on the line that owns it: the line where the cause sits. GitHub accepts anchors only inside the diff's hunks, so when the cause sits outside them, anchor on the changed line that brings it into play. Anchor a `suggestion` on the lines it replaces, a range from `start_line` to `line` when it spans several. A comment with no owning line in the hunks goes in the review body. The body holds those comments and nothing else, so it is empty when everything anchors.
 
-Create the pending review in one call: write the payload as JSON and send it with `gh api repos/<owner>/<repo>/pulls/<number>/reviews --input <file>`. The payload holds `commit_id` (the head SHA), `body`, and `comments[]` of `{path, line, side, body}`, adding `start_line` for a range. `side` is `"RIGHT"`, or `"LEFT"` on a line the PR deletes. Omit `event`: that is what keeps the review pending.
+Create the review in one call: write the payload as JSON and send it with `gh api repos/<owner>/<repo>/pulls/<number>/reviews --input <file>`. The payload holds `commit_id` (the head SHA), `body`, and `comments[]` of `{path, line, side, body}`, adding `start_line` for a range. `side` is `"RIGHT"`, or `"LEFT"` on a line the PR deletes. To submit, set `event` to the mode: `REQUEST_CHANGES`, `COMMENT`, or `APPROVE`. To post pending, omit `event`.
 
-Done when the pending review exists on the PR.
+Done when the review exists on the PR, submitted or pending as the user chose.
 
 ## 9. Report
 
-Recommend a **mode** from the dispositions:
+Report the review's link and its mode. For a pending review, give the recommended mode with a one-line reason.
 
-- **Request changes**: any **blocker**.
-- **Comment**: no blocker, but a **question**.
-- **Approve**: only **nits**, or nothing.
-
-On the user's own PR, GitHub offers only Comment, so recommend Comment.
-
-Report the PR's link, the recommended mode, and a one-line reason for it.
-
-Done when the user holds the link and the recommendation.
+Done when the user holds the link and the mode.
