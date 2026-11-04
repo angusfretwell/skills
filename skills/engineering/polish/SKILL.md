@@ -16,11 +16,11 @@ A **quick** polish, asked for by name or with `--quick`, trades depth for speed.
 - Step 2: the plan is `/code-review` at `medium` effort, plus `/mattpocock-skills:code-review` when there is a spec.
 - Step 5: go straight to step 6.
 - Step 6: skip `/simplify`.
-- Step 7: the opening lines say this was a quick polish and name what it skipped.
+- Step 8: the opening lines say this was a quick polish and name what it skipped.
 
 ## 1. Establish the scope
 
-The fixed point is the one the user named, else the current branch's merge-base with its base branch. Commit the uncommitted changes that belong to the branch's work per `/commit`, so every pass reads the same tree, and leave the rest uncommitted. When the two can't be separated cleanly, ask the user. Then record the diff size against the fixed point (`git diff --shortstat`) for the report.
+The fixed point is the one the user named, else the current branch's merge-base with its base branch. Commit the uncommitted changes that belong to the branch's work per `/commit`, so every pass reads the same tree, and leave the rest uncommitted. When the two can't be separated cleanly, ask the user. The resulting HEAD is the **start**: note it in the ledger file. Then record the diff size against the fixed point (`git diff --shortstat`) for the report.
 
 Find the spec once: the one already in this session, issue references in the commit messages, the open PR, or a spec file matching the branch under `docs/`, `specs/`, or `.scratch/`. If none turns up, ask the user once. The spec, or its confirmed absence, goes into every brief.
 
@@ -28,7 +28,7 @@ Dispatch a sub-agent to run the project's tests, typecheck, and lint that cover 
 
 Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees. When it is, dispatch a sub-agent to set up the **fixtures** every round's QA reuses: the test data the affected flows need, built with the project's seeds or the **run** skill. It returns each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event. Once the fixtures are saved, it tears down any browser session or app process it started.
 
-Done when you hold the checkout, the fixed point, the diff size, the spec, the checks' results, whether QA is live, and, when it is, the fixtures.
+Done when you hold the checkout, the fixed point, the **start**, the diff size, the spec, the checks' results, whether QA is live, and, when it is, the fixtures.
 
 ## 2. Run the passes
 
@@ -103,7 +103,15 @@ Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `
 
 Done when simplify's and tidy's changes and the review's fixes are committed.
 
-## 7. Report
+## 7. Squash
+
+When every commit since the **start** is local, squash each run into one commit written per `/commit`: the commits before step 6 into a `fix` commit whose body lists every **fix** finding, then step 6's into a `refactor` commit. Build each with `git commit-tree` from the tree its run ended on, so nothing replays and nothing can conflict.
+
+When any of them is already pushed, the history stays as it is, and the report's opening lines say so.
+
+Done when HEAD's tree is unchanged by the squash and the branch since the **start** holds one commit per run, or the pushed history stands as it was.
+
+## 8. Report
 
 Report in this shape:
 
