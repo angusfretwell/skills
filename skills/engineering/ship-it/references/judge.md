@@ -12,7 +12,7 @@ The **spec** is what a human agreed to: tracker issues and the docs they link, a
 
 ### Unmet precondition
 
-Something outside the code that must be in place before merge, or the merge breaks: an env var the code reads, a migration it depends on, third-party config, a PR that must land first. Find candidates in the spec, the PR's To-do list, and the diff itself: new env reads, new services, new config keys.
+Something outside the code that must be in place before merge, or the merge breaks: an env var the code reads, a migration it depends on, third-party config, a PR that must land first. Find candidates in the spec, the PR's To-do list, and the diff itself: new env reads, new services, new config keys, and changed files whose production copy builds somewhere else, such as another repo. Rule that last one out by finding how each changed path reaches production: checks that built this repo's copy say nothing about another.
 
 Verify each with read-only tools (`gh`, CLIs, connected services). Work that can wait until after merge, such as announcements, docs, and cleanup, is a follow-up.
 
