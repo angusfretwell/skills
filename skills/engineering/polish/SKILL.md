@@ -25,9 +25,9 @@ An **unattended** polish, asked for with `--unattended`, has nobody to answer a 
 - Step 1: when no spec turns up, proceed without one. Changes that can't be separated from the branch's work stay uncommitted, and the report says so.
 - Step 3: settle each **ask** before step 4. An option is **reversible** when `/merge-risk` wouldn't call it a one-way door, and the code as it stands counts as an option, reversible only when merging it is.
   - When an option is reversible, take the reversible one you'd recommend. The finding becomes a **decided** fix: step 4 fixes it, and the ledger keeps the call, the other options, and why.
-  - When no option is reversible, the finding stays an **ask** and that part stays out of the change: step 4 removes it when the branch already holds it. When the change can't stand without it, keep it and mark the PR draft.
+  - When no option is reversible, the finding stays an **ask** and that part stays out of the change: step 4 removes it when the branch already holds it. When the change can't stand without it, keep it.
 - Step 5: a **decided** fix doesn't count, so it earns no further round.
-- Step 8: the report adds a `## Decided` section before `## Needs you`, giving each **decided** fix its call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. With no PR open yet, the report names any **ask** that needs the PR opened as a draft. What goes on the PR is the caller's call.
+- Step 8: the report adds a `## Decided` section before `## Needs you`, giving each **decided** fix its call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. The report names any **ask** the change can't stand without. Polish leaves the PR alone: what goes on it, and whether it's a draft, is the caller's call.
 
 ## 1. Establish the scope
 
