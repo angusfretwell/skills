@@ -27,7 +27,7 @@ An **unattended** polish, asked for with `--unattended`, has nobody to answer a 
   - When an option is reversible, take the reversible one you'd recommend. The finding becomes a **decided** fix: step 4 fixes it, and the ledger keeps the call, the other options, and why.
   - When no option is reversible, the finding stays an **ask** and that part stays out of the change: step 4 removes it when the branch already holds it. When the change can't stand without it, keep it and mark the PR draft.
 - Step 5: a **decided** fix doesn't count, so it earns no further round.
-- Step 8: comment on the PR per `/humanize`. Each **decided** fix gets the call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. With no PR open yet, the report carries these comments for the caller to post, and names any **ask** that needs the PR opened as a draft. The report adds a `## Decided` section before `## Needs you`.
+- Step 8: the report adds a `## Decided` section before `## Needs you`, giving each **decided** fix its call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. With no PR open yet, the report names any **ask** that needs the PR opened as a draft. What goes on the PR is the caller's call.
 
 ## 1. Establish the scope
 
