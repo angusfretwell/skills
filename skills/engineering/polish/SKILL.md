@@ -1,7 +1,7 @@
 ---
 name: polish
 description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks for a polish or a quick polish, or when another skill needs a branch polished.
-argument-hint: "[--quick]"
+argument-hint: "[--quick] [--unattended]"
 ---
 
 A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **severity** and **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
@@ -17,6 +17,17 @@ A **quick** polish, asked for by name or with `--quick`, trades depth for speed.
 - Step 5: go straight to step 6.
 - Step 6: skip `/simplify`.
 - Step 8: the opening lines say this was a quick polish and name what it skipped.
+
+## Unattended mode
+
+An **unattended** polish, asked for with `--unattended`, has nobody to answer a question. It runs the steps below with these overrides:
+
+- Step 1: when no spec turns up, proceed without one. Changes that can't be separated from the branch's work stay uncommitted, and the report says so.
+- Step 3: settle each **ask** before step 4. An option is **reversible** when `/merge-risk` wouldn't call it a one-way door, and the code as it stands counts as an option, reversible only when merging it is.
+  - When an option is reversible, take the reversible one you'd recommend. The finding becomes a **decided** fix: step 4 fixes it, and the ledger keeps the call, the other options, and why.
+  - When no option is reversible, the finding stays an **ask** and that part stays out of the change: step 4 removes it when the branch already holds it. When the change can't stand without it, keep it and mark the PR draft.
+- Step 5: a **decided** fix doesn't count, so it earns no further round.
+- Step 8: comment on the PR per `/humanize`. Each **decided** fix gets the call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. With no PR open yet, the report carries these comments for the caller to post, and names any **ask** that needs the PR opened as a draft. The report adds a `## Decided` section before `## Needs you`.
 
 ## 1. Establish the scope
 
@@ -57,14 +68,14 @@ The **disposition**:
 - **fix**: valid, and fixed this round.
 - **won't fix**: invalid, or the change costs more than it earns. Keep the one-line reason.
 - **defer**: valid, but separate work.
-- **ask**: the fix is hard to reverse and you lack a strong case for which way to go. Hard to reverse looks like a public API's surface, a schema or migration, deleting data, or a rename that ripples past the diff. Keep the candidate fixes, your recommendation first.
+- **ask**: the fix is a **one-way door**, as `/merge-risk` defines it, and you lack a strong case for which way to go. Keep the candidate fixes, your recommendation first.
 - **settled**: its fix would undo a fix from an earlier round. This is **oscillation**: the earlier fix stands. Name that fix.
 
 A **fix** finding that is a bug an earlier round fixed, back by a new route, is a **recurrence**: that fix was too shallow, so its fix brief names the earlier fix and targets the shared cause.
 
 From round 2 on, a naming finding, test names included, is a **fix** only when the name **misleads**: it claims something the code doesn't do, or contradicts the project's glossary. A name that could merely be better is **won't fix**, so later rounds stop relitigating names earlier rounds chose.
 
-From round 3 on, a **blocker** or **should** is an **ask**, not a **fix**: one that serious this late means the fixes aren't converging, so a human looks. One in security, auth, permissions, data loss, or concurrency stays a **fix** through round 5.
+From round 3 on, a **blocker** or **should** is an **ask**, not a **fix**: one that serious this late means the fixes aren't converging, so a human looks. One in security, auth, permissions, data loss, or concurrency stays a **fix** through round 5. These are kinds of bug worth another round, a different question from which changes `/merge-risk` calls high-stakes.
 
 Done when every finding in the ledger carries a severity and a disposition.
 

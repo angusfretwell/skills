@@ -16,6 +16,7 @@
         "merge-risk",
         "open-pr",
         "polish",
+        "pr-green",
         "ship-it",
         "tidy",
         "to-artifact",
