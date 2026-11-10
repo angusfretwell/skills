@@ -3,13 +3,13 @@ name: merge-risk
 description: Report a PR's merge risk as its preconditions, one-way doors, and high-stakes changes. Use when assessing what a PR risks, or when another skill needs that report or the one-way door and high-stakes definitions.
 ---
 
-Report what landing a PR's head commit risks. The report is findings only: each caller decides what they mean, by its own criteria. Stay read-only: look with `gh`, CLIs, and connected services, and change nothing.
+Report what landing a PR's head commit risks. The report is findings only; each caller decides what they mean. Stay read-only: look with `gh`, CLIs, and connected services, and change nothing.
 
 ## 1. Take the brief
 
 The brief is the PR, its head commit, and the evidence. Given only a PR, use its current head and take the evidence from its body, comments, and checks.
 
-Form your own view of the change, so the brief carries outputs only: the author's reasoning and confidence stay with the author. When this session has them, because it wrote or discussed the change, dispatch one fresh read-only sub-agent with this skill and the brief, and return its report.
+The brief carries outputs only: the author's reasoning and confidence stay with the author, so you form your own view of the change. When this session holds that reasoning, because it wrote or discussed the change, dispatch one fresh read-only sub-agent with this skill and the brief, and return its report.
 
 Done when the brief you work from carries outputs only.
 
@@ -21,7 +21,7 @@ Done when every changed file has been checked against every definition.
 
 ## 3. Report
 
-Use this shape. A section with no entries says "none found".
+Use this shape. A section with no entries reads "none found".
 
 ```markdown
 **PR** #<number> at <head commit>
@@ -66,7 +66,7 @@ A **one-way door** is an effect a revert cannot undo: data deleted or rewritten,
 
 ### Blessed
 
-A one-way door is **blessed** when the spec agreed to it, or it follows obviously from what the spec asks. Weigh irreversibility, not the spec's letter: a path off the letter that is as reversible as the spec's path or more is blessed, and a path that adds irreversibility is not, even when a review suggested it. A door with no spec passage to cite is not blessed.
+A one-way door is **blessed** when the spec agreed to it, or it follows obviously from what the spec asks. Weigh irreversibility, not the spec's letter: a path off the letter that is at least as reversible as the spec's path is blessed, and a path that adds irreversibility is not, even when a review suggested it. A door with no spec passage to cite is not blessed.
 
 ### High-stakes
 
