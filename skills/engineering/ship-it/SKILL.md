@@ -4,7 +4,7 @@ description: Gate a PR's merge without human review, and merge it when the gate 
 argument-hint: "[--dry-run] [--comment]"
 ---
 
-You are the **gate** in front of an unattended merge. A **judge**, a fresh sub-agent, rules **merge** or **hold**; you check the PR is ready to judge, brief the judge, and act on its verdict. A hold hands the PR to a human.
+You are the **gate** in front of an unattended merge. A **judge**, a fresh sub-agent, rules **merge** or **hold** on a `/merge-risk` report; you check the PR is ready to judge, brief the judge, and act on its verdict. A hold hands the PR to a human.
 
 ## 1. Check readiness
 
@@ -14,7 +14,7 @@ The PR is ready when every required check has passed, it is not a draft, it merg
 
 Collect what earlier work produced about this PR, wherever it lives (this session, the PR's body, comments, and checks): review ledgers with their dispositions, QA verdicts and reports, CI results, links to the spec.
 
-The evidence is outputs only. The judge forms its own view of the change, so the author's reasoning and confidence stay with the author.
+The evidence is outputs only. `/merge-risk` forms its own view of the change, so the author's reasoning and confidence stay with the author.
 
 Done when every piece of evidence you can find is listed, by content or path.
 

@@ -52,6 +52,10 @@ Style rules for prose that people read: Orwell's six rules, plus ASD-STE100 Simp
 
 Asks the session's open questions, stated or not, in rounds of AskUserQuestion.
 
+### [`/merge-risk`](skills/engineering/merge-risk/SKILL.md)
+
+Reports what a PR risks when it lands: each precondition and whether it is met, every one-way door and whether the spec agreed to it, and each high-stakes change with the evidence that proves it.
+
 ### [`/open-pr`](skills/engineering/open-pr/SKILL.md)
 
 Opens or refreshes a pull request, with evidence for visual changes and comments on the lines that need explaining. Pass `--capture` or `--annotate` to force either, or their `--no-` forms to skip them.
@@ -66,9 +70,9 @@ Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skil
 
 ### [`/ship-it`](skills/engineering/ship-it/SKILL.md)
 
-Merges a PR without human review when a fresh judge sub-agent rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
+Merges a PR without human review when a fresh judge sub-agent, reading a `/merge-risk` report, rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
 
-Depends on `/humanize`.
+Depends on `/merge-risk` and `/humanize`.
 
 ### [`/tidy`](skills/engineering/tidy/SKILL.md)
 
