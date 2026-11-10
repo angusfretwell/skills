@@ -68,12 +68,6 @@ Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round 
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/humanize`, `/merge-risk`, and `/tidy`.
 
-### [`/pr-green`](skills/engineering/pr-green/SKILL.md)
-
-Gets an open PR's checks passing: reruns transient failures, fixes real ones, and merges the base to resolve conflicts, stopping after three pushes. Pass `--cap` to change the limit. A calling skill can supply its own way to wait and to ask a human.
-
-Depends on `/commit`, `/humanize`, and [`/mattpocock-skills:diagnosing-bugs`](https://github.com/mattpocock/skills).
-
 ### [`/ship-it`](skills/engineering/ship-it/SKILL.md)
 
 Merges a PR without human review when a fresh judge sub-agent, reading a `/merge-risk` report, rules out each of three reasons to hold it: an unmet precondition, a one-way door the spec never agreed to, and a high-stakes change with no evidence it works. Pass `--dry-run` to get the verdict without merging, or `--comment` to post it on the PR.
@@ -88,11 +82,17 @@ Cleans up a branch's changes: removes AI slop, such as needless comments and def
 
 Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the house style.
 
+### [`/unblock-pr`](skills/engineering/unblock-pr/SKILL.md)
+
+Gets an open PR's checks passing: reruns transient failures, fixes real ones, and merges the base to resolve conflicts, stopping after three pushes. Pass `--cap` to change the limit. A calling skill can supply its own way to wait and to ask a human.
+
+Depends on `/commit`, `/humanize`, and [`/mattpocock-skills:diagnosing-bugs`](https://github.com/mattpocock/skills).
+
 ### [`/work-on`](skills/engineering/work-on/SKILL.md)
 
 Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
 
-Depends on `/polish`, `/pr-green`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
+Depends on `/polish`, `/unblock-pr`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
 
 ## Work in progress
 

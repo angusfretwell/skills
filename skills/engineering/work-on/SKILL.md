@@ -24,7 +24,7 @@ Done when every work item is on the frontier or names every blocker it waits on.
 
 ## 2. Author the script
 
-Read the `SKILL.md` of `/polish`, `/pr-green`, and `/ship-it`, and ship-it's `references/judge.md`. They are the source of truth for their stages: the script encodes their orchestration.
+Read the `SKILL.md` of `/polish`, `/unblock-pr`, and `/ship-it`, and ship-it's `references/judge.md`. They are the source of truth for their stages: the script encodes their orchestration.
 
 ### Translation
 
@@ -46,7 +46,7 @@ For each work item, in order:
 1. **Implement.** Use `/mattpocock-skills:tdd` where possible. The seams the spec names count as agreed; where it names none, the agent picks them and reports its choice. Run typechecking and single test files regularly, and the full test suite once at the end. Commit to the work item's branch.
 2. **Polish.** `/polish`, translated, with the work item as its spec.
 3. **Open the PR**, unless `--no-pr`. `/open-pr`, as a draft when polish left an **ask** open.
-4. **Ship**, with `--ship` and a PR that is not a draft. One agent runs `/pr-green` at its default cap, with no escalation, and returns the outcome through a schema. On **green**, `/ship-it --comment`, translated, with polish's report as its evidence.
+4. **Ship**, with `--ship` and a PR that is not a draft. One agent runs `/unblock-pr` at its default cap, with no escalation, and returns the outcome through a schema. On **green**, `/ship-it --comment`, translated, with polish's report as its evidence.
 
 A stage that fails ends its work item's chain.
 

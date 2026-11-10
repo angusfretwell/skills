@@ -1,5 +1,5 @@
 ---
-name: pr-green
+name: unblock-pr
 description: Get an open PR's checks passing by rerunning transient failures, fixing real ones, and resolving conflicts. Use when a PR has failed checks or conflicts, or when another skill needs a PR green.
 argument-hint: "[<pr>] [--cap <n>]"
 ---
