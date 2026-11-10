@@ -68,6 +68,6 @@ Open with the PR's head SHA and the outcome:
 
 Then give the pushes made and each comment or review that arrived. Those stay with the PR's author, unanswered.
 
-When **stuck**, comment on the PR per `/humanize` with what still fails, why, and what would unblock it. Whether the PR becomes a draft is the caller's call.
+When **stuck**, also give what still fails, why, and what would unblock it. Whether anything goes on the PR, a comment or a move to draft, is the caller's call.
 
-Done when the report is written and any comment is posted.
+Done when the report is written.
