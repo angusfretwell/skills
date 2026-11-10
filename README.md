@@ -60,7 +60,7 @@ Depends on [`/mattpocock-skills:pr`](https://github.com/mattpocock/skills), `/at
 
 ### [`/polish`](skills/engineering/polish/SKILL.md)
 
-Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies and tidies it. Reports what it fixed, what it won't fix and why, and what needs your call. Pass `--unattended` when nobody can answer: it takes the reversible option it would recommend, leaves out what it can't undo, and comments each call on the PR.
+Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies and tidies it. Reports what it fixed, what it won't fix and why, and what needs your call.
 
 Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/humanize`, `/merge-risk`, and `/tidy`.
 
