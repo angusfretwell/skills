@@ -1,7 +1,7 @@
 ---
 name: polish
 description: Polish a branch by reviewing, QAing, fixing, and simplifying it in rounds until nothing worth fixing remains. Use when the user asks for a polish or a quick polish, or when another skill needs a branch polished.
-argument-hint: "[--quick] [--unattended]"
+argument-hint: "[--quick]"
 ---
 
 A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **severity** and **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
@@ -17,17 +17,6 @@ A **quick** polish, asked for by name or with `--quick`, trades depth for speed.
 - Step 5: go straight to step 6.
 - Step 6: skip `/simplify`.
 - Step 8: the opening lines say this was a quick polish and name what it skipped.
-
-## Unattended mode
-
-An **unattended** polish, asked for with `--unattended`, has nobody to answer a question. It runs the steps below with these overrides:
-
-- Step 1: when no spec turns up, proceed without one. Changes that can't be separated from the branch's work stay uncommitted, and the report says so.
-- Step 3: settle each **ask** before step 4. An option is **reversible** when `/merge-risk` wouldn't call it a one-way door, and the code as it stands counts as an option, reversible only when merging it is.
-  - When an option is reversible, take the reversible one you'd recommend. The finding becomes a **decided** fix: step 4 fixes it, and the ledger keeps the call, the other options, and why.
-  - When no option is reversible, the finding stays an **ask** and that part stays out of the change: step 4 removes it when the branch already holds it. When the change can't stand without it, keep it.
-- Step 5: a **decided** fix doesn't count, so it earns no further round.
-- Step 8: the report adds a `## Decided` section before `## Needs you`, giving each **decided** fix its call, the other options, and why. Each **ask** gets the question, the evidence, and the options, your recommendation first. The report names any **ask** the change can't stand without. Polish leaves the PR alone: what goes on it, and whether it's a draft, is the caller's call.
 
 ## 1. Establish the scope
 
