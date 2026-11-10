@@ -60,9 +60,15 @@ Depends on [`/mattpocock-skills:pr`](https://github.com/mattpocock/skills), `/at
 
 ### [`/polish`](skills/engineering/polish/SKILL.md)
 
-Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies and tidies it. Reports what it fixed, what it won't fix and why, and what needs your call.
+Reviews, QAs, and fixes a branch in rounds of parallel sub-agents until a round finds nothing to fix, then simplifies and tidies it. Reports what it fixed, what it won't fix and why, and what needs your call. Pass `--unattended` when nobody can answer: it takes the reversible option it would recommend, leaves out what it can't undo, and comments each call on the PR.
 
-Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, and `/tidy`.
+Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skills), `/browser-qa`, `/commit`, `/humanize`, `/merge-risk`, and `/tidy`.
+
+### [`/pr-green`](skills/engineering/pr-green/SKILL.md)
+
+Gets an open PR's checks passing: reruns transient failures, fixes real ones, and merges the base to resolve conflicts, stopping after three pushes. Pass `--cap` to change the limit. A calling skill can supply its own way to wait and to ask a human.
+
+Depends on `/commit`, `/humanize`, and [`/mattpocock-skills:diagnosing-bugs`](https://github.com/mattpocock/skills).
 
 ### [`/ship-it`](skills/engineering/ship-it/SKILL.md)
 
@@ -82,7 +88,7 @@ Publishes a report, brief, plan, comparison, or dashboard as an Artifact in the 
 
 Carries a spec or its tickets through implementation, `/polish`, and a PR in one workflow, running tickets that don't block each other in parallel. Pass `--ship` to merge each PR through `/ship-it` and then start the tickets it unblocks, or `--no-pr` to stop after polish.
 
-Depends on `/polish`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
+Depends on `/polish`, `/pr-green`, `/ship-it`, `/open-pr`, and [`/mattpocock-skills:tdd`](https://github.com/mattpocock/skills).
 
 ## Work in progress
 
