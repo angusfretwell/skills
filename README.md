@@ -54,9 +54,9 @@ Asks the session's open questions, stated or not, in rounds of AskUserQuestion.
 
 ### [`/open-pr`](skills/engineering/open-pr/SKILL.md)
 
-Opens or refreshes a pull request, with a description written for reviewers and comments on the lines that need explaining.
+Opens or refreshes a pull request, with evidence for visual changes and comments on the lines that need explaining. Pass `--capture` or `--annotate` to force either, or their `--no-` forms to skip them.
 
-Depends on `/attach-media`, `/commit`, and `/humanize`.
+Depends on [`/mattpocock-skills:pr`](https://github.com/mattpocock/skills), `/attach-media`, and `/humanize`.
 
 ### [`/polish`](skills/engineering/polish/SKILL.md)
 
