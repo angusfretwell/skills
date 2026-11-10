@@ -75,7 +75,7 @@ A **fix** finding that is a bug an earlier round fixed, back by a new route, is 
 
 From round 2 on, a naming finding, test names included, is a **fix** only when the name **misleads**: it claims something the code doesn't do, or contradicts the project's glossary. A name that could merely be better is **won't fix**, so later rounds stop relitigating names earlier rounds chose.
 
-From round 3 on, a **blocker** or **should** is an **ask**, not a **fix**: one that serious this late means the fixes aren't converging, so a human looks. One in security, auth, permissions, data loss, or concurrency stays a **fix** through round 5. These are kinds of bug worth another round, a different question from which changes `/merge-risk` calls high-stakes.
+From round 3 on, a **blocker** or **should** is an **ask**, not a **fix**: one that serious this late means the fixes aren't converging, so a human looks. One in security, auth, permissions, data loss, or concurrency stays a **fix** through round 5. This list names bugs worth another round. It is separate from the changes `/merge-risk` calls high-stakes.
 
 Done when every finding in the ledger carries a severity and a disposition.
 
