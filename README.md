@@ -111,3 +111,9 @@ Depends on [`/mattpocock-skills:code-review`](https://github.com/mattpocock/skil
 ### [`/status-report`](skills/in-progress/status-report/SKILL.md)
 
 Reports what your session still has in flight: open PRs with their checks and reviews, running agents and workflows, active watches, and what's waiting on you.
+
+### [`/tldr`](skills/in-progress/tldr/SKILL.md)
+
+Rewrites a verbose explanation as its bottom line, followed only by the facts you would decide or act differently without. Pass `--technical` for a reader in the code, who gets identifiers and a code sketch where one fits, or `--non-technical` for a reader of the product, who gets consequences in product terms.
+
+Depends on `/humanize`. Shapes adapted from [`/show-me`](https://github.com/humanlayer/skills).
