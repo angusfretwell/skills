@@ -34,12 +34,10 @@ Dispatch each pass in the round's plan as its own sub-agent, all in one message,
 
 Round 1's plan is every pass against the fixed point:
 
-- The **checks**: the project's tests, typecheck, and lint that cover the change. This pass invokes no skill and changes no code. It returns each check's result, and each failure as a finding that says whether the branch caused it.
+- The **checks**: the project's tests, typecheck, and lint that cover the change. This pass is **read-only**: the other passes read the same tree, so it leaves every file and HEAD as they are. It returns each check's result, and each failure as a finding that says whether the branch caused it.
 - `/code-review` at `high` effort.
 - `/mattpocock-skills:code-review`.
 - `/browser-qa`, when live.
-
-The checks nearly always pass, so they run beside the reviews instead of ahead of them.
 
 The round 1 `/browser-qa` pass also builds the **fixtures**: the test data its flows need. Its brief asks for them back with the findings: each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event. Note them in the ledger file. Every later `/browser-qa` brief carries them, so no round rebuilds its data.
 
@@ -93,6 +91,7 @@ When no **blocker** or **should** fix this round changed behaviour, go to step 6
 Otherwise, plan the next round's passes. A **settled** finding this round predicts more oscillation, so lean toward skipping passes, narrower ranges, and lower effort.
 
 - **Range**: the commits since this round began for contained fixes; the fixed point when a fix reshaped the change.
+- The checks run every round.
 - **Effort**: `low` for small, local fixes; `medium` when a fix changed control flow, error handling, or state shared across callers, or fixed a **recurrence**.
 - `/mattpocock-skills:code-review` runs only when a fix changed behaviour.
 - `/browser-qa` runs only when live for the fixes' diff.
@@ -104,9 +103,9 @@ Done when you have stated the plan to the user: every pass run or skipped with i
 
 ## 6. Simplify and tidy
 
-Dispatch one sub-agent over the branch diff. It runs `/simplify`, then `/tidy`, committing after each per `/commit`. When either changed code outside tests, it then runs the checks that cover those changes and fixes each failure, so the cleanup lands no **regression**. It returns what each skill changed and each check's result.
+Dispatch one sub-agent over the branch diff. It runs `/simplify`, then `/tidy`, committing after each per `/commit`. When the last round's fixes, simplify, or tidy committed anything, it then runs the checks that cover those commits and fixes each failure they caused, so the branch ends on no **regression**. It returns what each skill changed and each check's result.
 
-Done when simplify's and tidy's changes are committed and their checks pass.
+Done when simplify's and tidy's changes are committed and the checks hold no failure but the **pre-existing**.
 
 ## 7. Squash
 
