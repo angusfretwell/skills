@@ -9,7 +9,7 @@ Verification is **runtime observation**: what you capture from the running app i
 
 ### 1. Establish what's under test
 
-Whatever the user said is the scope (a commit SHA, branch name, tag, `main`, `HEAD~5`). If they didn't specify one, ask for it.
+The scope is whatever the brief or the user named (a commit SHA, branch name, tag, `main`, `HEAD~5`). If neither named one, ask for it.
 
 ### 2. Launch the app
 
@@ -17,9 +17,9 @@ Boot is the longest wait in a run, so start it before you read anything.
 
 Refuse if `agent-browser` isn't installed: stop and tell the user.
 
-When the brief hands you a running app, use it. Otherwise invoke the **run** skill and get the URL the app is serving on. An app already serving this checkout is used as it stands. One that isn't is launched in the background while you carry on with steps 3 and 4.
+A running app the brief hands you is the app under test. Otherwise invoke the **run** skill: use an app already serving this checkout as it stands, or launch one in the background.
 
-Refuse likewise if the app still isn't serving after one relaunch.
+Done when the app is serving, or its launch is running in the background while you take steps 3 and 4.
 
 ### 3. Identify the spec source
 
@@ -32,7 +32,7 @@ Look for the originating spec, in this order:
 
 ### 4. Plan the flows
 
-Read the diff and write the **flow list** before you open a page: every flow the change affects, each with the URL it starts at, the account and data it needs, and the observation that proves it works. Read code beyond the diff only to resolve those: a route, a permission, a seed record.
+Read the diff against the spec and write the **flow list** before you open a page: every flow the change affects, each with the URL it starts at, the account and data it needs, and the observation the spec says proves it works. Read code beyond the diff only to resolve those: a route, a permission, a seed record.
 
 When the brief hands you **fixtures**, test data already set up, plan the flows around them and build only what they lack.
 
@@ -49,7 +49,9 @@ Done when every user-visible behaviour the diff changes sits in a flow, or is li
 
 ### 5. Drive
 
-Drive each flow end-to-end with `agent-browser`, in one named session (`export AGENT_BROWSER_SESSION=<name>`). Its usage guide is `agent-browser skills get core`; load it when a command is unfamiliar.
+Start once the app answers at its URL. If the launch failed, relaunch it once, and refuse if the app still isn't serving.
+
+Drive each flow end-to-end with `agent-browser`, passing `--session <name>` on every call so the run keeps a browser of its own. Its usage guide is `agent-browser skills get core`; load it when a command fails or is unfamiliar.
 
 Keep the loop **tight**:
 
@@ -58,16 +60,22 @@ Keep the loop **tight**:
 - Assert on text: `snapshot -i -c` finds the controls, `get text` or `eval` reads the result.
 - Screenshot each flow's end state and every failure, for the report. Open a screenshot yourself only where the look is under test: layout, colour, overflow.
 
-A failure counts once it reproduces on a second try. Capture its repro: the steps, expected against actual, and a screenshot, or a video (`record start`, `record stop`) when a still can't show it.
+A failure counts once it reproduces on a second try. Capture its **repro**: the steps, expected against actual, and a screenshot, or a video (`record start`, `record stop`) when a still can't show it.
 
 Done when every flow and probe on the list has an observed result.
 
-### 6. Verdict
+### 6. Tear down
 
-The report is your reply, not a file, citing screenshots and videos by absolute path.
+Close the browser session with `agent-browser --session <name> close`. Each session holds a headless Chrome until it's closed.
 
-Open the report with a verdict on the first line: **pass** or **fail**. Fail on any issue that breaks the specified behaviour or fails a probe. There is no partial pass: anything short is a fail, with the passing parts noted.
+Stop any app you launched by its own process ID or background task, leaving one you found running. Other runs share this machine, and a kill by name (`pkill`) takes their servers too.
 
-Then **tear down** what you started: close each browser session you opened with `agent-browser --session <name> close`, and stop any app process you launched, leaving one you found running. Each session holds a headless Chrome until it's closed. Teardown runs on every exit, refusals included.
+Teardown runs on every exit, refusals included.
 
-Done when the report opens on its verdict and teardown is complete.
+### 7. Verdict
+
+The report is your reply, not a file. Open it with a verdict on the first line: **pass** or **fail**. Fail on any issue that breaks the specified behaviour or fails a probe. There is no partial pass: anything short is a fail, with the passing parts noted.
+
+Under the verdict, give every flow and probe on the list with its observed result, and every failure with its repro, citing screenshots and videos by absolute path.
+
+Done when teardown is complete and the report opens on its verdict.
