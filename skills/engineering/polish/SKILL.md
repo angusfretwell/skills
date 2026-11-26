@@ -6,14 +6,14 @@ argument-hint: "[--quick]"
 
 A **round** is one sweep of review passes, then the fixes they earn. The **ledger** is every finding from every round with its **severity** and **disposition**, kept in a file so it survives a restart. Every pass and every fix runs in a sub-agent.
 
-Sub-agents, and the skills they fork, start in the session's launch directory, which can be another checkout or another repository. So every brief names the **checkout**, the absolute path of the branch's working tree, and says to run each command there. Every range names both ends as SHAs, and `/code-review` takes the checkout before its range: `/code-review <effort> [--fix] <checkout> <from>..<to>`. A `/code-review` run that returns neither findings nor `(none)` failed: the sub-agent re-runs it once, then reviews the range by hand and says so.
+Sub-agents, and the skills they fork, start in the session's launch directory, which can be another checkout or another repository. So every brief names the **checkout**, the absolute path of the branch's working tree, and says to run each command there. Every range names both ends as SHAs, and `/code-review` takes the checkout before its range: `/code-review <effort> <checkout> <from>..<to>`. A `/code-review` run that returns neither findings nor `(none)` failed: the sub-agent re-runs it once, then reviews the range by hand and says so.
 
 ## Quick mode
 
 A **quick** polish, asked for by name or with `--quick`, trades depth for speed. It runs the steps below with these overrides:
 
 - Step 1: when no spec turns up, proceed without one. Browser QA is never live.
-- Step 2: the plan is `/code-review` at `medium` effort, plus `/mattpocock-skills:code-review` when there is a spec.
+- Step 2: the plan is the checks and `/code-review` at `medium` effort, plus `/mattpocock-skills:code-review` when there is a spec.
 - Step 5: go straight to step 6.
 - Step 6: skip `/simplify`.
 - Step 8: the opening lines say this was a quick polish and name what it skipped.
@@ -24,21 +24,24 @@ The fixed point is the one the user named, else the current branch's merge-base 
 
 Find the spec once: the one already in this session, issue references in the commit messages, the open PR, or a spec file matching the branch under `docs/`, `specs/`, or `.scratch/`. If none turns up, ask the user once. The spec, or its confirmed absence, goes into every brief.
 
-Dispatch a sub-agent to run the project's tests, typecheck, and lint that cover the change. It fixes each failure the branch causes and commits per `/commit`, so no pass reviews broken code. It returns each check's result, naming each failure the branch didn't cause; those go into every brief as **pre-existing**, so no pass or fix chases them.
+Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees.
 
-Browser QA is **live** when the app is browser-driven and the change under review touches something a user sees. When it is, dispatch a sub-agent to set up the **fixtures** every round's QA reuses: the test data the affected flows need, built with the project's seeds or the **run** skill. It returns each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event. Once the fixtures are saved, it tears down any browser session or app process it started.
-
-Done when you hold the checkout, the fixed point, the **start**, the diff size, the spec, the checks' results, whether QA is live, and, when it is, the fixtures.
+Done when you hold the checkout, the fixed point, the **start**, the diff size, the spec, and whether QA is live.
 
 ## 2. Run the passes
 
-Dispatch each pass in the round's plan as its own sub-agent, all in parallel. Each brief carries the exact commit range to review and the ledger file, so the pass skips findings the ledger holds as **won't fix**, **defer**, **ask**, or **settled**. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters. A `/browser-qa` pass's brief also carries the fixtures and where effects land.
+Dispatch each pass in the round's plan as its own sub-agent, all in one message, so they run in parallel. Each brief carries the exact commit range to review and the ledger file, so the pass skips findings the ledger holds as **won't fix**, **defer**, **ask**, or **settled**. It names the skill to invoke and asks for the findings back as a list: file, line, one-line claim, why it matters.
 
 Round 1's plan is every pass against the fixed point:
 
+- The **checks**: the project's tests, typecheck, and lint that cover the change. This pass invokes no skill and changes no code. It returns each check's result, and each failure as a finding that says whether the branch caused it.
 - `/code-review` at `high` effort.
 - `/mattpocock-skills:code-review`.
 - `/browser-qa`, when live.
+
+The checks nearly always pass, so they run beside the reviews instead of ahead of them.
+
+The round 1 `/browser-qa` pass also builds the **fixtures**: the test data its flows need. Its brief asks for them back with the findings: each fixture with how to reach it (ID, URL, or sign-in), and where each flow's effects land outside the app, such as a CRM record or an analytics event. Note them in the ledger file. Every later `/browser-qa` brief carries them, so no round rebuilds its data.
 
 Done when every pass in the plan has returned its list. A reply without the list means the pass is still working: message it to finish and send the list.
 
@@ -59,6 +62,8 @@ The **disposition**:
 - **defer**: valid, but separate work.
 - **ask**: the fix is a **one-way door**, as `/merge-risk` defines it, and you lack a strong case for which way to go. Keep the candidate fixes, your recommendation first.
 - **settled**: its fix would undo a fix from an earlier round. This is **oscillation**: the earlier fix stands. Name that fix.
+
+A check failure the branch caused is a **blocker**. One it didn't cause is **pre-existing**: a **won't fix**, named in every later brief, so no pass or fix chases it.
 
 A **fix** finding that is a bug an earlier round fixed, back by a new route, is a **recurrence**: that fix was too shallow, so its fix brief names the earlier fix and targets the shared cause.
 
@@ -99,9 +104,9 @@ Done when you have stated the plan to the user: every pass run or skipped with i
 
 ## 6. Simplify and tidy
 
-Dispatch `/simplify` in a sub-agent over the branch diff, once, and commit per `/commit`. Then do the same with `/tidy`. When the last round, simplify, or tidy committed anything outside tests, which `low` effort skips, dispatch `/code-review low --fix` in a sub-agent over those commits together, so it hunts **regressions** in them, and commit per `/commit`.
+Dispatch one sub-agent over the branch diff. It runs `/simplify`, then `/tidy`, committing after each per `/commit`. When either changed code outside tests, it then runs the checks that cover those changes and fixes each failure, so the cleanup lands no **regression**. It returns what each skill changed and each check's result.
 
-Done when simplify's and tidy's changes and the review's fixes are committed.
+Done when simplify's and tidy's changes are committed and their checks pass.
 
 ## 7. Squash
 
